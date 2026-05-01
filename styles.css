@@ -17,6 +17,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -33,7 +34,6 @@ body {
   font-size: 17px;
   line-height: 1.7;
 }
-
 body::before {
   content: "";
   position: fixed;
@@ -2121,6 +2121,8 @@ body.light-mode .skill-bar-track {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .form-group {
@@ -2184,6 +2186,8 @@ body.light-mode .form-group textarea {
 .form-submit {
   align-self: flex-start;
   min-width: 180px;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .form-note {
@@ -2260,9 +2264,9 @@ body.light-mode .form-group textarea {
 @media (max-width: 720px) {
   .back-to-top {
     bottom: 20px;
-    right: 16px;
-    width: 44px;
-    height: 44px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
   }
 
   .form-submit {
