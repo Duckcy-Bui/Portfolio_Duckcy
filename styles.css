@@ -275,6 +275,7 @@ html::-webkit-scrollbar {
   gap: 48px;
   align-items: center;
   width: 100%;
+  min-width: 0;
 }
 
 /* Left column — constrained to match right column card width */
@@ -282,6 +283,7 @@ html::-webkit-scrollbar {
   max-width: 480px;
   justify-self: end;
   width: 100%;
+  min-width: 0; /* prevent grid cell from blowing out on small screens */
 }
 
 .eyebrow {
@@ -464,6 +466,10 @@ h1 span {
   background: var(--card);
   border: 1px solid var(--stroke);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  /* Prevent overflow on small screens */
+  max-width: 100%;
+  overflow: hidden;
+  min-width: 0;
 }
 
 .code-header {
@@ -522,6 +528,9 @@ pre {
   line-height: 1.7;
   color: #d6d9e8;
   font-family: "Space Grotesk", monospace;
+  overflow-x: auto;
+  max-width: 100%;
+  white-space: pre;
 }
 
 /* Stats base styles — used inside .profile-card */
@@ -1639,6 +1648,20 @@ pre {
 
   .nav-toggle {
     display: inline-flex;
+  }
+
+  /* Prevent code card from overflowing viewport */
+  .code-card {
+    padding: 12px 14px;
+  }
+
+  pre {
+    font-size: 11px;
+    line-height: 1.6;
+  }
+
+  .code-line {
+    white-space: pre;
   }
   
   .profile-card {
