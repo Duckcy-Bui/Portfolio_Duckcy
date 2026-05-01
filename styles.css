@@ -123,6 +123,8 @@ body::after {
   justify-content: space-between;
   height: 72px;
   gap: 24px;
+  /* Prevent nav-actions from being clipped on small screens */
+  overflow: visible;
 }
 
 .brand {
@@ -1648,6 +1650,32 @@ pre {
 
   .nav-toggle {
     display: inline-flex;
+  }
+
+  /* Tighten nav-actions on mobile so toggle is never clipped */
+  .nav-actions {
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .nav-social-group .icon-button {
+    width: 28px;
+    height: 28px;
+  }
+
+  .nav-social-group {
+    padding: 2px;
+    gap: 0;
+  }
+
+  .theme-toggle {
+    width: 32px;
+    height: 32px;
+  }
+
+  .nav-bar {
+    gap: 8px;
+    padding: 0 4px;
   }
 
   /* Prevent code card from overflowing viewport */
