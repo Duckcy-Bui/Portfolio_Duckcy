@@ -54,7 +54,7 @@
         <div class="nav-actions">
           <!-- Social icon group -->
           <div class="nav-social-group">
-            <a class="icon-button" href="https://www.linkedin.com/in/hai-duck-2538a7233/" target="_blank" rel="noreferrer" aria-label="LinkedIn">
+            <a class="icon-button" href="https://www.linkedin.com/in/duckcy/" target="_blank" rel="noreferrer" aria-label="LinkedIn">
               <!-- LinkedIn -->
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
             </a>
@@ -163,7 +163,7 @@ core_focus:
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.08 6.08l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                 </a>
                 <!-- LinkedIn icon -->
-                <a class="profile-icon-btn" href="https://www.linkedin.com/in/hai-duck-2538a7233/" target="_blank" rel="noreferrer" aria-label="LinkedIn">
+                <a class="profile-icon-btn" href="https://www.linkedin.com/in/duckcy/" target="_blank" rel="noreferrer" aria-label="LinkedIn">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
                 </a>
                 <!-- GitHub icon -->
@@ -337,6 +337,17 @@ core_focus:
 
           <!-- Tech stack category dropdowns -->
           <div class="stack-filter-bar" id="stack-filter-bar">
+            <div class="stack-category" data-category="frontend">
+              <button class="stack-cat-btn" type="button" aria-expanded="false">
+                Frontend
+                <svg class="stack-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <div class="stack-dropdown">
+                <span class="stack-tag" data-tech="React">React</span>
+                <span class="stack-tag" data-tech="JavaFX">JavaFX</span>
+              </div>
+            </div>
+
             <div class="stack-category" data-category="backend">
               <button class="stack-cat-btn" type="button" aria-expanded="false">
                 Backend
@@ -347,18 +358,6 @@ core_focus:
                 <span class="stack-tag" data-tech="Spring Boot">Spring Boot</span>
                 <span class="stack-tag" data-tech="Python">Python</span>
                 <span class="stack-tag" data-tech="Java">Java</span>
-              </div>
-            </div>
-
-            <div class="stack-category" data-category="devops">
-              <button class="stack-cat-btn" type="button" aria-expanded="false">
-                DevOps
-                <svg class="stack-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </button>
-              <div class="stack-dropdown">
-                <span class="stack-tag" data-tech="Docker">Docker</span>
-                <span class="stack-tag" data-tech="Airflow">Airflow</span>
-                <span class="stack-tag" data-tech="CI/CD">CI/CD</span>
               </div>
             </div>
 
@@ -375,25 +374,26 @@ core_focus:
               </div>
             </div>
 
+            <div class="stack-category" data-category="devops">
+              <button class="stack-cat-btn" type="button" aria-expanded="false">
+                DevOps
+                <svg class="stack-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <div class="stack-dropdown">
+                <span class="stack-tag" data-tech="Docker">Docker</span>
+                <span class="stack-tag" data-tech="Airflow">Airflow</span>
+                <span class="stack-tag" data-tech="CI/CD">CI/CD</span>
+              </div>
+            </div>
+
             <div class="stack-category" data-category="ai">
               <button class="stack-cat-btn" type="button" aria-expanded="false">
-                AI / LLM
+                AI / ML
                 <svg class="stack-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
               <div class="stack-dropdown">
                 <span class="stack-tag" data-tech="GenAI">GenAI</span>
                 <span class="stack-tag" data-tech="LLM">LLM</span>
-              </div>
-            </div>
-
-            <div class="stack-category" data-category="frontend">
-              <button class="stack-cat-btn" type="button" aria-expanded="false">
-                Frontend
-                <svg class="stack-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </button>
-              <div class="stack-dropdown">
-                <span class="stack-tag" data-tech="React">React</span>
-                <span class="stack-tag" data-tech="JavaFX">JavaFX</span>
               </div>
             </div>
           </div>
@@ -415,10 +415,17 @@ core_focus:
             <!-- Project 1: Investor AI -->
             <article class="project-showcase" data-tags="devops,backend,data,ai" data-text="Investor AI Spring Boot React Airflow Docker PostgreSQL Spark Redis MinIO Python Java LLM">
               <div class="project-video-wrap">
+                <div class="video-lang-tabs" role="tablist" aria-label="Video language">
+                  <button class="video-lang-btn active" role="tab" aria-selected="true" data-lang="en" data-target="video-1">🇬🇧 English</button>
+                  <button class="video-lang-btn" role="tab" aria-selected="false" data-lang="vi" data-target="video-1">🇻🇳 Tiếng Việt</button>
+                </div>
                 <div class="project-video-placeholder">
-                  <!-- Replace src with your YouTube embed URL when ready -->
+                  <!-- Add YouTube embed URLs: data-src-en and data-src-vi -->
                   <iframe
+                    id="video-1"
                     src=""
+                    data-src-en=""
+                    data-src-vi=""
                     title="Investor AI demo video"
                     frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -452,9 +459,16 @@ core_focus:
             <!-- Project 2: Classes369 -->
             <article class="project-showcase" data-tags="devops,backend,ai" data-text="Classes369 Flask SQL Server Docker GenAI RBAC Python">
               <div class="project-video-wrap">
+                <div class="video-lang-tabs" role="tablist" aria-label="Video language">
+                  <button class="video-lang-btn active" role="tab" aria-selected="true" data-lang="en" data-target="video-2">🇬🇧 English</button>
+                  <button class="video-lang-btn" role="tab" aria-selected="false" data-lang="vi" data-target="video-2">🇻🇳 Tiếng Việt</button>
+                </div>
                 <div class="project-video-placeholder">
                   <iframe
+                    id="video-2"
                     src=""
+                    data-src-en=""
+                    data-src-vi=""
                     title="Classes369 demo video"
                     frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -486,9 +500,16 @@ core_focus:
             <!-- Project 3: Robot Pathfinding Game -->
             <article class="project-showcase" data-tags="backend" data-text="AI game Java JavaFX BFS DFS A* Maven pathfinding">
               <div class="project-video-wrap">
+                <div class="video-lang-tabs" role="tablist" aria-label="Video language">
+                  <button class="video-lang-btn active" role="tab" aria-selected="true" data-lang="en" data-target="video-3">🇬🇧 English</button>
+                  <button class="video-lang-btn" role="tab" aria-selected="false" data-lang="vi" data-target="video-3">🇻🇳 Tiếng Việt</button>
+                </div>
                 <div class="project-video-placeholder">
                   <iframe
+                    id="video-3"
                     src=""
+                    data-src-en=""
+                    data-src-vi=""
                     title="Robot pathfinding game demo"
                     frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -763,9 +784,18 @@ core_focus:
                 <span class="contact-text">duckcyzzz1305@gmail.com</span>
                 <span class="copy-hint">Click to copy</span>
               </a>
-              <a href="tel:0976795113">
+              <a href="mailto:ducbanca1604@gmail.com" class="copy-email" data-copy="ducbanca1604@gmail.com" title="Click to copy email">
+                <span class="contact-icon">✉</span>
+                <span class="contact-text">ducbanca1604@gmail.com</span>
+                <span class="copy-hint">Click to copy</span>
+              </a>
+              <a href="tel:+84976795113">
                 <span class="contact-icon">☎</span>
                 <span class="contact-text">+84 97 679 5113</span>
+              </a>
+              <a href="tel:+84868776016">
+                <span class="contact-icon">☎</span>
+                <span class="contact-text">+84 86 877 6016</span>
               </a>
               <a href="#">
                 <span class="contact-icon">📍</span>
@@ -773,7 +803,7 @@ core_focus:
               </a>
               <div class="contact-actions">
                 <a class="btn primary" href="assets/Bui-Hai-Duc-TopCV.vn-6.pdf" target="_blank" rel="noreferrer">📄 Download CV</a>
-                <a class="btn ghost" href="https://www.linkedin.com/in/hai-duck-2538a7233/" target="_blank" rel="noreferrer">💼 LinkedIn</a>
+                <a class="btn ghost" href="https://www.linkedin.com/in/duckcy/" target="_blank" rel="noreferrer">💼 LinkedIn</a>
               </div>
             </div>
           </div>
