@@ -1,0 +1,8 @@
+node_modules/
+.claude/
+.kiro/
+cloudflare-worker.js
+tests/
+vitest.config.js
+package.json
+package-lock.json
