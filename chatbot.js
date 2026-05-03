@@ -478,15 +478,72 @@ function handleWindowKeydown(e) {
   }
 }
 
+// ===== TOOLTIP BUBBLE =====
+const TOOLTIP_MESSAGES = [
+  '💬 Ask me anything!',
+  '👋 Curious about my projects?',
+  '🚀 Let\'s chat about DevOps!',
+  '🤔 Want to know more about Duc?',
+  '🛠️ Check out my tech stack!',
+  '📬 Want to get in touch with Duc?',
+];
+
+const TOOLTIP_DISMISSED_KEY = 'chatbot-tooltip-dismissed';
+
+function showTooltip() {
+  // Don't show if already dismissed this session
+  if (sessionStorage.getItem(TOOLTIP_DISMISSED_KEY)) return;
+
+  const tooltip = document.getElementById('chatbot-fab-tooltip');
+  if (!tooltip) return;
+
+  // Pick a random message and inject it (keep the close button)
+  const msg = TOOLTIP_MESSAGES[Math.floor(Math.random() * TOOLTIP_MESSAGES.length)];
+  const closeBtn = tooltip.querySelector('.chatbot-fab-tooltip-close');
+  tooltip.childNodes.forEach((node) => {
+    if (node.nodeType === Node.TEXT_NODE) node.remove();
+  });
+  // Set text as first child text node
+  tooltip.insertBefore(document.createTextNode(msg + ' '), closeBtn || tooltip.firstChild);
+
+  tooltip.classList.add('visible');
+}
+
+function hideTooltip() {
+  const tooltip = document.getElementById('chatbot-fab-tooltip');
+  if (!tooltip) return;
+  tooltip.classList.remove('visible');
+  sessionStorage.setItem(TOOLTIP_DISMISSED_KEY, '1');
+}
+
+function initTooltip() {
+  // Show after 1.5s
+  setTimeout(showTooltip, 1500);
+
+  // Close button dismisses tooltip
+  const closeBtn = document.getElementById('chatbot-tooltip-close');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      hideTooltip();
+    });
+  }
+}
+
 // ===== OPEN / CLOSE =====
 function openWindow() {
   const win = document.getElementById('chatbot-window');
   const fab = document.getElementById('chatbot-fab');
   if (!win || !fab) return;
 
+  // Hide tooltip when chat opens
+  hideTooltip();
+
   win.classList.add('chatbot-window--open');
   fab.classList.remove('chatbot-fab--pulse');
   fab.setAttribute('aria-expanded', 'true');
+  // Hide FAB on mobile so it doesn't overlap the input bar
+  fab.classList.add('chatbot-fab--hidden');
   isOpen = true;
 
   const input = document.getElementById('chatbot-input');
@@ -505,6 +562,8 @@ function closeWindow() {
   win.classList.remove('chatbot-window--open');
   fab.classList.add('chatbot-fab--pulse');
   fab.setAttribute('aria-expanded', 'false');
+  // Restore FAB visibility when chat closes
+  fab.classList.remove('chatbot-fab--hidden');
   isOpen = false;
 
   fab.focus();
@@ -546,6 +605,16 @@ function initChatbot() {
     minimizeBtn.addEventListener('click', () => {
       win.classList.toggle('chatbot-window--minimized');
       isMinimized = !isMinimized;
+
+      // Swap icon: show maximize icon when minimized, minimize icon when expanded
+      const iconMin = minimizeBtn.querySelector('.icon-minimize');
+      const iconMax = minimizeBtn.querySelector('.icon-maximize');
+      if (iconMin) iconMin.style.display = isMinimized ? 'none' : '';
+      if (iconMax) iconMax.style.display = isMinimized ? '' : 'none';
+
+      // Update aria-label and title to reflect current action
+      minimizeBtn.setAttribute('aria-label', isMinimized ? 'Expand chat' : 'Minimize chat');
+      minimizeBtn.setAttribute('title', isMinimized ? 'Expand' : 'Minimize');
     });
   }
 
@@ -592,6 +661,9 @@ function initChatbot() {
 
   // Restore previous chat or show welcome
   restoreChat();
+
+  // Show tooltip bubble after delay
+  initTooltip();
 }
 
 // Initialize when DOM is ready

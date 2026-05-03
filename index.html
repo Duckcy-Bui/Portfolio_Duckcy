@@ -37,18 +37,39 @@
 
     <header class="site-header">
       <div class="container nav-bar">
-        <div class="brand">
+        <div class="brand" id="theme-brand">
           <span class="brand-dot"></span>
           <span class="brand-text">THEME</span>
-          <span class="brand-pill">Outer Space</span>
+          <button class="brand-pill" id="theme-pill-btn" aria-haspopup="true" aria-expanded="false" aria-label="Select theme">
+            <span id="theme-pill-label">Outer Space</span>
+            <svg class="brand-pill-chevron" width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="theme-picker" id="theme-picker" role="menu" aria-label="Theme options">
+            <button class="theme-picker-item" data-theme-key="dark"    role="menuitem"><span class="theme-picker-dot" style="background:#5cc5ff"></span>Outer Space</button>
+            <button class="theme-picker-item" data-theme-key="light"   role="menuitem"><span class="theme-picker-dot" style="background:#d4a800"></span>Daylight</button>
+            <button class="theme-picker-item" data-theme-key="forest"  role="menuitem"><span class="theme-picker-dot" style="background:#4ade80"></span>Forest Terminal</button>
+            <button class="theme-picker-item" data-theme-key="ocean"   role="menuitem"><span class="theme-picker-dot" style="background:#22d3ee"></span>Deep Ocean</button>
+            <button class="theme-picker-item" data-theme-key="sunset"  role="menuitem"><span class="theme-picker-dot" style="background:#f97316"></span>Sunset Ember</button>
+          </div>
         </div>
 
         <nav id="site-nav" class="nav-links" data-nav>
           <a href="#home">Home</a>
-          <a href="#projects">Projects</a>
-          <a href="#about">About</a>
-          <a href="#experience">Experience</a>
+          <div class="nav-dropdown-wrap">
+            <button class="nav-dropdown-btn" aria-haspopup="true" aria-expanded="false" data-nav-dropdown>
+              About
+              <svg class="nav-dropdown-chevron" width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="nav-dropdown" role="menu">
+              <a href="#about" data-tab-target="overview" role="menuitem">Overview</a>
+              <a href="#about" data-tab-target="education" role="menuitem">Education</a>
+              <a href="#about" data-tab-target="certificates" role="menuitem">Certificates</a>
+              <a href="#about" data-tab-target="testimonials" role="menuitem">Testimonials</a>
+            </div>
+          </div>
           <a href="#skills">Skills</a>
+          <a href="#projects">Projects</a>
+          <a href="#experience">Experience</a>
           <a href="#contact">Contact</a>
         </nav>
 
@@ -69,13 +90,12 @@
             </a>
           </div>
 
-          <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle light/dark mode">
-            <span class="theme-icon-moon" aria-hidden="true">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-            </span>
-            <span class="theme-icon-sun" aria-hidden="true">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-            </span>
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch theme">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 2a10 10 0 0 1 0 20"/>
+              <path d="M12 2v20M2 12h20"/>
+            </svg>
           </button>
           <button
             class="nav-toggle"
@@ -262,70 +282,201 @@ core_focus:
               </div>
 
               <div class="tab-content" data-tab-panel="certificates">
-                <div class="certificates-list">
-                  <div class="cert-item">
-                    <div class="cert-header">
-                      <h3>Self-learning & Certifications</h3>
-                      <span class="cert-status">Ongoing</span>
-                    </div>
-                    <p class="cert-desc">Google Cloud, Docker & Kubernetes, Advanced Golang Patterns, and system scalability.</p>
-                  </div>
-
-                  <div class="cert-item">
-                    <div class="cert-header">
-                      <h3>Internship Completion Letter - iSeeWaves</h3>
-                      <span class="cert-status">Completed</span>
-                    </div>
-                    <p class="cert-desc">Backend development internship with focus on API design and system architecture.</p>
-                    <a href="#" class="cert-link">View Certificate →</a>
-                  </div>
-
-                  <div class="cert-item">
-                    <div class="cert-header">
-                      <h3>DevOps & Cloud Infrastructure</h3>
-                      <span class="cert-status">In Progress</span>
-                    </div>
-                    <p class="cert-desc">Advanced containerization, orchestration, and CI/CD pipeline implementation.</p>
-                    <a href="#" class="cert-link">View Progress →</a>
-                  </div>
+                <div class="coming-soon-state">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  <p class="coming-soon-title">Certificates coming soon</p>
+                  <p class="coming-soon-desc">This section will be updated with verified certificates and credentials.</p>
                 </div>
               </div>
 
               <div class="tab-content" data-tab-panel="testimonials">
-                <div class="testimonials-list">
-                  <div class="testimonial-item">
-                    <p class="testimonial-text">
-                      "Duc shipped reliable backend ahead of schedule and kept the API contracts clean. The system handled scale without surprises."
-                    </p>
-                    <div class="testimonial-author">
-                      <strong>Minh Tran</strong>
-                      <span class="author-title">Product Lead, GoodFood</span>
-                    </div>
-                  </div>
-
-                  <div class="testimonial-item">
-                    <p class="testimonial-text">
-                      "Clear communication, strong architecture instincts, and fast delivery. Our ops overhead dropped noticeably after his changes."
-                    </p>
-                    <div class="testimonial-author">
-                      <strong>Hanh Le</strong>
-                      <span class="author-title">Engineering Manager</span>
-                    </div>
-                  </div>
-
-                  <div class="testimonial-item">
-                    <p class="testimonial-text">
-                      "Duc owned critical parts of myESI, from secure data pipeline to reliable compliance reporting. His work directly improved stability and was recognized as Best Employee of the Month."
-                    </p>
-                    <div class="testimonial-author">
-                      <strong>Mr Abdullah Nasir</strong>
-                      <span class="author-title">CEO, iSeeWaves</span>
-                    </div>
-                  </div>
+                <div class="coming-soon-state">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                  <p class="coming-soon-title">Testimonials coming soon</p>
+                  <p class="coming-soon-desc">This section will be updated with real feedback from collaborators and mentors.</p>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section id="skills" class="section skills">
+        <div class="container">
+          <div class="section-title" style="text-align:center; max-width:100%;">
+            <p class="eyebrow" style="justify-content:center;">Technical Skills</p>
+            <h2>My Tech Stack</h2>
+            <p style="color:var(--muted);font-size:17px;">My expertise across various technologies and tools</p>
+          </div>
+
+          <!-- ── PRIMARY STACK (DevOps) ── -->
+          <div class="skills-stack-block">
+            <div class="skills-stack-label">
+              <span class="skills-stack-badge primary">Core</span>
+              DevOps Stack
+            </div>
+
+            <div class="skills-tabs" role="tablist" aria-label="Primary skill categories" data-tab-group="primary">
+              <button class="skills-tab active" role="tab" aria-selected="true"  data-skills-tab="devops"     data-group="primary">DevOps</button>
+              <button class="skills-tab"         role="tab" aria-selected="false" data-skills-tab="databases"  data-group="primary">Databases</button>
+              <button class="skills-tab"         role="tab" aria-selected="false" data-skills-tab="concepts"   data-group="primary">Concepts</button>
+            </div>
+
+            <div class="skills-panels" data-panel-group="primary">
+
+              <!-- DevOps -->
+              <div class="skills-panel active" data-skills-panel="devops" data-group="primary" role="tabpanel">
+                <div class="skill-icon-grid">
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="assets/docker_icon.png" alt="Docker" class="skill-img"></div>
+                    <span class="skill-icon-label">Docker</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="assets/docker-compose_icon-removebg-preview.png" alt="Docker Compose" class="skill-img"></div>
+                    <span class="skill-icon-label">Docker Compose</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="assets/linux_icon.png" alt="Linux" class="skill-img"></div>
+                    <span class="skill-icon-label">Linux</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="assets/apache-airflow_icon.png" alt="Airflow" class="skill-img"></div>
+                    <span class="skill-icon-label">Airflow</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="assets/Jenkins_icon.png" alt="Jenkins" class="skill-img"></div>
+                    <span class="skill-icon-label">Jenkins</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="assets/github-actions_icon-removebg-preview.png" alt="GitHub Actions" class="skill-img"></div>
+                    <span class="skill-icon-label">GitHub Actions</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Databases (primary) -->
+              <div class="skills-panel" data-skills-panel="databases" data-group="primary" role="tabpanel">
+                <div class="skill-icon-grid">
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="assets/postgreesql_icon-removebg-preview.png" alt="PostgreSQL" class="skill-img"></div>
+                    <span class="skill-icon-label">PostgreSQL</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="assets/redis_icon-removebg-preview.png" alt="Redis" class="skill-img"></div>
+                    <span class="skill-icon-label">Redis</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="assets/spark_icon-removebg-preview.png" alt="Spark" class="skill-img"></div>
+                    <span class="skill-icon-label">Spark</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="assets/MINIO_icon.png" alt="MinIO" class="skill-img"></div>
+                    <span class="skill-icon-label">MinIO</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Concepts (primary) -->
+              <div class="skills-panel" data-skills-panel="concepts" data-group="primary" role="tabpanel">
+                <div class="skill-icon-grid">
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="assets/CI-CD_icon.png" alt="CI/CD" class="skill-img"></div>
+                    <span class="skill-icon-label">CI/CD</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="assets/ETL-pipeline_icon.png" alt="ETL Pipeline" class="skill-img"></div>
+                    <span class="skill-icon-label">ETL Pipeline</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="assets/microservice_icon.png" alt="Microservices" class="skill-img"></div>
+                    <span class="skill-icon-label">Microservices</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="assets/git-github_icon.png" alt="Git / GitHub" class="skill-img"></div>
+                    <span class="skill-icon-label">Git / GitHub</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="assets/RESTful_icon-removebg-preview.png" alt="RESTful API" class="skill-img"></div>
+                    <span class="skill-icon-label">RESTful API</span>
+                  </div>
+                </div>
+              </div>
+
+            </div><!-- /primary panels -->
+          </div><!-- /primary block -->
+
+          <!-- ── SECONDARY STACK ── -->
+          <div class="skills-stack-block">
+            <div class="skills-stack-label">
+              <span class="skills-stack-badge secondary">Also</span>
+              Languages &amp; Frameworks
+            </div>
+
+            <div class="skills-tabs" role="tablist" aria-label="Secondary skill categories" data-tab-group="secondary">
+              <button class="skills-tab active" role="tab" aria-selected="true"  data-skills-tab="languages"   data-group="secondary">Languages</button>
+              <button class="skills-tab"         role="tab" aria-selected="false" data-skills-tab="frameworks"  data-group="secondary">Frameworks</button>
+              <button class="skills-tab"         role="tab" aria-selected="false" data-skills-tab="sec-databases" data-group="secondary">Databases</button>
+            </div>
+
+            <div class="skills-panels" data-panel-group="secondary">
+
+              <!-- Languages -->
+              <div class="skills-panel active" data-skills-panel="languages" data-group="secondary" role="tabpanel">
+                <div class="skill-icon-grid">
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="assets/python_icon-removebg-preview.png" alt="Python" class="skill-img"></div>
+                    <span class="skill-icon-label">Python</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="assets/java_icon.png" alt="Java" class="skill-img"></div>
+                    <span class="skill-icon-label">Java</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="assets/c++_icon-removebg-preview.png" alt="C++" class="skill-img"></div>
+                    <span class="skill-icon-label">C++</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="assets/sql_icon.png" alt="SQL" class="skill-img"></div>
+                    <span class="skill-icon-label">SQL</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Frameworks -->
+              <div class="skills-panel" data-skills-panel="frameworks" data-group="secondary" role="tabpanel">
+                <div class="skill-icon-grid">
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="assets/flask_icon-removebg-preview.png" alt="Flask" class="skill-img"></div>
+                    <span class="skill-icon-label">Flask</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="assets/spring_boot_icon-removebg-preview.png" alt="Spring Boot" class="skill-img"></div>
+                    <span class="skill-icon-label">Spring Boot</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="assets/react_icon.png" alt="React" class="skill-img"></div>
+                    <span class="skill-icon-label">React</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="assets/javaFX_icon-removebg-preview.png" alt="JavaFX" class="skill-img"></div>
+                    <span class="skill-icon-label">JavaFX</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Secondary Databases -->
+              <div class="skills-panel" data-skills-panel="sec-databases" data-group="secondary" role="tabpanel">
+                <div class="skill-icon-grid">
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="assets/sql-server_icon-removebg-preview.png" alt="SQL Server" class="skill-img"></div>
+                    <span class="skill-icon-label">SQL Server</span>
+                  </div>
+                </div>
+              </div>
+
+            </div><!-- /secondary panels -->
+          </div><!-- /secondary block -->
+
         </div>
       </section>
 
@@ -443,7 +594,7 @@ core_focus:
                 <h3 class="project-showcase-title">Investor AI</h3>
                 <p class="project-showcase-sub">Stock analysis &amp; prediction system</p>
                 <p class="project-showcase-desc">
-                  Deployed microservices using Docker Compose, integrated Spark, Redis, MinIO with GPU support. Built ETL pipeline with Airflow and JWT security. Integrated LLM for financial report analysis.
+                  Architected a full-stack stock analysis platform across 12 containerized services using Docker Compose with 5 custom Dockerfiles. Automated 13 Airflow DAGs for daily ETL pipelines (balance sheet, cash flow, income statement, price history, LLM analysis). Integrated GPU-accelerated LSTM model training via CUDA, Apache Spark for large-scale data processing, and JWT-secured Spring Boot APIs.
                 </p>
                 <div class="project-showcase-tags">
                   <span>Spring Boot</span><span>React</span><span>Airflow</span>
@@ -486,7 +637,7 @@ core_focus:
                 <h3 class="project-showcase-title">Classes369</h3>
                 <p class="project-showcase-sub">IT center management system</p>
                 <p class="project-showcase-desc">
-                  Built modular APIs with multi-role RBAC, complex transaction handling, and Docker Compose deployment with health checks. Implemented automatic model fallback for API quota limits.
+                  Delivered a complete IT center management system with 17 API modules serving 3 user roles (Admin / Teacher / Student). Containerized the full stack into 3 Docker services with automated DB initialization from SQL script. Implemented multi-role RBAC, complex transaction handling, and an AI assistant with automatic model fallback to handle API quota limits.
                 </p>
                 <div class="project-showcase-tags">
                   <span>Flask</span><span>SQL Server</span><span>Docker</span><span>GenAI</span><span>Python</span>
@@ -527,7 +678,7 @@ core_focus:
                 <h3 class="project-showcase-title">Game mô phỏng Robot tìm đường</h3>
                 <p class="project-showcase-sub">Pathfinding algorithm practice &amp; game optimization</p>
                 <p class="project-showcase-desc">
-                  Implemented BFS, DFS, A* and procedural maze generation. Synchronized game loop, power-ups, inventory, and local leaderboard persistence. Ensured backward compatibility without database dependency.
+                  Built an interactive AI pathfinding visualization platform featuring 3 search algorithms (BFS, DFS, A*) with step-by-step comparison of path length and explored nodes. Extended the system with a 20-power-up inventory system (~1,840 lines added in Phase 2) using Java 17 + JavaFX, achieving &lt;100ms modal latency and zero runtime crashes across all test runs.
                 </p>
                 <div class="project-showcase-tags">
                   <span>Java 17</span><span>JavaFX</span><span>Maven</span><span>BFS</span><span>DFS</span><span>A*</span>
@@ -540,204 +691,6 @@ core_focus:
             </article>
 
           </div>
-        </div>
-      </section>
-
-      <section id="skills" class="section skills">
-        <div class="container">
-          <div class="section-title" style="text-align:center; max-width:100%;">
-            <p class="eyebrow" style="justify-content:center;">Technical Skills</p>
-            <h2>My Tech Stack</h2>
-            <p style="color:var(--muted);font-size:17px;">My expertise across various technologies and tools</p>
-          </div>
-
-          <!-- Category tab pills -->
-          <div class="skills-tabs" role="tablist" aria-label="Skill categories">
-            <button class="skills-tab active" role="tab" aria-selected="true"  data-skills-tab="languages">Languages</button>
-            <button class="skills-tab"         role="tab" aria-selected="false" data-skills-tab="frameworks">Frameworks / Libraries</button>
-            <button class="skills-tab"         role="tab" aria-selected="false" data-skills-tab="devops">DevOps</button>
-            <button class="skills-tab"         role="tab" aria-selected="false" data-skills-tab="databases">Databases</button>
-            <button class="skills-tab"         role="tab" aria-selected="false" data-skills-tab="concepts">Concepts</button>
-          </div>
-
-          <!-- Skill icon panels -->
-          <div class="skills-panels">
-
-            <!-- Languages -->
-            <div class="skills-panel active" data-skills-panel="languages" role="tabpanel">
-              <div class="skill-icon-grid">
-                <div class="skill-icon-card">
-                  <div class="skill-icon-img">
-                    <img src="assets/python_icon-removebg-preview.png" alt="Python" class="skill-img">
-                  </div>
-                  <span class="skill-icon-label">Python</span>
-                </div>
-                <div class="skill-icon-card">
-                  <div class="skill-icon-img">
-                    <img src="assets/java_icon.png" alt="Java" class="skill-img">
-                  </div>
-                  <span class="skill-icon-label">Java</span>
-                </div>
-                <div class="skill-icon-card">
-                  <div class="skill-icon-img">
-                    <img src="assets/c++_icon-removebg-preview.png" alt="C++" class="skill-img">
-                  </div>
-                  <span class="skill-icon-label">C++</span>
-                </div>
-                <div class="skill-icon-card">
-                  <div class="skill-icon-img">
-                    <img src="assets/sql_icon.png" alt="SQL" class="skill-img">
-                  </div>
-                  <span class="skill-icon-label">SQL</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Frameworks / Libraries -->
-            <div class="skills-panel" data-skills-panel="frameworks" role="tabpanel">
-              <div class="skill-icon-grid">
-                <div class="skill-icon-card">
-                  <div class="skill-icon-img">
-                    <img src="assets/flask_icon-removebg-preview.png" alt="Flask" class="skill-img">
-                  </div>
-                  <span class="skill-icon-label">Flask</span>
-                </div>
-                <div class="skill-icon-card">
-                  <div class="skill-icon-img">
-                    <img src="assets/spring_boot_icon-removebg-preview.png" alt="Spring Boot" class="skill-img">
-                  </div>
-                  <span class="skill-icon-label">Spring Boot</span>
-                </div>
-                <div class="skill-icon-card">
-                  <div class="skill-icon-img">
-                    <img src="assets/react_icon.png" alt="React" class="skill-img">
-                  </div>
-                  <span class="skill-icon-label">React</span>
-                </div>
-                <div class="skill-icon-card">
-                  <div class="skill-icon-img">
-                    <img src="assets/javaFX_icon-removebg-preview.png" alt="JavaFX" class="skill-img">
-                  </div>
-                  <span class="skill-icon-label">JavaFX</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- DevOps -->
-            <div class="skills-panel" data-skills-panel="devops" role="tabpanel">
-              <div class="skill-icon-grid">
-                <div class="skill-icon-card">
-                  <div class="skill-icon-img">
-                    <img src="assets/docker_icon.png" alt="Docker" class="skill-img">
-                  </div>
-                  <span class="skill-icon-label">Docker</span>
-                </div>
-                <div class="skill-icon-card">
-                  <div class="skill-icon-img">
-                    <img src="assets/docker-compose_icon-removebg-preview.png" alt="Docker Compose" class="skill-img">
-                  </div>
-                  <span class="skill-icon-label">Docker Compose</span>
-                </div>
-                <div class="skill-icon-card">
-                  <div class="skill-icon-img">
-                    <img src="assets/linux_icon.png" alt="Linux" class="skill-img">
-                  </div>
-                  <span class="skill-icon-label">Linux</span>
-                </div>
-                <div class="skill-icon-card">
-                  <div class="skill-icon-img">
-                    <img src="assets/apache-airflow_icon.png" alt="Airflow" class="skill-img">
-                  </div>
-                  <span class="skill-icon-label">Airflow</span>
-                </div>
-                <div class="skill-icon-card">
-                  <div class="skill-icon-img">
-                    <img src="assets/Jenkins_icon.png" alt="Jenkins" class="skill-img">
-                  </div>
-                  <span class="skill-icon-label">Jenkins</span>
-                </div>
-                <div class="skill-icon-card">
-                  <div class="skill-icon-img">
-                    <img src="assets/github-actions_icon-removebg-preview.png" alt="GitHub Actions" class="skill-img">
-                  </div>
-                  <span class="skill-icon-label">GitHub Actions</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Databases -->
-            <div class="skills-panel" data-skills-panel="databases" role="tabpanel">
-              <div class="skill-icon-grid">
-                <div class="skill-icon-card">
-                  <div class="skill-icon-img">
-                    <img src="assets/postgreesql_icon-removebg-preview.png" alt="PostgreSQL" class="skill-img">
-                  </div>
-                  <span class="skill-icon-label">PostgreSQL</span>
-                </div>
-                <div class="skill-icon-card">
-                  <div class="skill-icon-img">
-                    <img src="assets/sql-server_icon-removebg-preview.png" alt="SQL Server" class="skill-img">
-                  </div>
-                  <span class="skill-icon-label">SQL Server</span>
-                </div>
-                <div class="skill-icon-card">
-                  <div class="skill-icon-img">
-                    <img src="assets/redis_icon-removebg-preview.png" alt="Redis" class="skill-img">
-                  </div>
-                  <span class="skill-icon-label">Redis</span>
-                </div>
-                <div class="skill-icon-card">
-                  <div class="skill-icon-img">
-                    <img src="assets/spark_icon-removebg-preview.png" alt="Spark" class="skill-img">
-                  </div>
-                  <span class="skill-icon-label">Spark</span>
-                </div>
-                <div class="skill-icon-card">
-                  <div class="skill-icon-img">
-                    <img src="assets/MINIO_icon.png" alt="MinIO" class="skill-img">
-                  </div>
-                  <span class="skill-icon-label">MinIO</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Concepts -->
-            <div class="skills-panel" data-skills-panel="concepts" role="tabpanel">
-              <div class="skill-icon-grid">
-                <div class="skill-icon-card">
-                  <div class="skill-icon-img">
-                    <img src="assets/RESTful_icon-removebg-preview.png" alt="RESTful API" class="skill-img">
-                  </div>
-                  <span class="skill-icon-label">RESTful API</span>
-                </div>
-                <div class="skill-icon-card">
-                  <div class="skill-icon-img">
-                    <img src="assets/CI-CD_icon.png" alt="CI/CD" class="skill-img">
-                  </div>
-                  <span class="skill-icon-label">CI/CD</span>
-                </div>
-                <div class="skill-icon-card">
-                  <div class="skill-icon-img">
-                    <img src="assets/git-github_icon.png" alt="Git / GitHub" class="skill-img">
-                  </div>
-                  <span class="skill-icon-label">Git / GitHub</span>
-                </div>
-                <div class="skill-icon-card">
-                  <div class="skill-icon-img">
-                    <img src="assets/ETL-pipeline_icon.png" alt="ETL Pipeline" class="skill-img">
-                  </div>
-                  <span class="skill-icon-label">ETL Pipeline</span>
-                </div>
-                <div class="skill-icon-card">
-                  <div class="skill-icon-img">
-                    <img src="assets/microservice_icon.png" alt="Microservices" class="skill-img">
-                  </div>
-                  <span class="skill-icon-label">Microservices</span>
-                </div>
-              </div>
-            </div>
-
-          </div><!-- /skills-panels -->
         </div>
       </section>
 
@@ -840,6 +793,12 @@ core_focus:
         <span class="chatbot-fab-badge" aria-hidden="true"></span>
       </button>
 
+      <!-- Tooltip bubble above FAB -->
+      <div class="chatbot-fab-tooltip" id="chatbot-fab-tooltip" aria-live="polite">
+        👋 Ask me anything about Duc!
+        <button class="chatbot-fab-tooltip-close" id="chatbot-tooltip-close" aria-label="Dismiss">×</button>
+      </div>
+
       <!-- Chat window -->
       <div id="chatbot-window" role="dialog" aria-modal="true" aria-label="Duc's AI Assistant">
         <div class="chatbot-header">
@@ -853,7 +812,10 @@ core_focus:
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
             </button>
             <button id="chatbot-minimize" aria-label="Minimize chat" title="Minimize">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <!-- Minimize icon (dash) — shown when chat is expanded -->
+              <svg class="icon-minimize" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <!-- Maximize icon (expand arrows) — shown when chat is minimized -->
+              <svg class="icon-maximize" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
             </button>
             <button id="chatbot-close" aria-label="Close chat" title="Close">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
