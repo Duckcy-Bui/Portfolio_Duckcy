@@ -999,39 +999,6 @@ function showToast(message, type = "info") {
 
 })();
 
-// ============================================================
-// VIDEO LANGUAGE SWITCHER (EN / VI)
-// ============================================================
-(function () {
-  document.querySelectorAll(".video-lang-tabs").forEach((tabGroup) => {
-    tabGroup.querySelectorAll(".video-lang-btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const lang = btn.dataset.lang;           // "en" or "vi"
-        const targetId = btn.dataset.target;     // "video-1", "video-2", "video-3"
-        const iframe = document.getElementById(targetId);
-        if (!iframe) return;
-
-        // Update active tab
-        tabGroup.querySelectorAll(".video-lang-btn").forEach((b) => {
-          b.classList.remove("active");
-          b.setAttribute("aria-selected", "false");
-        });
-        btn.classList.add("active");
-        btn.setAttribute("aria-selected", "true");
-
-        // Swap iframe src
-        const newSrc = iframe.dataset[`src${lang.charAt(0).toUpperCase() + lang.slice(1)}`] || "";
-        iframe.src = newSrc;
-
-        // Show/hide empty state
-        const emptyState = iframe.nextElementSibling;
-        if (emptyState && emptyState.classList.contains("video-empty-state")) {
-          emptyState.style.display = newSrc ? "none" : "";
-        }
-      });
-    });
-  });
-})();
 
 // ============================================================
 // NAV DROPDOWN — About submenu with tab targeting

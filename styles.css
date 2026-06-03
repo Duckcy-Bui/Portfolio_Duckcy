@@ -3054,6 +3054,25 @@ body.light-mode .stack-cat-btn {
 }
 
 /* ============================================================
+   PROJECTS CTA — View All Source Code
+   ============================================================ */
+.projects-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 48px;
+}
+
+.projects-cta .btn {
+  gap: 10px;
+  font-size: 15px;
+  padding: 14px 28px;
+}
+
+.projects-cta .btn svg {
+  flex-shrink: 0;
+}
+
+/* ============================================================
    SKILLS — tab + icon grid redesign
    ============================================================ */
 

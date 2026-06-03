@@ -39,30 +39,36 @@ Role: Software Engineering Intern
 Responsibilities: Backend development, API design, system architecture, team collaboration
 
 === TECHNICAL SKILLS ===
-Programming Languages: Python, Java, C++, SQL
-Frameworks & Libraries: Flask, Spring Boot, React, JavaFX
-DevOps & Infrastructure: Docker, Docker Compose, Linux, Apache Airflow, Jenkins, GitHub Actions
+Programming Languages: Python, Java, C++, SQL, TypeScript
+Frameworks & Libraries: Next.js, Flask, Spring Boot, React, JavaFX, Tailwind CSS, Prisma
+DevOps & Infrastructure: Docker, Docker Compose, Linux, Apache Airflow, Jenkins, GitHub Actions, PM2
 Databases & Storage: PostgreSQL, SQL Server, Redis, Apache Spark, MinIO
-Concepts & Practices: RESTful API, CI/CD, Git/GitHub, ETL Pipelines, Microservices Architecture
+AI/ML: PyTorch (CUDA), LSTM, Google Gemini API, LLM Integration
+Realtime & Notifications: SSE (Server-Sent Events), Redis Pub/Sub, Web Push API
+Concepts & Practices: RESTful API, CI/CD, Git/GitHub, ETL Pipelines, Microservices Architecture, JWT Authentication, OAuth2, RBAC
 
 === PROJECTS ===
-1. Investor AI
-   - Description: An AI-powered stock analysis and prediction system
-   - Tech Stack: Spring Boot, React, Apache Airflow, Docker, PostgreSQL, Apache Spark, Redis, MinIO, LLM integration
-   - Features: Microservices architecture, automated ETL pipelines with Airflow, real-time analytics, JWT security, GPU support, AI-driven financial report analysis
-   - GitHub: github.com/ltdungg/Investor-Al-Website
+1. SBLT CUP
+   - Description: Tournament Management Platform for TFT (Teamfight Tactics)
+   - Tech Stack: Next.js 16, TypeScript, Prisma 7, PostgreSQL, Redis, NextAuth v5, Tailwind CSS, SSE, Web Push, GitHub Actions CI/CD
+   - Role: Personal Project (built for SBLT YouTube team's TFT tournament, May 2026)
+   - Features: Multi-stage tournament system (5 types, 8 groups × 8 players), automated advancement and prediction system with time-window control and auto-scoring, real-time updates via SSE + Redis Pub/Sub (5000+ concurrent connections) with cross-instance PM2 broadcasting, 3-channel notification system (Database, Email, Push) with batch processing, composite player rating algorithm (0-1000 score), OAuth2 (Google) + Credentials auth, RBAC, session invalidation, audit logging
+   - GitHub: github.com/Duck-SFIT-CNTT2-K64/SBLT-CUP
 
 2. Classes369
-   - Description: An IT center management system for student and class management
-   - Tech Stack: Flask, SQL Server, Docker, Generative AI, Python
-   - Features: Multi-role RBAC, complex transaction handling, Docker Compose with health checks, automatic model fallback for API quota limits
+   - Description: IT center student management system
+   - Tech Stack: Flask, SQL Server, Docker, Python, GenAI
+   - Role: DevOps and Backend (Feb 2026 – May 2026)
+   - Backend: Modular Flask API with 11+ Blueprint modules, robust DB transaction handling, authentication with bcrypt and role-based access, transactional enrollment, cascading deletes, payments handling
+   - DevOps: Docker-based deployment (app + SQL Server + db-init) with automated schema seeding, persistent volumes, healthchecks, wait-for-sql race condition prevention, retry/backoff mechanisms
    - GitHub: github.com/Duck-SFIT-CNTT2-K64/api_web_student_manager
 
-3. Robot Pathfinding Game
-   - Description: A pathfinding algorithm visualization and game platform
-   - Tech Stack: Java 17, JavaFX, Maven
-   - Features: BFS, DFS, A* algorithm implementation, procedural maze generation, synchronized game loop, power-ups, inventory, local leaderboard persistence
-   - GitHub: github.com/Duck-SFIT-CNTT2-K64/ai-game-platform
+3. Investor AI
+   - Description: AI-powered stock analysis and prediction platform
+   - Tech Stack: Spring Boot, React, Apache Airflow, Docker, Spark, PostgreSQL, Redis, MinIO, CUDA
+   - Role: DevOps (Jan 2025 – Jun 2025)
+   - Features: Scalable containerized deployment for 12 services, daily processing of financial data via 13 Airflow DAGs, Docker images and docker-compose configurations, automated CI/CD pipelines with rollback support, GPU- and Spark-enabled containers for LSTM model training with CUDA tuning, centralized logging, alerting, and SLOs, PostgreSQL backups, MinIO object storage, secrets handling
+   - GitHub: github.com/ltdungg/Investor-AI-Website
 
 === CERTIFICATES ===
 - Google Cloud (self-learning, completed)
