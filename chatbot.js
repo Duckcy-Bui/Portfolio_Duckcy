@@ -1,6 +1,6 @@
 // ===== CHATBOT MODULE =====
 // Portfolio AI Chatbot for duckcy.me
-// Uses Anthropic Claude via shopaikey.com proxy
+// Uses a remote AI proxy when available and falls back to local portfolio answers
 
 const PROXY_URL = 'https://chatbot-proxy.ducbanca1604.workers.dev/';
 
@@ -209,6 +209,82 @@ function detectLanguage(text) {
   return vietnamesePattern.test(text) ? 'vi' : 'en';
 }
 
+function localize(lang, viText, enText) {
+  return lang === 'vi' ? viText : enText;
+}
+
+function getFallbackReply(userText) {
+  const lang = detectLanguage(userText);
+  const query = String(userText || '').toLowerCase();
+  const intro = localize(
+    lang,
+    "AI live đang tạm gián đoạn, nhưng mình vẫn có thể trả lời nhanh về Duc:\n\n",
+    "The live AI is temporarily unavailable, but I can still answer the basics about Duc:\n\n"
+  );
+
+  if (/^(hi|hello|hey|xin chao|xin chào|chao|chào)\b/.test(query)) {
+    return intro + localize(
+      lang,
+      "Duc hiện là Software Engineer Intern tại NestScale, định hướng Software Engineering với trọng tâm DevOps. Bạn có thể hỏi về kỹ năng, dự án, kinh nghiệm, học vấn hoặc cách liên hệ.",
+      "Duc is currently a Software Engineer Intern at NestScale, focused on Software Engineering with a DevOps orientation. You can ask about his skills, projects, experience, education, or contact details."
+    );
+  }
+
+  if (/(contact|email|phone|linkedin|github|facebook|liên hệ|lien he|sdt|số điện thoại|so dien thoai)/.test(query)) {
+    return intro + localize(
+      lang,
+      "Bạn có thể liên hệ Duc qua email `duckcy.work@gmail.com`, số điện thoại `+84 97 679 5113`, LinkedIn `linkedin.com/in/duckcy/`, hoặc GitHub `github.com/Duck-SFIT-CNTT2-K64`.",
+      "You can reach Duc at `duckcy.work@gmail.com`, phone `+84 97 679 5113`, LinkedIn `linkedin.com/in/duckcy/`, or GitHub `github.com/Duck-SFIT-CNTT2-K64`."
+    );
+  }
+
+  if (/(skill|stack|tech|kỹ năng|ky nang|cong nghe|công nghệ)/.test(query)) {
+    return intro + localize(
+      lang,
+      "Duc mạnh về Docker, Linux, CI/CD, Jenkins, GitHub Actions, PostgreSQL, Redis, Spark, MinIO, cùng backend bằng Python, Java, Flask và Spring Boot. Ngoài ra còn có kinh nghiệm với React, Next.js, ETL pipeline và microservices.",
+      "Duc is strongest in Docker, Linux, CI/CD, Jenkins, GitHub Actions, PostgreSQL, Redis, Spark, MinIO, plus backend work with Python, Java, Flask, and Spring Boot. He also has experience with React, Next.js, ETL pipelines, and microservices."
+    );
+  }
+
+  if (/(project|du an|dự án|portfolio|work)/.test(query)) {
+    return intro + localize(
+      lang,
+      "3 dự án nổi bật của Duc là `SBLT CUP` (nền tảng quản lý giải đấu), `Classes369` (hệ thống quản lý trung tâm IT với Flask + SQL Server + Docker) và `Investor AI` (nền tảng phân tích chứng khoán dùng Spring Boot, React, Airflow, Docker, Spark, Redis, MinIO).",
+      "Duc's 3 standout projects are `SBLT CUP` (a tournament management platform), `Classes369` (an IT center system built with Flask, SQL Server, and Docker), and `Investor AI` (a stock analysis platform using Spring Boot, React, Airflow, Docker, Spark, Redis, and MinIO)."
+    );
+  }
+
+  if (/(experience|intern|internship|nestscale|kinh nghiem|kinh nghiệm|thuc tap|thực tập)/.test(query)) {
+    return intro + localize(
+      lang,
+      "Duc đang thực tập vị trí Software Engineer Intern tại NestScale, Đê La Thành, Hà Nội. Hướng đi hiện tại là Software Engineering với trọng tâm DevOps, tập trung vào backend systems, CI/CD, deployment quality và operational reliability.",
+      "Duc is currently a Software Engineer Intern at NestScale in De La Thanh, Hanoi. His direction is Software Engineering with a DevOps focus, especially backend systems, CI/CD, deployment quality, and operational reliability."
+    );
+  }
+
+  if (/(education|school|university|utc|sfit|hoc van|học vấn|truong|trường|club|clb)/.test(query)) {
+    return intro + localize(
+      lang,
+      "Duc là sinh viên năm 3 ngành Công nghệ Thông tin tại University of Transport and Communications, GPA 3.4/4.0. Đồng thời Duc hoạt động tại SFIT Club với vai trò Technical Lead & Mentor, phụ trách workshop, mentoring và kết nối thành viên.",
+      "Duc is a third-year Information Technology student at the University of Transport and Communications with a 3.4/4.0 GPA. He is also active in SFIT Club as a Technical Lead & Mentor, organizing workshops, mentoring members, and supporting project-based learning."
+    );
+  }
+
+  if (/(cv|resume)/.test(query)) {
+    return intro + localize(
+      lang,
+      "Bạn có thể tải CV của Duc tại: [Download CV](https://duckcy.me/assets/CV_bui_hai_duc.pdf).",
+      "You can download Duc's CV here: [Download CV](https://duckcy.me/assets/CV_bui_hai_duc.pdf)."
+    );
+  }
+
+  return intro + localize(
+    lang,
+    "Mình chỉ hỗ trợ thông tin về Duc. Bạn có thể hỏi về kỹ năng, dự án, kinh nghiệm tại NestScale, học vấn ở UTC hoặc cách liên hệ.",
+    "I can help with Duc's skills, projects, NestScale internship, UTC education, or contact details."
+  );
+}
+
 // ===== RATE LIMITING =====
 function checkRateLimit() {
   const now = Date.now();
@@ -244,12 +320,15 @@ function getHistory() {
 // ===== API CLIENT =====
 // Calls Anthropic Claude via shopaikey.com proxy (Cloudflare Worker)
 async function sendToAI(userText) {
+  const fallbackReply = getFallbackReply(userText);
+
   if (!checkRateLimit()) {
     throw new Error('Too many messages, please wait a moment');
   }
 
   if (PROXY_URL === 'YOUR_CLOUDFLARE_WORKER_URL') {
-    throw new Error('AI is not configured yet. Please set up the Cloudflare Worker proxy.');
+    appendMessage('assistant', fallbackReply);
+    return fallbackReply;
   }
 
   const lang = detectLanguage(userText);
@@ -268,11 +347,17 @@ async function sendToAI(userText) {
     messages: getHistory()
   };
 
-  const response = await fetch(PROXY_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
+  let response;
+  try {
+    response = await fetch(PROXY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+  } catch (_) {
+    appendMessage('assistant', fallbackReply);
+    return fallbackReply;
+  }
 
   if (!response.ok) {
     // Try to parse error message from response
@@ -283,7 +368,8 @@ async function sendToAI(userText) {
         errMsg = errData.error.message;
       }
     } catch (_) { /* ignore parse error */ }
-    throw new Error(errMsg);
+    appendMessage('assistant', fallbackReply);
+    return fallbackReply;
   }
 
   const data = await response.json();
@@ -292,7 +378,8 @@ async function sendToAI(userText) {
   const text = data?.content?.[0]?.text;
 
   if (!text) {
-    throw new Error('AI returned an empty response, please try again');
+    appendMessage('assistant', fallbackReply);
+    return fallbackReply;
   }
 
   // Add assistant message to history (Anthropic format)
