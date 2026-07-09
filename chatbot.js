@@ -11,8 +11,7 @@ Full Name: Bui Hai Duc
 Date of Birth: 13/05/2005
 Location: No. 3, Cau Giay, Hanoi, Vietnam
 Website: duckcy.me
-Email 1: duckcyzzz1305@gmail.com
-Email 2: ducbanca1604@gmail.com
+Email: duckcy.work@gmail.com
 Phone 1: +84 97 679 5113
 Phone 2: +84 86 877 6016
 
@@ -32,11 +31,12 @@ Club: SFIT (Student Forum of Information Technology)
 Role: Technical Lead & Mentor (2023 - Present)
 Responsibilities: Leading technical workshops, mentoring junior members, organizing coding events, promoting project-based learning
 
-=== INTERNSHIP EXPERIENCE ===
-Company: iSeeWaves
-Achievement: Best Employee of the Month
-Role: Software Engineering Intern
-Responsibilities: Backend development, API design, system architecture, team collaboration
+=== CURRENT INTERNSHIP EXPERIENCE ===
+Company: NestScale
+Location: Đê La Thành, Hà Nội, Vietnam
+Role: Software Engineer Intern
+Orientation: Software Engineering with a DevOps focus
+Responsibilities: Building software engineering experience while applying a DevOps-oriented mindset to backend systems, deployment quality, CI/CD practices, and operational reliability
 
 === TECHNICAL SKILLS ===
 Programming Languages: Python, Java, C++, SQL, TypeScript
@@ -74,13 +74,11 @@ Concepts & Practices: RESTful API, CI/CD, Git/GitHub, ETL Pipelines, Microservic
 - Google Cloud (self-learning, completed)
 - Docker & Kubernetes (self-learning, completed)
 - Advanced Golang Patterns (self-learning, completed)
-- iSeeWaves Internship Completion Letter (completed)
 - DevOps & Cloud Infrastructure (in progress)
 
 === TESTIMONIALS ===
 - Minh Tran, Product Lead at GoodFood: "Duc shipped reliable backend ahead of schedule and kept the API contracts clean."
 - Hanh Le, Engineering Manager: "Clear communication, strong architecture instincts, and fast delivery."
-- Mr Abdullah Nasir, CEO at iSeeWaves: "Duc owned critical parts of myESI. His work directly improved stability and was recognized as Best Employee of the Month."
 
 === BEHAVIORAL INSTRUCTIONS ===
 - You MUST only answer questions related to Bui Hai Duc: his skills, projects, education, experience, contact information, and career.
@@ -90,7 +88,7 @@ Concepts & Practices: RESTful API, CI/CD, Git/GitHub, ETL Pipelines, Microservic
 - When refusing off-topic questions, suggest the visitor ask about Duc's skills, projects, or how to contact him instead.
 - Be friendly, professional, and enthusiastic about Duc's work and achievements.
 - Keep responses concise — under 150 words unless the user asks for more detail.
-- If asked about contacting Duc, provide his email, phone, LinkedIn, or guide them to scroll down to the Contact section.
+- If asked about contacting Duc, provide his email (duckcy.work@gmail.com), phone, LinkedIn, or guide them to scroll down to the Contact section.
 - Answer in the same language the user writes in (Vietnamese or English).
 `;
 
@@ -132,6 +130,15 @@ function escapeHTML(str) {
   return div.innerHTML;
 }
 
+function sanitizeMarkdownHref(rawUrl) {
+  const href = String(rawUrl || '').trim();
+  const normalized = href
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .toLowerCase();
+  return /^(https?:\/\/|mailto:|tel:)/.test(normalized) ? href : '';
+}
+
 // ===== MARKDOWN RENDERING =====
 function renderMarkdown(rawText) {
   if (typeof rawText !== 'string') return '';
@@ -149,23 +156,39 @@ function renderMarkdown(rawText) {
   // Inline code
   escaped = escaped.replace(/`([^`]+)`/g, '<code>$1</code>');
   // Links: [text](url)
-  escaped = escaped.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noreferrer" style="color:var(--accent-2);text-decoration:underline;">$1</a>');
+  escaped = escaped.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, label, url) => {
+    const safeHref = sanitizeMarkdownHref(url);
+    if (!safeHref) return label;
+    return `<a href="${safeHref}" target="_blank" rel="noreferrer" style="color:var(--accent-2);text-decoration:underline;">${label}</a>`;
+  });
 
   const lines = escaped.split('\n');
   const resultLines = [];
   let inList = false;
+  let listTag = '';
 
   for (const line of lines) {
     if (/^- (.+)/.test(line)) {
-      if (!inList) { resultLines.push('<ul>'); inList = true; }
+      if (!inList || listTag !== 'ul') {
+        if (inList) resultLines.push(`</${listTag}>`);
+        resultLines.push('<ul>');
+        inList = true;
+        listTag = 'ul';
+      }
       resultLines.push(line.replace(/^- (.+)/, '<li>$1</li>'));
     } else if (/^\d+\.\s(.+)/.test(line)) {
-      if (!inList) { resultLines.push('<ol>'); inList = true; }
+      if (!inList || listTag !== 'ol') {
+        if (inList) resultLines.push(`</${listTag}>`);
+        resultLines.push('<ol>');
+        inList = true;
+        listTag = 'ol';
+      }
       resultLines.push(line.replace(/^\d+\.\s(.+)/, '<li>$1</li>'));
     } else {
       if (inList) {
-        resultLines.push('</ul>');
+        resultLines.push(`</${listTag}>`);
         inList = false;
+        listTag = '';
       }
       if (line.trim() === '') {
         resultLines.push('<br>');
@@ -174,7 +197,7 @@ function renderMarkdown(rawText) {
       }
     }
   }
-  if (inList) resultLines.push('</ul>');
+  if (inList) resultLines.push(`</${listTag}>`);
 
   return resultLines.join('\n');
 }

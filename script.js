@@ -478,7 +478,7 @@ if (contactForm) {
       `Hi Duc,\n\nMy name is ${name} (${email}).\n\n${message}\n\nBest regards,\n${name}`
     );
 
-    window.location.href = `mailto:duckcyzzz1305@gmail.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:duckcy.work@gmail.com?subject=${subject}&body=${body}`;
     showToast("Opening your email client...", "info");
     contactForm.reset();
     fields.forEach((f) => f.classList.remove("valid", "invalid"));

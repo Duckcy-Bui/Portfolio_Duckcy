@@ -2,7 +2,7 @@
 
 ## 📋 PROJECT OVERVIEW
 
-**Project Name:** Bui Hai Duc's DevOps Portfolio  
+**Project Name:** Bui Hai Duc's Software Engineering Portfolio (DevOps-oriented)
 **Current Status:** MVP Complete - Ready for Enhancement  
 **Tech Stack:** HTML5, CSS3, Vanilla JavaScript (No Frameworks)  
 **Design Theme:** Outer Space with animated gradient background  
@@ -480,7 +480,7 @@ When complete, the portfolio should have:
 ## 📞 CONTACT & SUPPORT
 
 **Portfolio Owner:** Bui Hai Duc  
-**Email:** duckcyzzz1305@gmail.com  
+**Email:** duckcy.work@gmail.com
 **Phone:** +84 97 679 5113  
 **LinkedIn:** https://www.linkedin.com/in/hai-duck-2538a7233/  
 **GitHub:** https://github.com/Duck-SFIT-CNTT2-K64
