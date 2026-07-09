@@ -141,57 +141,6 @@ animatedBlocks.forEach((block) => {
   });
 });
 
-// Project Filtering
-const searchInput = document.querySelector("[data-project-search]");
-const filterButtons = document.querySelectorAll("[data-filter]");
-const projectList = document.querySelector("[data-project-list]");
-const projectCount = document.querySelector("[data-project-count]");
-
-if (projectList && projectCount) {
-  const cards = Array.from(projectList.querySelectorAll(".project-card"));
-  const total = cards.length;
-  let activeFilter = "all";
-  let activeQuery = "";
-
-  const updateCount = (visible) => {
-    projectCount.textContent = `Showing ${visible} of ${total} projects`;
-  };
-
-  const applyFilters = () => {
-    let visible = 0;
-    cards.forEach((card) => {
-      const tags = (card.dataset.tags || "").toLowerCase().split(",").map((tag) => tag.trim());
-      const text = (card.dataset.text || "").toLowerCase();
-      const matchesTag = activeFilter === "all" || tags.includes(activeFilter);
-      const matchesQuery = !activeQuery || text.includes(activeQuery);
-      const shouldShow = matchesTag && matchesQuery;
-      card.style.display = shouldShow ? "flex" : "none";
-      if (shouldShow) {
-        visible += 1;
-      }
-    });
-    updateCount(visible);
-  };
-
-  filterButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      filterButtons.forEach((btn) => btn.classList.remove("active"));
-      button.classList.add("active");
-      activeFilter = button.dataset.filter || "all";
-      applyFilters();
-    });
-  });
-
-  if (searchInput) {
-    searchInput.addEventListener("input", (event) => {
-      activeQuery = event.target.value.trim().toLowerCase();
-      applyFilters();
-    });
-  }
-
-  applyFilters();
-}
-
 // Smooth scroll for anchor links
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener("click", function (e) {
@@ -400,27 +349,40 @@ if (backToTopBtn) {
 }
 
 // ============================================================
-// SKILL PROGRESS BARS — animate on scroll into view
-// ============================================================
-const skillCards = document.querySelectorAll(".skill-card");
-
-if (skillCards.length > 0) {
-  const skillBarObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("bars-animated");
-        skillBarObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.3 });
-
-  skillCards.forEach((card) => skillBarObserver.observe(card));
-}
-
-// ============================================================
 // CONTACT FORM — validation + mailto submit
 // ============================================================
 const contactForm = document.getElementById("contact-form");
+
+function copyTextToClipboard(text) {
+  if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+    return navigator.clipboard.writeText(text);
+  }
+
+  return new Promise((resolve, reject) => {
+    const helper = document.createElement("textarea");
+    helper.value = text;
+    helper.setAttribute("readonly", "");
+    helper.style.position = "fixed";
+    helper.style.opacity = "0";
+    helper.style.pointerEvents = "none";
+    document.body.appendChild(helper);
+    helper.select();
+    helper.setSelectionRange(0, helper.value.length);
+
+    try {
+      const copied = document.execCommand("copy");
+      document.body.removeChild(helper);
+      if (copied) {
+        resolve();
+      } else {
+        reject(new Error("Clipboard copy was blocked."));
+      }
+    } catch (error) {
+      document.body.removeChild(helper);
+      reject(error);
+    }
+  });
+}
 
 function validateField(input) {
   const type = input.dataset.validate;
@@ -454,7 +416,7 @@ if (contactForm) {
     });
   });
 
-  contactForm.addEventListener("submit", (e) => {
+  contactForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const fields = contactForm.querySelectorAll("[data-validate]");
     let allValid = true;
@@ -473,13 +435,25 @@ if (contactForm) {
     const email = contactForm.querySelector("#cf-email").value.trim();
     const message = contactForm.querySelector("#cf-message").value.trim();
 
+    const draftMessage = `Hi Duc,\n\nMy name is ${name} (${email}).\n\n${message}\n\nBest regards,\n${name}`;
     const subject = encodeURIComponent(`Portfolio Contact from ${name}`);
-    const body = encodeURIComponent(
-      `Hi Duc,\n\nMy name is ${name} (${email}).\n\n${message}\n\nBest regards,\n${name}`
-    );
+    const body = encodeURIComponent(draftMessage);
+    let copiedBackup = false;
+
+    try {
+      await copyTextToClipboard(draftMessage);
+      copiedBackup = true;
+    } catch (_) {
+      copiedBackup = false;
+    }
 
     window.location.href = `mailto:duckcy.work@gmail.com?subject=${subject}&body=${body}`;
-    showToast("Opening your email client...", "info");
+    showToast(
+      copiedBackup
+        ? "Opening your email client. Draft copied as backup."
+        : "Opening your email client...",
+      "info"
+    );
     contactForm.reset();
     fields.forEach((f) => f.classList.remove("valid", "invalid"));
   });
@@ -491,12 +465,12 @@ if (contactForm) {
 const copyEmailLinks = document.querySelectorAll(".copy-email");
 
 copyEmailLinks.forEach((link) => {
-  link.addEventListener("click", (e) => {
+  link.addEventListener("click", async (e) => {
     e.preventDefault();
     const text = link.dataset.copy;
     if (!text) return;
 
-    navigator.clipboard.writeText(text).then(() => {
+    copyTextToClipboard(text).then(() => {
       link.classList.add("copied");
       showToast("Email copied to clipboard! ✓", "success");
       setTimeout(() => link.classList.remove("copied"), 2500);
