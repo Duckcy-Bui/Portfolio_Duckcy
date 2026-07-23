@@ -1083,6 +1083,11 @@ pre {
   margin: 12px 0 0;
 }
 
+.cert-badge-embed {
+  display: block;
+  margin-top: 12px;
+}
+
 .cert-link {
   display: inline-block;
   margin-top: 12px;
