@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-25T00:01:38.707Z",
+  "provenance": {
+    "commitSha": "3cf03702d7d95363f5d7381da986f5a66863085a",
+    "sourceDigest": "e16dbd2cdc7cbfecec21c5d619a58bb7bded72efa68461eea30d0f14b9fda6e6",
+    "sourceScope": "fc-source-v1"
+  },
+  "command": "/home/duckcy/work/Portfolio_Duckcy/node_modules/.bin/vitest --run tests/flappy-cloud-game/mounted.test.js tests/flappy-cloud-game/properties.test.js tests/flappy-cloud-game/portfolio.test.js --reporter=json --outputFile=<temporary-json-report>",
+  "rawReport": {
+    "path": "evidence/lifecycle-vitest-raw.json",
+    "sha256": "18326e97280df46267d8763d92e24777edd2428cea8735f974a6228973db1010"
+  },
+  "runner": {
+    "name": "vitest",
+    "version": "3.2.4"
+  },
+  "targets": [
+    "tests/flappy-cloud-game/mounted.test.js",
+    "tests/flappy-cloud-game/properties.test.js",
+    "tests/flappy-cloud-game/portfolio.test.js"
+  ],
+  "success": true,
+  "totals": {
+    "tests": 83,
+    "passed": 83,
+    "failed": 0,
+    "pending": 0
+  },
+  "requiredAssertions": {
+    "stress20": true,
+    "fullStress20": true,
+    "p37": true,
+    "p38": true,
+    "runtimeError": true
+  },
+  "stressRounds": 20,
+  "propertyRuns": {
+    "P37": 150,
+    "P38": 150
+  },
+  "assertedFinalResourceCounts": {
+    "loops": 0,
+    "timers": 0,
+    "observers": 0,
+    "gameOwnedListeners": 0,
+    "mediaListeners": 0,
+    "pointerCaptures": 0
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://duckcy.dev/schemas/fc-final-evidence-manifest.schema.json",
+  "title": "Flappy Cloud final evidence manifest",
+  "type": "object",
+  "required": ["schemaVersion", "kind", "createdAt", "provenance", "artifacts", "supportingArtifacts"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "kind": { "const": "flappy-cloud-game-final-evidence" },
+    "createdAt": { "type": "string", "minLength": 1 },
+    "provenance": { "$ref": "#/$defs/provenance" },
+    "artifacts": {
+      "type": "object",
+      "required": ["usability", "accessibility", "performanceDesktop", "performanceMobile", "payload", "lifecycle"],
+      "additionalProperties": false,
+      "properties": {
+        "usability": { "$ref": "#/$defs/artifact" },
+        "accessibility": { "$ref": "#/$defs/artifact" },
+        "performanceDesktop": { "$ref": "#/$defs/artifact" },
+        "performanceMobile": { "$ref": "#/$defs/artifact" },
+        "payload": { "$ref": "#/$defs/artifact" },
+        "lifecycle": { "$ref": "#/$defs/artifact" }
+      }
+    },
+    "supportingArtifacts": {
+      "type": "array",
+      "minItems": 14,
+      "maxItems": 14,
+      "items": { "$ref": "#/$defs/supportingArtifact" }
+    }
+  },
+  "$defs": {
+    "provenance": {
+      "type": "object",
+      "required": ["commitSha", "sourceDigest", "sourceScope"],
+      "additionalProperties": false,
+      "properties": {
+        "commitSha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "sourceDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "sourceScope": { "const": "fc-source-v1" }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "required": ["path", "bytes", "sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "path": { "type": "string", "pattern": "^evidence/[A-Za-z0-9._/-]+\\.json$" },
+        "bytes": { "type": "integer", "minimum": 1 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "supportingArtifact": {
+      "type": "object",
+      "required": ["path", "bytes", "sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "path": { "type": "string", "pattern": "^evidence/[A-Za-z0-9._/-]+$" },
+        "bytes": { "type": "integer", "minimum": 1 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    }
+  }
+}

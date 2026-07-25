@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "limitBytes": 150000,
+  "totalEncodedBytes": 20754,
+  "passed": true,
+  "resources": [
+    {
+      "url": "game/fc-engine.js",
+      "rawBytes": 52577,
+      "encodedBytes": 18447,
+      "measurement": "gzip-9-n-equivalent"
+    },
+    {
+      "url": "game/fc-overlay.css",
+      "rawBytes": 8870,
+      "encodedBytes": 2307,
+      "measurement": "gzip-9-n-equivalent"
+    }
+  ]
+}

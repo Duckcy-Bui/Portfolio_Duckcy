@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://duckcy.dev/schemas/fc-lifecycle-evidence.schema.json",
+  "title": "Flappy Cloud lifecycle evidence",
+  "type": "object",
+  "required": ["schemaVersion", "generatedAt", "provenance", "command", "rawReport", "runner", "targets", "success", "totals", "requiredAssertions", "stressRounds", "propertyRuns", "assertedFinalResourceCounts"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "generatedAt": { "type": "string", "minLength": 1 },
+    "provenance": { "$ref": "#/$defs/provenance" },
+    "command": { "type": "string", "minLength": 1 },
+    "rawReport": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "path": { "const": "evidence/lifecycle-vitest-raw.json" },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "runner": {
+      "type": "object",
+      "required": ["name", "version"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "const": "vitest" },
+        "version": { "type": "string", "pattern": "^[0-9]+(?:\\.[0-9]+)+$" }
+      }
+    },
+    "targets": { "type": "array", "minItems": 3, "items": { "type": "string", "minLength": 1 } },
+    "success": { "const": true },
+    "totals": {
+      "type": "object",
+      "required": ["tests", "passed", "failed", "pending"],
+      "additionalProperties": false,
+      "properties": {
+        "tests": { "type": "integer", "minimum": 1 },
+        "passed": { "type": "integer", "minimum": 1 },
+        "failed": { "const": 0 },
+        "pending": { "const": 0 }
+      }
+    },
+    "requiredAssertions": {
+      "type": "object",
+      "required": ["stress20", "fullStress20", "p37", "p38", "runtimeError"],
+      "additionalProperties": false,
+      "properties": {
+        "stress20": { "const": true },
+        "fullStress20": { "const": true },
+        "p37": { "const": true },
+        "p38": { "const": true },
+        "runtimeError": { "const": true }
+      }
+    },
+    "stressRounds": { "type": "integer", "minimum": 20 },
+    "propertyRuns": {
+      "type": "object",
+      "required": ["P37", "P38"],
+      "additionalProperties": false,
+      "properties": {
+        "P37": { "type": "integer", "minimum": 100 },
+        "P38": { "type": "integer", "minimum": 100 }
+      }
+    },
+    "assertedFinalResourceCounts": { "$ref": "#/$defs/zeroResources" }
+  },
+  "$defs": {
+    "provenance": {
+      "type": "object",
+      "required": ["commitSha", "sourceDigest", "sourceScope"],
+      "additionalProperties": false,
+      "properties": {
+        "commitSha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "sourceDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "sourceScope": { "const": "fc-source-v1" }
+      }
+    },
+    "zeroResources": {
+      "type": "object",
+      "required": ["loops", "timers", "observers", "gameOwnedListeners", "mediaListeners", "pointerCaptures"],
+      "additionalProperties": false,
+      "properties": {
+        "loops": { "const": 0 },
+        "timers": { "const": 0 },
+        "observers": { "const": 0 },
+        "gameOwnedListeners": { "const": 0 },
+        "mediaListeners": { "const": 0 },
+        "pointerCaptures": { "const": 0 }
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "portfolio-duckcy-cloud-rescue-tests",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest --run",
+    "build:production": "node scripts/fc-build.mjs --output build/fc-production --esbuild \"$ESBUILD\" --report evidence/production-build.json",
+    "serve:performance": "node scripts/fc-serve.mjs --root build/fc-production",
+    "evidence:payload": "node scripts/fc-payload.mjs --root build/fc-production --output evidence/payload.json",
+    "evidence:checkpoint": "node scripts/fc-checkpoint.mjs --seed 20260725 --raw-output evidence/full-vitest-raw.json --coverage-output evidence/property-coverage.json",
+    "evidence:lifecycle": "node scripts/fc-lifecycle.mjs --output evidence/lifecycle-evidence.json",
+    "evidence:final": "node scripts/fc-finalize.mjs --verify --input evidence/final-manifest.json"
+  },
+  "devDependencies": {
+    "fast-check": "4.2.0",
+    "jsdom": "26.1.0",
+    "vitest": "3.2.4"
+  }
+}

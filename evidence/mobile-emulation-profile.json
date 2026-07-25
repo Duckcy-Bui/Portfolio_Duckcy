@@ -1,0 +1,45 @@
+{
+  "build": "node scripts/fc-build.mjs --output build/fc-production --esbuild /home/duckcy/.npm/_npx/5e8c127031d71bbc/node_modules/esbuild/bin/esbuild --report evidence/production-build.json",
+  "buildRoot": "build/fc-production",
+  "server": "node scripts/fc-serve.mjs --root build/fc-production --host 127.0.0.1 --port 4173 (gzip-9, no-cache)",
+  "device": "duckcy-LOQ-15IAX9 calibrated Chromium mobile profile (360x800 CSS, DPR 3)",
+  "cpu": "12th Gen Intel(R) Core(TM) i5-12450HX with CDP 12x configured CPU throttling",
+  "ramGb": 4,
+  "os": "Ubuntu 24.04.4 LTS",
+  "profile": "mobile",
+  "viewport": { "width": 360, "height": 800 },
+  "dpr": 3,
+  "cpuThrottleRate": 12,
+  "cpuQuotaPercent": 800,
+  "memoryLimitMb": 3072,
+  "hardwareConcurrency": 8,
+  "powerState": "AC power; battery saver off",
+  "thermalState": "nominal during run",
+  "referenceQualification": {
+    "qualified": true,
+    "method": "cdp-cpu-throttling",
+    "referenceProfile": "Samsung Galaxy A32 4G; MediaTek Helio G80; 4 GB RAM; Android 13",
+    "cpuThrottleRate": 12,
+    "referenceRamGb": 4,
+    "profileRamGb": 4,
+    "comparisons": [
+      {
+        "metric": "Geekbench 6 single-core",
+        "hostScore": 2207,
+        "referenceScore": 406,
+        "effectiveProfileScore": 183.91666666666666,
+        "sourceUrl": "https://www.cpu-monkey.com/en/compare_cpu-intel_core_i5_12450hx-vs-intel_core_i7_1165g7",
+        "referenceSourceUrl": "https://nanoreview.net/en/soc/mediatek-helio-g80"
+      },
+      {
+        "metric": "Geekbench 6 multi-core",
+        "hostScore": 9230,
+        "referenceScore": 1456,
+        "effectiveProfileScore": 769.1666666666666,
+        "sourceUrl": "https://www.cpu-monkey.com/en/compare_cpu-intel_core_i5_12450hx-vs-intel_core_i7_1165g7",
+        "referenceSourceUrl": "https://nanoreview.net/en/soc/mediatek-helio-g80"
+      }
+    ],
+    "notes": "The collector discards these nominal projections, recomputes both effective scores from its measured slowdown, and fails before FPS sampling unless both measured projections are no stronger than Helio G80. V8 old-space is capped below 4 GB and DPR 3 is applied through DeviceMetricsOverride."
+  }
+}

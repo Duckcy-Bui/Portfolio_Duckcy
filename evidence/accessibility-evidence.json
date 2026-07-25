@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "isRealEvidence": true,
+  "provenance": {
+    "commitSha": "3cf03702d7d95363f5d7381da986f5a66863085a",
+    "sourceDigest": "e16dbd2cdc7cbfecec21c5d619a58bb7bded72efa68461eea30d0f14b9fda6e6",
+    "sourceScope": "fc-source-v1"
+  },
+  "runs": [
+    {
+      "runId": "A11Y-ORCA-20260725",
+      "os": {
+        "name": "Ubuntu",
+        "version": "24.04.4"
+      },
+      "browser": {
+        "name": "Google Chrome for Testing",
+        "version": "149.0.7827.55"
+      },
+      "screenReader": {
+        "name": "Orca",
+        "version": "46.1"
+      },
+      "realBrowserRun": true,
+      "keyboardOnly": true,
+      "announcements": true,
+      "focusTrap": true,
+      "focusRestore": true,
+      "reducedMotion": true,
+      "noTimer": true,
+      "zoomAndViewport": true
+    }
+  ]
+}

@@ -1,0 +1,209 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://duckcy.dev/schemas/fc-performance-evidence.schema.json",
+  "title": "Flappy Cloud performance evidence",
+  "type": "object",
+  "required": ["schemaVersion", "metadata", "fps", "lighthouse", "resourceTiming", "payload"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "generatedAt": { "type": "string", "minLength": 1 },
+    "metadata": {
+      "type": "object",
+      "required": ["commit", "sourceDigest", "sourceScope", "build", "buildRoot", "server", "device", "cpu", "ramGb", "os", "browserVersion", "browserMode", "browserProduct", "testedUrl", "viewport", "dpr", "powerState", "thermalState", "cpuThrottleRate", "cpuQuotaPercent", "memoryLimitMb", "hardwareConcurrency", "runtimeLimits", "cpuCalibration", "referenceQualification"],
+      "properties": {
+        "commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "sourceDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "sourceScope": { "const": "fc-source-v1" },
+        "build": { "type": "string", "minLength": 1 },
+        "buildRoot": { "type": "string", "pattern": "fc-production" },
+        "server": { "type": "string", "minLength": 1 },
+        "device": { "type": "string", "minLength": 1 },
+        "cpu": { "type": "string", "minLength": 1 },
+        "ramGb": { "type": "number", "exclusiveMinimum": 0 },
+        "os": { "type": "string", "minLength": 1 },
+        "browserVersion": { "type": "string", "minLength": 1 },
+        "browserMode": { "const": "headed-foreground" },
+        "browserProduct": { "type": "string", "minLength": 1, "not": { "pattern": "HeadlessChrome" } },
+        "testedUrl": { "type": "string", "pattern": "^https?://" },
+        "viewport": {
+          "type": "object",
+          "required": ["width", "height"],
+          "properties": {
+            "width": { "type": "integer", "minimum": 1 },
+            "height": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "dpr": { "type": "number", "exclusiveMinimum": 0 },
+        "powerState": { "type": "string", "minLength": 1 },
+        "thermalState": { "type": "string", "minLength": 1 },
+        "cpuThrottleRate": { "type": "number", "minimum": 1 },
+        "cpuQuotaPercent": { "type": "number", "exclusiveMinimum": 0 },
+        "memoryLimitMb": { "type": "integer", "minimum": 1 },
+        "hardwareConcurrency": { "type": "integer", "minimum": 1 },
+        "runtimeLimits": {
+          "type": "object",
+          "required": ["cgroupPath", "memoryMaxBytes", "cpuQuotaMicros", "cpuPeriodMicros", "cpuQuotaPercent"],
+          "properties": {
+            "cgroupPath": { "type": "string", "minLength": 1 },
+            "memoryMaxBytes": { "type": "number", "exclusiveMinimum": 0 },
+            "cpuQuotaMicros": { "type": "number", "exclusiveMinimum": 0 },
+            "cpuPeriodMicros": { "type": "number", "exclusiveMinimum": 0 },
+            "cpuQuotaPercent": { "type": "number", "exclusiveMinimum": 0 }
+          }
+        },
+        "cpuCalibration": {
+          "type": "object",
+          "required": ["configuredRate", "baselineDurationMs", "throttledDurationMs", "observedSlowdown"],
+          "properties": {
+            "configuredRate": { "type": "number", "minimum": 1 },
+            "baselineDurationMs": { "type": "number", "exclusiveMinimum": 0 },
+            "throttledDurationMs": { "type": "number", "exclusiveMinimum": 0 },
+            "observedSlowdown": { "type": "number", "minimum": 0.7 }
+          }
+        },
+        "referenceQualification": {
+          "type": "object",
+          "required": ["qualified", "method", "referenceProfile", "cpuThrottleRate", "observedCpuSlowdown", "referenceRamGb", "profileRamGb", "comparisons"],
+          "properties": {
+            "qualified": { "const": true },
+            "method": { "enum": ["physical-reference-device", "cdp-cpu-throttling"] },
+            "referenceProfile": { "type": "string", "minLength": 1 },
+            "cpuThrottleRate": { "type": "number", "minimum": 1 },
+            "observedCpuSlowdown": { "type": "number", "minimum": 1 },
+            "referenceRamGb": { "type": "number", "exclusiveMinimum": 0 },
+            "profileRamGb": { "type": "number", "exclusiveMinimum": 0 },
+            "comparisons": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "required": ["metric", "hostScore", "referenceScore", "effectiveProfileScore", "sourceUrl"],
+                "properties": {
+                  "metric": { "type": "string", "minLength": 1 },
+                  "hostScore": { "type": "number", "exclusiveMinimum": 0 },
+                  "referenceScore": { "type": "number", "exclusiveMinimum": 0 },
+                  "effectiveProfileScore": { "type": "number", "exclusiveMinimum": 0 },
+                  "sourceUrl": { "type": "string", "pattern": "^https://" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "fps": {
+      "type": "object",
+      "required": ["profile", "runs", "medianOfThree"],
+      "properties": {
+        "profile": { "enum": ["desktop", "mobile"] },
+        "warmupPlayingMs": { "const": 5000 },
+        "samplePlayingMs": { "const": 30000 },
+        "runs": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "type": "object",
+            "required": ["frameIntervals", "medianFps", "warmupPlayingMs", "sampledPlayingMs", "sampledIntervalMs", "wallDurationMs", "foregroundAtActivation", "preActivationGameResources", "retryCount"],
+            "properties": {
+              "frameIntervals": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "number", "exclusiveMinimum": 0 }
+              },
+              "medianFps": { "type": "number", "exclusiveMinimum": 0 },
+              "warmupPlayingMs": { "const": 5000 },
+              "sampledPlayingMs": { "const": 30000 },
+              "sampledIntervalMs": { "type": "number", "minimum": 29750, "maximum": 30050 },
+              "wallDurationMs": { "type": "number", "minimum": 35000 },
+              "retryCount": { "const": 0 },
+              "preActivationGameResources": { "type": "array", "maxItems": 0 },
+              "foregroundAtActivation": {
+                "type": "object",
+                "required": ["visibilityState", "hasFocus"],
+                "properties": {
+                  "visibilityState": { "const": "visible" },
+                  "hasFocus": { "const": true }
+                }
+              }
+            }
+          }
+        },
+        "medianOfThree": { "type": "number", "minimum": 0 }
+      }
+    },
+    "lighthouse": {
+      "type": "object",
+      "required": ["runs", "lcpRunsMs", "clsRuns", "medianLcpMs", "medianCls", "profile", "lighthouseVersion", "chromiumVersion", "testedUrl"],
+      "properties": {
+        "runs": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "items": {
+            "type": "object",
+            "required": ["run", "lcpMs", "cls", "gameplayResources", "rawReportSha256"],
+            "properties": {
+              "run": { "type": "integer", "minimum": 1, "maximum": 5 },
+              "lcpMs": { "type": "number", "minimum": 0 },
+              "cls": { "type": "number", "minimum": 0 },
+              "gameplayResources": { "type": "array", "maxItems": 0 },
+              "rawReportSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+            }
+          }
+        },
+        "profile": { "type": "object" },
+        "lighthouseVersion": { "type": "string", "minLength": 1 },
+        "chromiumVersion": { "type": "string", "minLength": 1 },
+        "testedUrl": { "type": "string", "pattern": "^https?://" },
+        "lcpRunsMs": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "items": { "type": "number", "minimum": 0 }
+        },
+        "clsRuns": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "items": { "type": "number", "minimum": 0 }
+        },
+        "medianLcpMs": { "type": "number", "minimum": 0, "maximum": 2500 },
+        "medianCls": { "type": "number", "minimum": 0, "maximum": 0.1 }
+      }
+    },
+    "resourceTiming": {
+      "allOf": [{ "$ref": "#/$defs/resourceLedger" }],
+      "type": "object",
+      "required": ["allResources", "gameResources", "unexpectedGameResources", "preActivationGameResources", "resources", "totalEncodedBytes"],
+      "properties": {
+        "allResources": { "type": "array", "minItems": 2 },
+        "gameResources": { "type": "array", "minItems": 2, "maxItems": 2 },
+        "unexpectedGameResources": { "type": "array", "maxItems": 0 },
+        "preActivationGameResources": { "type": "array", "maxItems": 0 }
+      }
+    },
+    "payload": { "$ref": "#/$defs/resourceLedger" }
+  },
+  "$defs": {
+    "resourceLedger": {
+      "type": "object",
+      "required": ["resources", "totalEncodedBytes"],
+      "properties": {
+        "resources": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": ["url", "encodedBytes"],
+            "properties": {
+              "url": { "type": "string", "minLength": 1 },
+              "encodedBytes": { "type": "integer", "minimum": 1 }
+            }
+          }
+        },
+        "totalEncodedBytes": { "type": "integer", "minimum": 1, "maximum": 150000 }
+      }
+    }
+  }
+}

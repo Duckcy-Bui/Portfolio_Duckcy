@@ -1,0 +1,214 @@
+{
+  "startedAt": "2026-07-25T00:02:00.411Z",
+  "keyboardEvents": [
+    "Enter CTA",
+    "ArrowDown No Timer",
+    "Enter Start",
+    "Space boost",
+    "S status",
+    "Tab pauses PLAYING",
+    "Enter Exit"
+  ],
+  "focusSequence": [],
+  "osWindowFocus": {
+    "status": 0,
+    "stdout": "focused Google Chrome for Testing application False",
+    "stderr": "/tmp/focus_chrome.py:33: DeprecationWarning: Atspi.Action.get_action_name is deprecated\n  if action.get_action_name(i).lower() in ('activate', 'raise', 'click'):"
+  },
+  "ctaFocused": {
+    "tag": "BUTTON",
+    "id": "",
+    "text": "Play Game",
+    "action": "",
+    "value": "",
+    "checked": false,
+    "inside": false
+  },
+  "dialogSemantics": {
+    "role": "dialog",
+    "modal": "true",
+    "labelledby": "cr-title",
+    "describedby": "cr-description",
+    "activeId": "cr-title"
+  },
+  "focusTrapSequence": [
+    {
+      "tag": "BUTTON",
+      "id": "",
+      "text": "×",
+      "action": "CLOSE",
+      "value": "",
+      "checked": false,
+      "inside": true
+    },
+    {
+      "tag": "INPUT",
+      "id": "",
+      "text": "",
+      "action": "",
+      "value": "STANDARD",
+      "checked": true,
+      "inside": true
+    },
+    {
+      "tag": "INPUT",
+      "id": "",
+      "text": "",
+      "action": "",
+      "value": "NO_TIMER",
+      "checked": false,
+      "inside": true
+    },
+    {
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Start",
+      "action": "START",
+      "value": "",
+      "checked": false,
+      "inside": true
+    },
+    {
+      "tag": "BUTTON",
+      "id": "",
+      "text": "View all facts",
+      "action": "VIEW_FACTS",
+      "value": "",
+      "checked": false,
+      "inside": true
+    },
+    {
+      "tag": "BUTTON",
+      "id": "",
+      "text": "Back to Portfolio",
+      "action": "BACK",
+      "value": "",
+      "checked": false,
+      "inside": true
+    },
+    {
+      "tag": "BUTTON",
+      "id": "",
+      "text": "×",
+      "action": "CLOSE",
+      "value": "",
+      "checked": false,
+      "inside": true
+    },
+    {
+      "tag": "INPUT",
+      "id": "",
+      "text": "",
+      "action": "",
+      "value": "STANDARD",
+      "checked": true,
+      "inside": true
+    },
+    {
+      "tag": "INPUT",
+      "id": "",
+      "text": "",
+      "action": "",
+      "value": "NO_TIMER",
+      "checked": false,
+      "inside": true
+    }
+  ],
+  "focusTrap": true,
+  "noTimerSelected": true,
+  "noTimerReady": {
+    "status": "Phase: READY. Gate 0/12. Checkpoint: 0. Next achievement: Code Crafter at Gate 3. Mode: No Timer Mode",
+    "hud": "\n    Gate 0/12\n    Checkpoint 0\n    No Timer Mode\n  ",
+    "active": "Flight surface. Tap, click, or press Space to boost."
+  },
+  "statusAnnouncement": {
+    "text": "Gate 1 LINT: middle opening, Bot inside, far",
+    "role": "status",
+    "phase": "PLAYING"
+  },
+  "pauseAnnouncement": {
+    "text": "Deployment paused",
+    "role": "status",
+    "active": "Controls"
+  },
+  "reducedMotion": {
+    "matches": true,
+    "classApplied": true,
+    "overlayTransition": "0s",
+    "panelTransition": "0s"
+  },
+  "zoomViewport": {
+    "visualScale": 2,
+    "innerWidth": 360,
+    "innerHeight": 800,
+    "scrollWidth": 360,
+    "clientWidth": 360,
+    "noHorizontalOverflow": true,
+    "panelScrollable": true,
+    "controlCount": 8,
+    "allControlsVisible": true
+  },
+  "axTree": [
+    {
+      "role": "dialog",
+      "name": "Deploy Before Dawn: Cloud Rescue",
+      "ignored": false
+    },
+    {
+      "role": "status",
+      "name": "",
+      "ignored": false
+    },
+    {
+      "role": "status",
+      "name": "",
+      "ignored": false
+    },
+    {
+      "role": "heading",
+      "name": "Deploy Before Dawn: Cloud Rescue",
+      "ignored": false
+    },
+    {
+      "role": "button",
+      "name": "Close Deploy Before Dawn: Cloud Rescue",
+      "ignored": false
+    },
+    {
+      "role": "heading",
+      "name": "Deployment Paused",
+      "ignored": false
+    },
+    {
+      "role": "button",
+      "name": "Controls",
+      "ignored": false
+    },
+    {
+      "role": "button",
+      "name": "Resume",
+      "ignored": false
+    },
+    {
+      "role": "button",
+      "name": "Restart checkpoint",
+      "ignored": false
+    },
+    {
+      "role": "button",
+      "name": "Exit",
+      "ignored": false
+    }
+  ],
+  "focusRestored": {
+    "tag": "BUTTON",
+    "id": "",
+    "text": "Play Game",
+    "action": "",
+    "value": "",
+    "checked": false,
+    "inside": false
+  },
+  "finishedAt": "2026-07-25T00:02:08.812Z",
+  "pass": true
+}

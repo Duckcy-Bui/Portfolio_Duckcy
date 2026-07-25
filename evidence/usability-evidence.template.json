@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "isRealEvidence": false,
+  "provenance": {
+    "commitSha": "0000000000000000000000000000000000000000",
+    "sourceDigest": "0000000000000000000000000000000000000000000000000000000000000000",
+    "sourceScope": "fc-source-v1"
+  },
+  "studyId": "REPLACE_WITH_PSEUDONYMOUS_STUDY_ID",
+  "rawEvidence": {
+    "bundlePath": "evidence/usability-raw-bundle.json",
+    "bundleSha256": "REPLACE_WITH_64_HEX_BUNDLE_SHA256",
+    "sessionCount": 0,
+    "publicKeySha256": "REPLACE_WITH_64_HEX_PUBLIC_KEY_SHA256"
+  },
+  "participants": []
+}

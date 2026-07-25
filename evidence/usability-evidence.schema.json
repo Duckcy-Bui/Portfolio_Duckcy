@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://duckcy.dev/schemas/fc-usability-evidence.schema.json",
+  "title": "Flappy Cloud usability evidence",
+  "type": "object",
+  "required": ["schemaVersion", "isRealEvidence", "provenance", "studyId", "rawEvidence", "participants"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "isRealEvidence": { "type": "boolean" },
+    "provenance": {
+      "type": "object",
+      "required": ["commitSha", "sourceDigest", "sourceScope"],
+      "additionalProperties": false,
+      "properties": {
+        "commitSha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "sourceDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "sourceScope": { "const": "fc-source-v1" }
+      }
+    },
+    "studyId": { "type": "string", "pattern": "^[A-Za-z0-9_-]{3,64}$" },
+    "rawEvidence": {
+      "type": "object",
+      "required": ["bundlePath", "bundleSha256", "sessionCount", "publicKeySha256"],
+      "additionalProperties": false,
+      "properties": {
+        "bundlePath": { "const": "evidence/usability-raw-bundle.json" },
+        "bundleSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "sessionCount": { "type": "integer", "minimum": 5 },
+        "publicKeySha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "participants": {
+      "type": "array",
+      "minItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["participantId", "isDeveloper", "startTimestampMs", "wonTimestampMs", "durationMs", "retries", "completed"],
+        "additionalProperties": false,
+        "properties": {
+          "participantId": { "type": "string", "pattern": "^P-[A-Za-z0-9_-]{2,32}$" },
+          "isDeveloper": { "const": false },
+          "startTimestampMs": { "type": "number", "minimum": 0 },
+          "wonTimestampMs": { "type": "number", "minimum": 0 },
+          "durationMs": { "type": "number", "minimum": 0 },
+          "retries": { "type": "integer", "minimum": 0, "maximum": 1 },
+          "completed": { "const": true }
+        }
+      }
+    }
+  }
+}

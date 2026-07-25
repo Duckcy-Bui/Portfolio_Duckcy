@@ -1,0 +1,250 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-25T00:01:38.995Z",
+  "provenance": {
+    "commitSha": "3cf03702d7d95363f5d7381da986f5a66863085a",
+    "sourceDigest": "e16dbd2cdc7cbfecec21c5d619a58bb7bded72efa68461eea30d0f14b9fda6e6",
+    "sourceScope": "fc-source-v1"
+  },
+  "seed": 20260725,
+  "totals": {
+    "testFiles": 12,
+    "tests": 175,
+    "passed": 175,
+    "failed": 0,
+    "pending": 0,
+    "todo": 0
+  },
+  "valid": true,
+  "errors": [],
+  "properties": [
+    {
+      "id": "P01",
+      "description": "Gravity pulls downward",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P02",
+      "description": "Jump normalizes velocity",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P03",
+      "description": "Terminal velocity is invariant",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P04",
+      "description": "Vertical boundaries clamp or crash exactly",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P05",
+      "description": "Fixed-step simulation is deterministic",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P06",
+      "description": "Gate config is canonically complete",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P07",
+      "description": "Generated gate geometry stays valid",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P08",
+      "description": "Gate lead, cadence, and center spacing are bounded",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P09",
+      "description": "Collider generation is deterministic",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P10",
+      "description": "Bug Clouds preserve a safe corridor",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P11",
+      "description": "AABB is deterministic and symmetric",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P12",
+      "description": "Edge contact is not an AABB collision",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P13",
+      "description": "Collision has priority over scoring",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P14",
+      "description": "Score is monotonic during an attempt",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P15",
+      "description": "A gate scores at most once",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P16",
+      "description": "Only gate passes produce score",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P17",
+      "description": "Checkpoints are valid and monotonic",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P18",
+      "description": "Retry restores the deterministic checkpoint segment",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P19",
+      "description": "Active time accrues only in PLAYING",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P20",
+      "description": "No Timer changes projection only",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P21",
+      "description": "Score and spawn terminate at twelve",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P22",
+      "description": "Milestone mapping is exact",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P23",
+      "description": "Achievement unlock is ordered and idempotent",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P24",
+      "description": "Achievement phase freezes gameplay",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P25",
+      "description": "Achievements never auto-advance",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P26",
+      "description": "Gate twelve commits directly to WON",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P27",
+      "description": "Reducer only follows legal graph edges",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P28",
+      "description": "Pause freezes all gameplay data",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P29",
+      "description": "Visibility and resize never auto-resume",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P30",
+      "description": "One valid activation produces one jump",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P31",
+      "description": "Input dedup rejects repeats and synthetic pairs",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P32",
+      "description": "Canvas contain ratio and DPR are bounded",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P33",
+      "description": "Pointer coordinate mapping round-trips",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P34",
+      "description": "Reduced Motion does not alter mechanics",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P35",
+      "description": "Spatial status boundaries and approach dedup are exact",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P36",
+      "description": "Lazy generation safety",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P37",
+      "description": "Atomic teardown",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    },
+    {
+      "id": "P38",
+      "description": "Portfolio preservation",
+      "testFile": "tests/flappy-cloud-game/properties.test.js",
+      "numRuns": 150
+    }
+  ]
+}

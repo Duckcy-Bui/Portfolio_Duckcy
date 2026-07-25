@@ -1,0 +1,72 @@
+{
+  "runs": [
+    {
+      "run": 1,
+      "lcpMs": 815.668,
+      "cls": 0.0002196240234375,
+      "gameplayResources": [],
+      "rawReportSha256": "29f3dc0dff3c445e4ce8b9e5fb627b802d4004b372ade340451eb7c4b27d441f"
+    },
+    {
+      "run": 2,
+      "lcpMs": 844.661,
+      "cls": 0.0002196240234375,
+      "gameplayResources": [],
+      "rawReportSha256": "77ecfbb151b183c6b9f41e0d09c405896922c27934e19118220213fc41aa4f57"
+    },
+    {
+      "run": 3,
+      "lcpMs": 818.885,
+      "cls": 0.0002196240234375,
+      "gameplayResources": [],
+      "rawReportSha256": "85485bc49c3cfc04aa55d379a3730846420a90396b3a8fdcd91071f4ffe084ed"
+    },
+    {
+      "run": 4,
+      "lcpMs": 806.528,
+      "cls": 0.0002196240234375,
+      "gameplayResources": [],
+      "rawReportSha256": "f3b7a377af56966439bd16f9241500e2770eb98d6a5563efc4d856d8a940fe99"
+    },
+    {
+      "run": 5,
+      "lcpMs": 815.79,
+      "cls": 0.0002196240234375,
+      "gameplayResources": [],
+      "rawReportSha256": "06d63ee852e06cdb8f8bfb1d70fbaeb963808696864936904b5c062ced9574d4"
+    }
+  ],
+  "lcpRunsMs": [
+    815.668,
+    844.661,
+    818.885,
+    806.528,
+    815.79
+  ],
+  "clsRuns": [
+    0.0002196240234375,
+    0.0002196240234375,
+    0.0002196240234375,
+    0.0002196240234375,
+    0.0002196240234375
+  ],
+  "medianLcpMs": 815.79,
+  "medianCls": 0.0002196240234375,
+  "profile": {
+    "viewport": {
+      "width": 360,
+      "height": 800
+    },
+    "dpr": 1,
+    "cpuSlowdown": 4,
+    "rttMs": 150,
+    "downlinkKbps": 1600,
+    "uplinkKbps": 750,
+    "coldCache": true
+  },
+  "lighthouseVersion": "13.4.1",
+  "chromiumVersion": "Google Chrome for Testing 149.0.7827.55",
+  "testedUrl": "http://127.0.0.1:4173/",
+  "rawReportDirectory": "evidence/lighthouse-raw",
+  "passed": true
+}

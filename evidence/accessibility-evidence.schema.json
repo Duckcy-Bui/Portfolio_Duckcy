@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://duckcy.dev/schemas/fc-accessibility-evidence.schema.json",
+  "title": "Flappy Cloud accessibility evidence",
+  "type": "object",
+  "required": ["schemaVersion", "isRealEvidence", "provenance", "runs"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "isRealEvidence": { "type": "boolean" },
+    "provenance": { "$ref": "#/$defs/provenance" },
+    "runs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["runId", "os", "browser", "screenReader", "realBrowserRun", "keyboardOnly", "announcements", "focusTrap", "focusRestore", "reducedMotion", "noTimer", "zoomAndViewport"],
+        "additionalProperties": false,
+        "properties": {
+          "runId": { "type": "string", "pattern": "^A11Y-[A-Za-z0-9_-]{2,32}$" },
+          "os": { "$ref": "#/$defs/versionedTool" },
+          "browser": { "$ref": "#/$defs/versionedTool" },
+          "screenReader": { "$ref": "#/$defs/versionedTool" },
+          "realBrowserRun": { "const": true },
+          "keyboardOnly": { "const": true },
+          "announcements": { "const": true },
+          "focusTrap": { "const": true },
+          "focusRestore": { "const": true },
+          "reducedMotion": { "const": true },
+          "noTimer": { "const": true },
+          "zoomAndViewport": { "const": true }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "provenance": {
+      "type": "object",
+      "required": ["commitSha", "sourceDigest", "sourceScope"],
+      "additionalProperties": false,
+      "properties": {
+        "commitSha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "sourceDigest": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "sourceScope": { "const": "fc-source-v1" }
+      }
+    },
+    "versionedTool": {
+      "type": "object",
+      "required": ["name", "version"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "pattern": "^[0-9]+(?:\\.[0-9]+)+$" }
+      }
+    }
+  }
+}

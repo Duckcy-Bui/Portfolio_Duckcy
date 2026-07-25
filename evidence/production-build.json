@@ -1,0 +1,225 @@
+{
+  "schemaVersion": 1,
+  "kind": "flappy-cloud-production-build",
+  "createdAt": "2026-07-24T21:28:39.333Z",
+  "provenance": {
+    "commitSha": "3cf03702d7d95363f5d7381da986f5a66863085a",
+    "sourceDigest": "e16dbd2cdc7cbfecec21c5d619a58bb7bded72efa68461eea30d0f14b9fda6e6",
+    "sourceScope": "fc-source-v1"
+  },
+  "command": "/home/duckcy/.npm/_npx/5e8c127031d71bbc/node_modules/esbuild/bin/esbuild (0.28.1) --minify --legal-comments=none --target=es2022",
+  "output": "build/fc-production",
+  "digest": "a26956d0bb37f87a55cf0c58c41a14727fa09cdeec63f6082169922071c4e505",
+  "files": [
+    {
+      "path": "CNAME",
+      "bytes": 9,
+      "sha256": "4d3126f8ca90ff0a3ce320fa973fa9e473444f50ebdf2b22d7383ded7cd8e9a9"
+    },
+    {
+      "path": "assets/CI-CD_icon.png",
+      "bytes": 58562,
+      "sha256": "8a09f0354de35d45b6940e8afa38ab3070483b3e3242051b5839641f63b7ad0f"
+    },
+    {
+      "path": "assets/CV_bui_hai_duc.pdf",
+      "bytes": 109160,
+      "sha256": "11405f800347f4aa8d238aac5e95ee1afb88e6449d1d16b0d727d91f8840a648"
+    },
+    {
+      "path": "assets/ETL-pipeline_icon.png",
+      "bytes": 30097,
+      "sha256": "f235f3b099b0383209523ab9a189b210d3714994aceee713bfdddf026c797a4c"
+    },
+    {
+      "path": "assets/Jenkins_icon.png",
+      "bytes": 52808,
+      "sha256": "21adc5abfcd35b2cc8b4350c9b79b4b5f4bba5d6db26d57375cf6b5529e764a4"
+    },
+    {
+      "path": "assets/MINIO_icon.png",
+      "bytes": 24180,
+      "sha256": "57da364132500718539c345ec19299f64396612328d6cbce8bf675ab6e2150fa"
+    },
+    {
+      "path": "assets/RESTful_icon-removebg-preview.png",
+      "bytes": 96413,
+      "sha256": "2c6560f1ed312293f562ccbb67a4bac1767f092dc27fcbea392df0706cb4631c"
+    },
+    {
+      "path": "assets/apache-airflow_icon.png",
+      "bytes": 29609,
+      "sha256": "7136f80f5b01d41fc56c0a9e7da0ba91f1bb555168407b6ae2c93f54f5676453"
+    },
+    {
+      "path": "assets/c++_icon-removebg-preview.png",
+      "bytes": 101019,
+      "sha256": "ae1edc73437810a0d98ead4dc6f26b5c92f8046d60ec5251cbb64e4e008d2c92"
+    },
+    {
+      "path": "assets/docker-compose_icon-removebg-preview.png",
+      "bytes": 122483,
+      "sha256": "413d14d97b090b21c9d29e58e07853f899d7f436084ff90c088d095c6aee97f0"
+    },
+    {
+      "path": "assets/docker_icon.png",
+      "bytes": 8860,
+      "sha256": "9e5291ae66d1463b1c2eacb1167d78db60bf964751cd9df4e8bc14e686416bbc"
+    },
+    {
+      "path": "assets/experience/nestscale-logo.png",
+      "bytes": 1164,
+      "sha256": "88cba070e5f92de04961ed62fe38c95b639932cda28158da4e29941ba4abb194"
+    },
+    {
+      "path": "assets/experience/sfit-badge.svg",
+      "bytes": 2031,
+      "sha256": "74b7f32ec4df67c504420cf5b53b50934663532c95ae7efcee7425de80caf55b"
+    },
+    {
+      "path": "assets/experience/utc-logo.png",
+      "bytes": 21662,
+      "sha256": "f18b8f8069101188f9aae3cfc6098edd1e42c3ed00b7f43981adc30c01743afe"
+    },
+    {
+      "path": "assets/flask_icon-removebg-preview.png",
+      "bytes": 111766,
+      "sha256": "4d3fd4a95bbcf05e5662cb9ca77854e780060387f86d3d69c3dfc4bcd51da425"
+    },
+    {
+      "path": "assets/git-github_icon.png",
+      "bytes": 20226,
+      "sha256": "7cdea515b1efda5c7415cec4a7ce577868b5fa6402a2550871c640069829a9e8"
+    },
+    {
+      "path": "assets/github-actions_icon-removebg-preview.png",
+      "bytes": 154871,
+      "sha256": "192f1b6ff1045d8d840be1a7827641603104271b508671b694145427fdb70617"
+    },
+    {
+      "path": "assets/hai_duc_img-removebg-preview.png",
+      "bytes": 181430,
+      "sha256": "11c59ff966dbcbdad69820f048b96e48d74ed5b0ef72ac4b32ac9e42114e6a9d"
+    },
+    {
+      "path": "assets/hai_duc_img.jpg",
+      "bytes": 30404,
+      "sha256": "d9b51e4650fdc07d53f40d14681d3acf25789ec51524bae2d56b1e3578fa9c3c"
+    },
+    {
+      "path": "assets/javaFX_icon-removebg-preview.png",
+      "bytes": 53704,
+      "sha256": "c37db2a105674851105f6321fbaf2b8a151c4b27da030e57be4e153e06eeed8a"
+    },
+    {
+      "path": "assets/java_icon.png",
+      "bytes": 79096,
+      "sha256": "2416b79ae241b8b24b80f801b3e19c538c0a67c0c1529c2adc68077d3cd35cdf"
+    },
+    {
+      "path": "assets/linux_icon.png",
+      "bytes": 39064,
+      "sha256": "b782caa1ca0240c60a96af1bde215870803791255a8f01004760ebd5cbf4bd93"
+    },
+    {
+      "path": "assets/logo_nestscale.png",
+      "bytes": 5210,
+      "sha256": "5ff4d11274c336ff14bd6453b479223428fe8ed0f3efa423659c629294bea591"
+    },
+    {
+      "path": "assets/logo_sfit.jpeg",
+      "bytes": 11448,
+      "sha256": "d9fbe1e61d01ba40355019e9840a70064eb81888464afec3a2c09a85ce2f4a07"
+    },
+    {
+      "path": "assets/logo_utc.webp",
+      "bytes": 48144,
+      "sha256": "3922546377f57c9753c2078dd82a596b85aaf7fe587b5004de414248cce2c95c"
+    },
+    {
+      "path": "assets/microservice_icon.png",
+      "bytes": 25682,
+      "sha256": "b194fc2fb6ea7ad348586dee09b1f41259fa03ae69594454e2408377a736f36b"
+    },
+    {
+      "path": "assets/postgreesql_icon-removebg-preview.png",
+      "bytes": 98995,
+      "sha256": "f4456ad71d1896f0479e1bd0aeadcaa309dd25e75de29c8689c386196e3fb6a2"
+    },
+    {
+      "path": "assets/python_icon-removebg-preview.png",
+      "bytes": 72166,
+      "sha256": "2e94d531b14181e0f943ff91cc3f69ed257c3925e87ef5c75f18ae94eaca5fcf"
+    },
+    {
+      "path": "assets/react_icon.png",
+      "bytes": 21600,
+      "sha256": "6a1a6620fd86e6a56e2b982199fcf5fc265b6785906a609854f229661ef8de3f"
+    },
+    {
+      "path": "assets/redis_icon-removebg-preview.png",
+      "bytes": 190149,
+      "sha256": "c8a0b9378a9b1069c56d63040f1910ef1d1897af8e17136f8982d372e5fb85b3"
+    },
+    {
+      "path": "assets/spark_icon-removebg-preview.png",
+      "bytes": 72341,
+      "sha256": "d6bd6c04a7a018ea36d13c5ab7d9f02f482c06b0a0ef5ae6edc70d6496dd5bed"
+    },
+    {
+      "path": "assets/spring_boot_icon-removebg-preview.png",
+      "bytes": 87479,
+      "sha256": "ea5dede29370aaaa3843157c2b3162f95e324d3e4823dea1322bde54a5cf7d53"
+    },
+    {
+      "path": "assets/sql-server_icon-removebg-preview.png",
+      "bytes": 83437,
+      "sha256": "24b9b36390940c342eb9dcfd907820a3dc18257f286ad04754e317ee973cf808"
+    },
+    {
+      "path": "assets/sql_icon.png",
+      "bytes": 29274,
+      "sha256": "9e8e8811b2aa6c6435113e6bdb78badd2bcd81234e6302466d51e3bc69ffe459"
+    },
+    {
+      "path": "chatbot.js",
+      "bytes": 19839,
+      "sha256": "4142294f0d314608e8fcb50454f810354272d5d3c38cdde3e4b50e884ae88462"
+    },
+    {
+      "path": "game/cr-engine.js",
+      "bytes": 91,
+      "sha256": "856fed8cd3d005d34baa09b5d92905e8f5ad552669fa408e22fc0ac817b8a56a"
+    },
+    {
+      "path": "game/cr-overlay.css",
+      "bytes": 27,
+      "sha256": "ad4b90478b1a28806ce36ec3f62f2396121461cd888615babe032cee0336e064"
+    },
+    {
+      "path": "game/fc-engine.js",
+      "bytes": 52577,
+      "sha256": "a2ad5e39bb9f8766d4779fe68e6b3c0ef393c5dfdc52bfccc69efe909d621736"
+    },
+    {
+      "path": "game/fc-overlay.css",
+      "bytes": 8870,
+      "sha256": "eb0131a659c322519cef06f9903862868157d156f48464862aba2677798e2fc5"
+    },
+    {
+      "path": "index.html",
+      "bytes": 53312,
+      "sha256": "5bf0c7eb468a78cf83f25d24ff85f0044cce4dac66eca45d43f9b007077ae658"
+    },
+    {
+      "path": "script.js",
+      "bytes": 31295,
+      "sha256": "13a4f4b4de153eeaed7852646bc7956e27ef0ec885ff4cd30351ec013a2f28a0"
+    },
+    {
+      "path": "styles.css",
+      "bytes": 65198,
+      "sha256": "1dcc66ebb16ca8f707e4ace9411ac34dafe07c79614ef69fb7b909c03b693174"
+    }
+  ]
+}

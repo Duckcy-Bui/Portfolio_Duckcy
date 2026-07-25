@@ -1,0 +1,36 @@
+{
+  "build": "node scripts/fc-build.mjs --output build/fc-production --esbuild /home/duckcy/.npm/_npx/5e8c127031d71bbc/node_modules/esbuild/bin/esbuild --report evidence/production-build.json",
+  "buildRoot": "build/fc-production",
+  "server": "node scripts/fc-serve.mjs --root build/fc-production --host 127.0.0.1 --port 4173 (gzip-9, no-cache)",
+  "device": "duckcy-LOQ-15IAX9 calibrated Chromium desktop profile",
+  "cpu": "12th Gen Intel(R) Core(TM) i5-12450HX with CDP 4x configured CPU throttling",
+  "ramGb": 8,
+  "os": "Ubuntu 24.04.4 LTS",
+  "profile": "desktop",
+  "viewport": { "width": 1366, "height": 768 },
+  "dpr": 1,
+  "cpuThrottleRate": 4,
+  "cpuQuotaPercent": 400,
+  "memoryLimitMb": 7168,
+  "hardwareConcurrency": 8,
+  "powerState": "AC power; battery saver off",
+  "thermalState": "nominal during run",
+  "referenceQualification": {
+    "qualified": true,
+    "method": "cdp-cpu-throttling",
+    "referenceProfile": "Lenovo ThinkPad E14 Gen 2; Intel Core i5-1135G7; 8 GB RAM",
+    "cpuThrottleRate": 4,
+    "referenceRamGb": 8,
+    "profileRamGb": 8,
+    "comparisons": [
+      {
+        "metric": "PassMark CPU Mark aggregate",
+        "hostScore": 17688,
+        "referenceScore": 9317,
+        "effectiveProfileScore": 4422,
+        "sourceUrl": "https://technical.city/en/cpu/Core-i5-1135G7-vs-Core-i5-12450HX"
+      }
+    ],
+    "notes": "The collector discards this nominal projection, recomputes effectiveProfileScore from its measured slowdown, and fails before FPS sampling unless the measured profile is no stronger than the reference. V8 old-space is capped below 8 GB."
+  }
+}

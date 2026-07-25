@@ -7,3 +7,10 @@ vitest.config.js
 package.json
 package-lock.json
 bui_hai_duc_cv.tex
+
+# Cloud Rescue development-only verification (required by its Kiro spec)
+!package.json
+!package-lock.json
+!vitest.config.js
+!tests/
+!tests/**

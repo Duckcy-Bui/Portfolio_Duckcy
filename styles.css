@@ -590,9 +590,6 @@ h1 span {
 
 .code-line {
   display: block;
-  opacity: 0;
-  transform: translateY(6px);
-  animation: codeLineIn 0.6s ease forwards;
   white-space: pre;
   color: #d6d9e8;
 }
