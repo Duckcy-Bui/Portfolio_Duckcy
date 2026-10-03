@@ -1,0 +1,12 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import PageHeading from '../components/PageHeading.astro';
+import Icon from '../components/Icon.astro';
+import { profile, experiences } from '../data/portfolio';
+---
+<SiteLayout title="About" description="Meet Bui Hai Duc: Software Engineering Intern, Information Technology student and SFIT mentor with a DevOps orientation."><div class="container page">
+  <PageHeading eyebrow="A little about me" title="Engineering with intent" description="Curious about how software works, and how to keep it working well." />
+  <div class="content-grid"><div><section class="panel" id="overview"><h2>Career objective</h2><p>{profile.objective}</p></section><section class="panel"><h2>How I approach work</h2><ul class="strengths">{profile.strengths.map((strength) => <li><Icon name="check" size={17} /><span>{strength}</span></li>)}</ul></section></div><aside class="panel"><h2>At a glance</h2><dl class="facts"><div><dt>Name</dt><dd>{profile.name}</dd></div><div><dt>Current role</dt><dd>{profile.role} at NestScale</dd></div><div><dt>Focus</dt><dd>{profile.orientation}</dd></div><div><dt>Based in</dt><dd>{profile.location}</dd></div><div><dt>Date of birth</dt><dd>{profile.dateOfBirth}</dd></div></dl></aside></div>
+  <section class="panel section-space" id="education"><h2>Education & community</h2>{experiences.slice(1).map((item) => <div class="education section-space"><img class="organization-logo" src={item.logo} alt={`${item.organization} logo`} width="54" height="54" loading="lazy" /><div><p class="meta">{item.period} · {item.role}</p><h3>{item.organization}</h3><p>{item.description}</p></div></div>)}</section>
+  <div class="actions section-space"><a href={profile.cv} class="btn btn-primary" target="_blank" rel="noopener noreferrer"><Icon name="download" size={17} />Read my CV</a><a href="/experience/" class="btn">Explore experience <Icon name="right" size={17} /></a></div>
+</div></SiteLayout>

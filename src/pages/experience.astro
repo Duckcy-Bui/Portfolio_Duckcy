@@ -1,0 +1,9 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import PageHeading from '../components/PageHeading.astro';
+import { experiences } from '../data/portfolio';
+---
+<SiteLayout title="Experience" description="Bui Hai Duc’s internship at NestScale, Information Technology studies at UTC and technical mentoring with SFIT Club."><div class="container page">
+  <PageHeading eyebrow="Learning by doing" title="Experience & community" description="Work, study and collaboration that shape how I build software." />
+  <div class="timeline">{experiences.map((item) => <article class="timeline-item"><div class="timeline-content"><div class="timeline-top"><p class="overline">{item.category}</p><span class="timeline-period">{item.period}</span></div><div class="education"><img src={item.logo} alt={`${item.organization} logo`} class="organization-logo" width="54" height="54" loading="lazy" /><div><h2 class="card-title">{item.organization}</h2><p class="meta">{item.role} · {item.location}</p><p>{item.description}</p></div></div></div></article>)}</div>
+</div></SiteLayout>

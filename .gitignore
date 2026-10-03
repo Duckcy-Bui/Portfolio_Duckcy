@@ -14,3 +14,10 @@ bui_hai_duc_cv.tex
 !vitest.config.js
 !tests/
 !tests/**
+
+# Astro outputs and reproducible QA artifacts
+dist/
+.astro/
+artifacts/
+playwright-report/
+test-results/

@@ -1,0 +1,77 @@
+---
+import '../styles/global.css';
+import { navigation, profile, themes } from '../data/portfolio';
+import Chatbot from '../components/Chatbot.astro';
+import Icon from '../components/Icon.astro';
+interface Props { title: string; description: string; noindex?: boolean; }
+const { title, description, noindex = false } = Astro.props;
+const pathname = Astro.url.pathname;
+const canonical = new URL(pathname, Astro.site);
+const active = (href: string) => href === '/' ? pathname === '/' : pathname.startsWith(href);
+---
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} | Bui Hai Duc · Duckcy</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="dark light" />
+    {noindex ? <meta name="robots" content="noindex, follow" /> : <link rel="canonical" href={canonical} />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Duckcy — Bui Hai Duc" />
+    <meta property="og:title" content={`${title} | Bui Hai Duc`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL('/assets/hai_duc_img.jpg', Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script is:inline>
+      (() => {
+        try {
+          const saved = localStorage.getItem('portfolio-theme');
+          if (['dark', 'light', 'forest', 'ocean', 'sunset'].includes(saved)) document.documentElement.dataset.theme = saved;
+        } catch (_) {}
+        if (location.pathname === '/' && location.hash) {
+          const destinations = { '#about': '/about/', '#skills': '/skills/', '#projects': '/projects/', '#experience': '/experience/', '#contact': '/contact/', '#certificates': '/certificate/', '#certificate': '/certificate/' };
+          const destination = destinations[location.hash];
+          if (destination) location.replace(destination);
+          else if (location.hash === '#home') history.replaceState(null, '', '/' + location.search);
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <noscript><style>
+      .theme-control,.nav-toggle,[data-copy-email]{display:none!important}
+      @media(max-width:1023px){.header-inner{height:auto;flex-wrap:wrap;padding-block:14px}.nav-links{display:flex!important;position:static;flex-basis:100%;flex-direction:row;flex-wrap:wrap;gap:0 18px;padding:0;margin:0;order:3;overflow:visible}.nav-links>a{font-size:13px;padding:6px 0;border:0}.nav-links>a.active:after{display:none}}
+    </style></noscript>
+    <a href="#main-content" class="skip-link">Skip to content</a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="/" aria-label="Duckcy home"><span class="brand-mark">d<span class="accent">.</span></span><span class="brand-name">duckcy<span class="accent">.</span></span></a>
+        <nav class="nav-links" id="site-nav" data-nav aria-label="Main navigation">
+          {navigation.map((item) => <a href={item.href} class:list={{ active: active(item.href) }} aria-current={active(item.href) ? 'page' : undefined}>{item.label}</a>)}
+        </nav>
+        <div class="header-actions">
+          <label class="theme-control" for="theme-select"><Icon name="sun" size={17} /><span class="sr-only">Color theme</span><select id="theme-select" aria-label="Color theme">{themes.map((theme) => <option value={theme.value}>{theme.label}</option>)}</select></label>
+          <button class="nav-toggle" type="button" data-nav-toggle aria-label="Toggle navigation" aria-controls="site-nav" aria-expanded="false"><span></span><span></span></button>
+        </div>
+      </div>
+    </header>
+    <main id="main-content" tabindex="-1"><slot /></main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div><a href="/" class="footer-brand">duckcy<span class="accent">.</span></a><p>Software engineering. A DevOps mindset.</p></div>
+        <div class="footer-links"><a href={profile.github} target="_blank" rel="noopener noreferrer">GitHub <Icon name="arrow" size={14} /></a><a href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn <Icon name="arrow" size={14} /></a><a href={`mailto:${profile.email}`}>Email <Icon name="arrow" size={14} /></a></div>
+      </div>
+      <div class="container footer-bottom"><span>© <span data-year>{new Date().getFullYear()}</span> Bui Hai Duc</span><span>Hanoi, Vietnam <span class="status-dot"></span></span></div>
+    </footer>
+    <Chatbot />
+    <div id="cloud-rescue-root" hidden></div>
+    <script>
+      import { initSite } from '../scripts/site';
+      initSite();
+    </script>
+  </body>
+</html>

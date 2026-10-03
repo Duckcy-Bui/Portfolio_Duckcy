@@ -1,0 +1,17 @@
+---
+import type { Project } from '../data/portfolio';
+import ProjectVisual from './ProjectVisual.astro';
+import Icon from './Icon.astro';
+interface Props { project: Project; filterable?: boolean; }
+const { project, filterable = false } = Astro.props;
+---
+<article class:list={['project-card', `project-${project.accent}`]} data-project={filterable || undefined} data-tags={project.stack.join(',')} data-text={[project.name, project.category, project.summary, ...project.stack].join(' ')}>
+  <a href={`/projects/${project.slug}/`} class="project-card-visual" tabindex="-1" aria-hidden="true"><ProjectVisual kind={project.illustration} compact /></a>
+  <div class="project-card-body">
+    <p class="overline">{project.category}</p>
+    <h2 class="card-title"><a href={`/projects/${project.slug}/`}>{project.name}<Icon name="arrow" size={19} /></a></h2>
+    <p>{project.summary}</p>
+    <div class="tags">{project.stack.slice(0, 4).map((tech) => <span>{tech}</span>)}{project.stack.length > 4 && <span class="tag-more">+{project.stack.length - 4}</span>}</div>
+    <div class="project-card-footer"><span>{project.role}</span><a href={`/projects/${project.slug}/`} aria-label={`Explore ${project.name}`}>Explore <Icon name="right" size={16} /></a></div>
+  </div>
+</article>

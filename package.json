@@ -1,6 +1,6 @@
 {
-  "name": "portfolio-duckcy-cloud-rescue-tests",
-  "version": "1.0.0",
+  "name": "duckcy-portfolio",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,11 +10,31 @@
     "evidence:payload": "node scripts/fc-payload.mjs --root build/fc-production --output evidence/payload.json",
     "evidence:checkpoint": "node scripts/fc-checkpoint.mjs --seed 20260725 --raw-output evidence/full-vitest-raw.json --coverage-output evidence/property-coverage.json",
     "evidence:lifecycle": "node scripts/fc-lifecycle.mjs --output evidence/lifecycle-evidence.json",
-    "evidence:final": "node scripts/fc-finalize.mjs --verify --input evidence/final-manifest.json"
+    "evidence:final": "node scripts/fc-finalize.mjs --verify --input evidence/final-manifest.json",
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test:e2e": "playwright test",
+    "test:performance": "node scripts/lighthouse-check.mjs",
+    "verify": "node scripts/verify-site.mjs",
+    "qa": "node scripts/qa-report.mjs"
   },
   "devDependencies": {
     "fast-check": "4.2.0",
     "jsdom": "26.1.0",
-    "vitest": "3.2.4"
+    "vitest": "4.1.11",
+    "@astrojs/check": "0.9.10",
+    "typescript": "5.9.3",
+    "@playwright/test": "1.63.0",
+    "@axe-core/playwright": "4.11.1",
+    "lighthouse": "13.5.0"
+  },
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "dependencies": {
+    "astro": "7.3.5",
+    "@astrojs/sitemap": "3.7.4"
   }
 }

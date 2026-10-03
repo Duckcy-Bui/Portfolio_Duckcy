@@ -1,0 +1,16 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import PageHeading from '../../components/PageHeading.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import Icon from '../../components/Icon.astro';
+import { projects } from '../../data/portfolio';
+const technologies = [...new Set(projects.flatMap((project) => project.stack))].sort();
+---
+<SiteLayout title="Projects" description="Explore Bui Hai Duc’s projects in backend engineering, DevOps and data infrastructure: SBLT CUP, Classes369 and Investor AI."><div class="container page">
+  <PageHeading eyebrow="Work & experiments" title="Projects that connect the dots" description="Application logic, infrastructure and delivery — explored through real projects." />
+  <div class="project-filters" data-filter-controls hidden><label class="search-control"><Icon name="search" size={19} /><span class="sr-only">Search projects</span><input type="search" data-project-search placeholder="Search projects or technologies…" aria-label="Search projects" /></label><fieldset class="filter-options"><legend>Filter by technology</legend><div class="filter-chips">{technologies.map((tech) => <label class="filter-chip"><input type="checkbox" data-tech value={tech} />{tech}</label>)}</div></fieldset></div>
+  <div class="projects-result-row"><p data-project-count aria-live="polite" style="margin:0">Showing {projects.length} of {projects.length} projects</p><button type="button" class="link-button" data-project-clear hidden>Clear filters</button></div>
+  <div class="project-grid" data-project-list>{projects.map((project) => <ProjectCard project={project} filterable />)}</div>
+  <div class="empty-state" data-project-empty hidden><h2>No projects match yet</h2><p>Try a different keyword or clear the technology filters.</p></div>
+  <script>import { initProjects } from '../../scripts/projects'; document.querySelector('[data-filter-controls]')?.removeAttribute('hidden'); document.querySelector('[data-project-clear]')?.removeAttribute('hidden'); initProjects();</script>
+</div></SiteLayout>
