@@ -1,7 +1,7 @@
 import { generateKeyPairSync, sign } from 'node:crypto';
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { describe, expect, it } from 'vitest';
 import { aggregateUsabilitySessions } from '../../evidence/tools/fc-usability-aggregate.mjs';
@@ -14,7 +14,7 @@ import {
   validateUsabilityEvidence,
 } from '../../scripts/fc-evidence.mjs';
 import { FINAL_SUPPORTING_PATHS, validateFinalManifestShape, validateProductionBuildEvidence } from '../../scripts/fc-finalize.mjs';
-import { computeSourceDigest, currentProvenance, readCommitSha } from '../../scripts/fc-provenance.mjs';
+import { computeSourceDigest, readCommitSha } from '../../scripts/fc-provenance.mjs';
 import { CORE_BUILD_ASSETS, canonicalJson, sha256, verifyUsabilityBundle } from '../../scripts/fc-usability-chain.mjs';
 import { collectActivationResourceTiming, collectUniqueResourceTiming, fpsFromFrameIntervals } from '../../scripts/fc-performance.mjs';
 import { summarizeLighthouseRuns } from '../../scripts/fc-lighthouse.mjs';
@@ -28,6 +28,47 @@ function provenance() {
     sourceDigest: 'b'.repeat(64),
     sourceScope: 'fc-source-v1',
   };
+}
+
+function productionBuildFixture() {
+  const directory = mkdtempSync(join(tmpdir(), 'fc-production-ledger-fixture-'));
+  const output = join(directory, 'build/fc-production');
+  // Synthetic validator data, never a replacement for current browser/build evidence.
+  const contents = {
+    CNAME: 'duckcy.me\n',
+    'assets/example.txt': 'fixture asset\n',
+    'game/fc-engine.js': 'export const fixture=true;\n',
+    'game/fc-overlay.css': '#cloud-rescue-root{display:grid}\n',
+    'index.html': '<!doctype html><html lang="en"><title>Fixture</title></html>\n',
+  };
+  const files = Object.keys(contents).sort().map((path) => {
+    const bytes = Buffer.from(contents[path]);
+    const destination = join(output, path);
+    mkdirSync(dirname(destination), { recursive: true });
+    writeFileSync(destination, bytes);
+    return { path, bytes: bytes.length, sha256: sha256(bytes) };
+  });
+  const report = {
+    schemaVersion: 1,
+    kind: 'flappy-cloud-production-build',
+    createdAt: new Date(0).toISOString(),
+    provenance: provenance(),
+    command: 'esbuild (0.25.12) --minify --legal-comments=none --target=es2022',
+    output: 'build/fc-production',
+    digest: sha256(files.map((file) => `${file.path}\0${file.sha256}\n`).join('')),
+    files,
+  };
+  const reportPath = join(directory, 'evidence/production-build.json');
+  const markerPath = join(output, '.fc-production-build.json');
+  mkdirSync(dirname(reportPath), { recursive: true });
+  const saveReport = () => {
+    const bytes = JSON.stringify(report, null, 2) + '\n';
+    writeFileSync(reportPath, bytes);
+    writeFileSync(markerPath, bytes);
+    return bytes;
+  };
+  saveReport();
+  return { directory, output, report, reportPath, markerPath, saveReport };
 }
 
 function usabilityFixture() {
@@ -526,11 +567,50 @@ describe('final evidence provenance and manifest gates', () => {
     expect(validateLifecycleEvidence(artifact).errors).toContain('Final timers count must be zero');
   });
 
-  it('replays the complete production build ledger, marker, provenance, and aggregate digest', async () => {
-    const validation = await validateProductionBuildEvidence(process.cwd(), await currentProvenance());
-    expect(validation.files).toBe(42);
-    expect(validation.digest).toMatch(/^[0-9a-f]{64}$/);
-    expect(validation.reportSha256).toMatch(/^[0-9a-f]{64}$/);
+  it('replays a complete deterministic production ledger, marker, provenance and aggregate digest', async () => {
+    const fixture = productionBuildFixture();
+    try {
+      const validation = await validateProductionBuildEvidence(fixture.directory, provenance());
+      expect(validation.files).toBe(fixture.report.files.length);
+      expect(validation.digest).toBe(fixture.report.digest);
+      expect(validation.reportSha256).toBe(sha256(readFileSync(fixture.reportPath)));
+    } finally { rmSync(fixture.directory, { recursive: true, force: true }); }
+  });
+
+  it.each([
+    ['stale provenance', (fixture) => {
+      fixture.report.provenance.sourceDigest = 'c'.repeat(64);
+      fixture.saveReport();
+    }, /provenance does not match/],
+    ['noncanonical command', (fixture) => {
+      fixture.report.command = 'esbuild (0.25.12) --bundle';
+      fixture.saveReport();
+    }, /command\/output is not canonical/],
+    ['altered marker', (fixture) => {
+      writeFileSync(fixture.markerPath, '{}');
+    }, /embedded marker differ/],
+    ['altered output bytes', (fixture) => {
+      writeFileSync(join(fixture.output, 'game/fc-engine.js'), 'export const fixture=false;');
+    }, /file ledger does not exactly match/],
+    ['extra output file', (fixture) => {
+      writeFileSync(join(fixture.output, 'unlisted.txt'), 'not in the ledger');
+    }, /file ledger does not exactly match/],
+    ['incorrect aggregate digest', (fixture) => {
+      fixture.report.digest = '0'.repeat(64);
+      fixture.saveReport();
+    }, /aggregate digest is inconsistent/],
+    ['source map output', (fixture) => {
+      writeFileSync(join(fixture.output, 'game/fc-engine.js.map'), '{}');
+    }, /source map/],
+    ['symbolic link output', (fixture) => {
+      symlinkSync(join(fixture.output, 'index.html'), join(fixture.output, 'linked.html'));
+    }, /symbolic link/],
+  ])('rejects %s in production evidence without touching checked-in artifacts', async (_label, tamper, error) => {
+    const fixture = productionBuildFixture();
+    try {
+      tamper(fixture);
+      await expect(validateProductionBuildEvidence(fixture.directory, provenance())).rejects.toThrow(error);
+    } finally { rmSync(fixture.directory, { recursive: true, force: true }); }
   });
 
   it('requires every exact artifact role, safe unique paths, hashes and provenance in the final manifest', () => {

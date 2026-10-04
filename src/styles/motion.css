@@ -1,0 +1,21 @@
+.motion-toggle { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; flex: 0 0 44px; padding: 0; border: 1px solid var(--stroke); border-radius: 50%; background: rgba(255,255,255,.06); color: var(--text); cursor: pointer; }
+.motion-toggle:hover { border-color: var(--accent); color: var(--accent); }
+.motion-toggle[aria-pressed=true] { border-color: var(--accent-2); color: var(--accent-2); background: rgba(92,197,255,.1); }
+.motion-toggle:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 4px; }
+.motion-toggle > span { display: inline-flex; }
+.motion-toggle [hidden] { display: none; }
+/* These decorations can move continuously; functional game and dialog controls remain usable. */
+html[data-effects-paused] .orb,
+html[data-effects-paused] .avatar-ring,
+html[data-effects-paused] .hero h1,
+html[data-effects-paused] .chatbot-fab--pulse,
+html[data-effects-paused] body::before,
+html[data-effects-paused] body::after { animation-play-state: paused !important; }
+html[data-motion-state=paused] .theme-toggle:hover,
+html[data-motion-state=reduced] .theme-toggle:hover { transform: none; transition: none; }
+@media (max-width: 480px) {
+  .site-header .brand, .site-header .brand-pill { min-width: 0; }
+  .site-header .brand-dot { flex-shrink: 0; }
+  .site-header .brand-pill { padding-inline: 8px; letter-spacing: .04em; }
+  #theme-pill-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}

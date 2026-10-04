@@ -1,0 +1,184 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+---
+<SiteLayout title="Skills" description="Bui Hai Duc’s toolkit for backend development, DevOps, databases and engineering practices.">
+      <section id="skills" class="section skills">
+        <div class="container">
+          <div class="section-title" style="text-align:center; max-width:100%;">
+            <p class="eyebrow" style="justify-content:center;">Technical Skills</p>
+            <h1>My Tech Stack</h1>
+            <p style="color:var(--muted);font-size:17px;">My expertise across various technologies and tools</p>
+          </div>
+
+          <!-- ── PRIMARY STACK (DevOps) ── -->
+          <div class="skills-stack-block" data-skill-group="primary">
+            <div class="skills-stack-label">
+              <span class="skills-stack-badge primary">Core</span>
+              DevOps Stack
+            </div>
+
+            <div class="skills-tabs" role="tablist" aria-label="Primary skill categories" data-tab-group="primary" data-skills-controls hidden>
+              <button class="skills-tab active" role="tab" aria-selected="true"  data-skills-tab="devops" data-skill-tab="devops" id="skill-tab-devops" aria-controls="skill-panel-devops"     data-group="primary">DevOps</button>
+              <button class="skills-tab"         role="tab" aria-selected="false" data-skills-tab="databases" data-skill-tab="databases" id="skill-tab-databases" aria-controls="skill-panel-databases"  data-group="primary">Databases</button>
+              <button class="skills-tab"         role="tab" aria-selected="false" data-skills-tab="concepts" data-skill-tab="concepts" id="skill-tab-concepts" aria-controls="skill-panel-concepts"   data-group="primary">Concepts</button>
+            </div>
+
+            <div class="skills-panels" data-panel-group="primary">
+
+              <!-- DevOps -->
+              <div class="skills-panel active" data-skills-panel="devops" data-skill-panel="devops" id="skill-panel-devops" aria-labelledby="skill-tab-devops" data-group="primary" role="tabpanel">
+                <div class="skill-icon-grid">
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="/assets/docker_icon.png" alt="Docker" class="skill-img" width="52" height="52" loading="lazy"></div>
+                    <span class="skill-icon-label">Docker</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="/assets/docker-compose_icon-removebg-preview.png" alt="Docker Compose" class="skill-img" width="52" height="52" loading="lazy"></div>
+                    <span class="skill-icon-label">Docker Compose</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="/assets/linux_icon.png" alt="Linux" class="skill-img" width="52" height="52" loading="lazy"></div>
+                    <span class="skill-icon-label">Linux</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="/assets/apache-airflow_icon.png" alt="Airflow" class="skill-img" width="52" height="52" loading="lazy"></div>
+                    <span class="skill-icon-label">Airflow</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="/assets/Jenkins_icon.png" alt="Jenkins" class="skill-img" width="52" height="52" loading="lazy"></div>
+                    <span class="skill-icon-label">Jenkins</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="/assets/github-actions_icon-removebg-preview.png" alt="GitHub Actions" class="skill-img" width="52" height="52" loading="lazy"></div>
+                    <span class="skill-icon-label">GitHub Actions</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Databases (primary) -->
+              <div class="skills-panel" data-skills-panel="databases" data-skill-panel="databases" id="skill-panel-databases" aria-labelledby="skill-tab-databases" data-group="primary" role="tabpanel">
+                <div class="skill-icon-grid">
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="/assets/postgreesql_icon-removebg-preview.png" alt="PostgreSQL" class="skill-img" width="52" height="52" loading="lazy"></div>
+                    <span class="skill-icon-label">PostgreSQL</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="/assets/redis_icon-removebg-preview.png" alt="Redis" class="skill-img" width="52" height="52" loading="lazy"></div>
+                    <span class="skill-icon-label">Redis</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="/assets/spark_icon-removebg-preview.png" alt="Spark" class="skill-img" width="52" height="52" loading="lazy"></div>
+                    <span class="skill-icon-label">Spark</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="/assets/MINIO_icon.png" alt="MinIO" class="skill-img" width="52" height="52" loading="lazy"></div>
+                    <span class="skill-icon-label">MinIO</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Concepts (primary) -->
+              <div class="skills-panel" data-skills-panel="concepts" data-skill-panel="concepts" id="skill-panel-concepts" aria-labelledby="skill-tab-concepts" data-group="primary" role="tabpanel">
+                <div class="skill-icon-grid">
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="/assets/CI-CD_icon.png" alt="CI/CD" class="skill-img" width="52" height="52" loading="lazy"></div>
+                    <span class="skill-icon-label">CI/CD</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="/assets/ETL-pipeline_icon.png" alt="ETL Pipeline" class="skill-img" width="52" height="52" loading="lazy"></div>
+                    <span class="skill-icon-label">ETL Pipeline</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="/assets/microservice_icon.png" alt="Microservices" class="skill-img" width="52" height="52" loading="lazy"></div>
+                    <span class="skill-icon-label">Microservices</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="/assets/git-github_icon.png" alt="Git / GitHub" class="skill-img" width="52" height="52" loading="lazy"></div>
+                    <span class="skill-icon-label">Git / GitHub</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="/assets/RESTful_icon-removebg-preview.png" alt="RESTful API" class="skill-img" width="52" height="52" loading="lazy"></div>
+                    <span class="skill-icon-label">RESTful API</span>
+                  </div>
+                </div>
+              </div>
+
+            </div><!-- /primary panels -->
+          </div><!-- /primary block -->
+
+          <!-- ── SECONDARY STACK ── -->
+          <div class="skills-stack-block" data-skill-group="secondary">
+            <div class="skills-stack-label">
+              <span class="skills-stack-badge secondary">Also</span>
+              Languages &amp; Frameworks
+            </div>
+
+            <div class="skills-tabs" role="tablist" aria-label="Secondary skill categories" data-tab-group="secondary" data-skills-controls hidden>
+              <button class="skills-tab active" role="tab" aria-selected="true"  data-skills-tab="languages" data-skill-tab="languages" id="skill-tab-languages" aria-controls="skill-panel-languages"   data-group="secondary">Languages</button>
+              <button class="skills-tab"         role="tab" aria-selected="false" data-skills-tab="frameworks" data-skill-tab="frameworks" id="skill-tab-frameworks" aria-controls="skill-panel-frameworks"  data-group="secondary">Frameworks</button>
+              <button class="skills-tab"         role="tab" aria-selected="false" data-skills-tab="sec-databases" data-skill-tab="sec-databases" id="skill-tab-sec-databases" aria-controls="skill-panel-sec-databases" data-group="secondary">Databases</button>
+            </div>
+
+            <div class="skills-panels" data-panel-group="secondary">
+
+              <!-- Languages -->
+              <div class="skills-panel active" data-skills-panel="languages" data-skill-panel="languages" id="skill-panel-languages" aria-labelledby="skill-tab-languages" data-group="secondary" role="tabpanel">
+                <div class="skill-icon-grid">
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="/assets/python_icon-removebg-preview.png" alt="Python" class="skill-img" width="52" height="52" loading="lazy"></div>
+                    <span class="skill-icon-label">Python</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="/assets/java_icon.png" alt="Java" class="skill-img" width="52" height="52" loading="lazy"></div>
+                    <span class="skill-icon-label">Java</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="/assets/c++_icon-removebg-preview.png" alt="C++" class="skill-img" width="52" height="52" loading="lazy"></div>
+                    <span class="skill-icon-label">C++</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="/assets/sql_icon.png" alt="SQL" class="skill-img" width="52" height="52" loading="lazy"></div>
+                    <span class="skill-icon-label">SQL</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Frameworks -->
+              <div class="skills-panel" data-skills-panel="frameworks" data-skill-panel="frameworks" id="skill-panel-frameworks" aria-labelledby="skill-tab-frameworks" data-group="secondary" role="tabpanel">
+                <div class="skill-icon-grid">
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="/assets/flask_icon-removebg-preview.png" alt="Flask" class="skill-img" width="52" height="52" loading="lazy"></div>
+                    <span class="skill-icon-label">Flask</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="/assets/spring_boot_icon-removebg-preview.png" alt="Spring Boot" class="skill-img" width="52" height="52" loading="lazy"></div>
+                    <span class="skill-icon-label">Spring Boot</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="/assets/react_icon.png" alt="React" class="skill-img" width="52" height="52" loading="lazy"></div>
+                    <span class="skill-icon-label">React</span>
+                  </div>
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="/assets/javaFX_icon-removebg-preview.png" alt="JavaFX" class="skill-img" width="52" height="52" loading="lazy"></div>
+                    <span class="skill-icon-label">JavaFX</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Secondary Databases -->
+              <div class="skills-panel" data-skills-panel="sec-databases" data-skill-panel="sec-databases" id="skill-panel-sec-databases" aria-labelledby="skill-tab-sec-databases" data-group="secondary" role="tabpanel">
+                <div class="skill-icon-grid">
+                  <div class="skill-icon-card">
+                    <div class="skill-icon-img"><img src="/assets/sql-server_icon-removebg-preview.png" alt="SQL Server" class="skill-img" width="52" height="52" loading="lazy"></div>
+                    <span class="skill-icon-label">SQL Server</span>
+                  </div>
+                </div>
+              </div>
+
+            </div><!-- /secondary panels -->
+          </div><!-- /secondary block -->
+
+        </div>
+      </section>
+<script>import { initSkills } from '../scripts/skills'; document.querySelectorAll('[data-skills-controls]').forEach((controls) => controls.removeAttribute('hidden')); initSkills();</script>
+</SiteLayout>

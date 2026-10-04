@@ -1,0 +1,44 @@
+---
+import '../styles/chatbot.css';
+---
+<div id="chatbot-root">
+  <button type="button" id="chatbot-fab" aria-label="Open Duc's AI Assistant" aria-expanded="false" aria-haspopup="dialog" aria-controls="chatbot-window">
+    <svg class="chatbot-fab-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <span class="chatbot-fab-badge" aria-hidden="true"></span>
+  </button>
+  <div class="chatbot-fab-tooltip" id="chatbot-fab-tooltip" aria-live="polite" hidden>
+    👋 Ask me anything about Duc!
+    <button type="button" class="chatbot-fab-tooltip-close" id="chatbot-tooltip-close" aria-label="Dismiss assistant tip">×</button>
+  </div>
+  <dialog id="chatbot-window" aria-labelledby="chatbot-title" aria-describedby="chatbot-description">
+    <div class="chatbot-header">
+      <img class="chatbot-avatar" src="/assets/hai_duc_img-removebg-preview.png" alt="" width="36" height="36" />
+      <div class="chatbot-title">
+        <span class="chatbot-title-name" id="chatbot-title">Duc's AI Assistant</span>
+        <span class="chatbot-title-status"><span class="chatbot-online-dot" aria-hidden="true"></span> Portfolio assistant</span>
+      </div>
+      <div class="chatbot-header-actions">
+        <button type="button" id="chatbot-reset" aria-label="New conversation" title="New conversation"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg></button>
+        <button type="button" id="chatbot-minimize" aria-label="Minimize chat" title="Minimize" aria-expanded="true"><svg aria-hidden="true" class="icon-minimize" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg><svg aria-hidden="true" class="icon-maximize" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></button>
+        <button type="button" id="chatbot-close" aria-label="Close assistant" title="Close"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+    </div>
+    <p id="chatbot-description" class="chatbot-sr-only">Ask about Duc's skills, projects and experience. AI can make mistakes; verify answers against the portfolio.</p>
+    <div class="chatbot-messages" role="log" aria-live="polite" aria-relevant="additions" aria-label="Conversation" tabindex="0"></div>
+    <div class="chatbot-suggestions" aria-label="Suggested questions">
+      <button type="button" class="chatbot-suggestion-chip" data-chat-suggestion="What are Duc's skills?">⚡ Skills</button>
+      <button type="button" class="chatbot-suggestion-chip" data-chat-suggestion="Tell me about Duc's projects">🚀 Projects</button>
+      <button type="button" class="chatbot-suggestion-chip" data-chat-suggestion="How can I contact Duc?">✉ Contact</button>
+    </div>
+    <form id="chatbot-form" class="chatbot-input-row">
+      <label for="chatbot-input" class="chatbot-sr-only">Message for Duc's assistant</label>
+      <textarea id="chatbot-input" name="message" rows="1" maxlength="2000" placeholder="Ask me anything about Duc..." required></textarea>
+      <button type="submit" id="chatbot-send" aria-label="Send message"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+    </form>
+  </dialog>
+</div>
+<noscript><style>#chatbot-root { display: none; }</style></noscript>
+<script>
+  import { initChatbot } from '../scripts/chatbot';
+  initChatbot();
+</script>

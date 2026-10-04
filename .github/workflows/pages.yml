@@ -1,0 +1,85 @@
+name: Verify and deploy portfolio
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: portfolio-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+      - name: Use Node 24
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Check Astro and TypeScript
+        id: check
+        run: npm run check
+      - name: Run unit and integration tests
+        id: unit
+        run: |
+          mkdir -p artifacts
+          npm test -- --reporter=default --reporter=json --outputFile=artifacts/vitest.json
+      - name: Build static pages
+        id: build
+        run: npm run build
+      - name: Verify generated pages and links
+        run: npm run verify
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run browser acceptance
+        run: npm run test:e2e
+      - name: Check cold mobile performance
+        run: npm run test:performance
+      - name: Bind QA evidence to this build
+        if: always()
+        env:
+          QA_CHECK_STATUS: ${{ steps.check.outcome }}
+          QA_UNIT_STATUS: ${{ steps.unit.outcome }}
+          QA_BUILD_STATUS: ${{ steps.build.outcome }}
+        run: npm run qa
+      - name: Preserve QA artifacts
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: portfolio-qa-${{ github.sha }}
+          path: artifacts/
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Upload verified Pages artifact
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: github-pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy verified static artifact
+        id: deployment
+        uses: actions/deploy-pages@v5

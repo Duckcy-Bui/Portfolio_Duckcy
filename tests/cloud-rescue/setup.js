@@ -1,4 +1,4 @@
-import { afterEach, vi } from 'vitest';
+import { afterEach, beforeEach, vi } from 'vitest';
 
 export function makeCanvasContext() {
   const noop = () => {};
@@ -13,14 +13,21 @@ export function makeCanvasContext() {
   };
 }
 
-Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
-  configurable: true,
-  value: vi.fn(function getContext(kind) {
-    if (kind !== '2d') return null;
-    if (!this.__fcContext) this.__fcContext = makeCanvasContext();
-    return this.__fcContext;
-  }),
-});
+function installCanvasStub() {
+  Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
+    configurable: true,
+    value: vi.fn(function getContext(kind) {
+      if (kind !== '2d') return null;
+      if (!this.__fcContext) this.__fcContext = makeCanvasContext();
+      return this.__fcContext;
+    }),
+  });
+}
+installCanvasStub();
+// A spy on an existing mock can change that mock's implementation in Vitest 4.
+// Reset the browser capability fixture so an unsupported-canvas test cannot
+// silently make every later loader activation unsupported as well.
+beforeEach(installCanvasStub);
 
 Object.defineProperty(window, 'matchMedia', {
   configurable: true,

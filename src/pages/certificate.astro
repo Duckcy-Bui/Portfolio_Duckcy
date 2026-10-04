@@ -1,0 +1,35 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import AboutNavigation from '../components/AboutNavigation.astro';
+import '../styles/certificates.css';
+---
+<SiteLayout title="Certificates" description="Verify Bui Hai Duc’s AWS Student Builder Group Core Team Member Badge, issued by AWS Community in July 2026.">
+<section id="certificate" class="section about"><div class="container"><div class="section-title"><p class="eyebrow">Certificates</p><h1>Certificates &amp; Recognition</h1></div><div class="about-tabs">
+                <AboutNavigation page="certificate" />
+                <div class="certificates-list">
+                  <article class="cert-item cert-feature" aria-labelledby="aws-sbg-title" data-credly-badge>
+                    <figure class="cert-artwork" data-certificate-artwork>
+                      <img class="cert-badge-image" data-certificate-image src="/assets/certificates/aws-sbg-core-team.png" width="1501" height="1501" alt="AWS Student Builder Group Core Team Member badge" decoding="async" />
+                      <figcaption class="cert-artwork-caption">AWS Student Builder Group</figcaption>
+                      <p class="cert-image-unavailable" data-certificate-image-unavailable hidden>The badge image is unavailable. You can still verify this credential on Credly.</p>
+                    </figure>
+                    <div class="cert-details">
+                    <div class="cert-header">
+                      <h2 id="aws-sbg-title">AWS SBG Core Team Member Badge</h2>
+                      <span class="cert-status">Issued Jul 2026</span>
+                    </div>
+                    <p class="cert-desc">Official recognition as an AWS Student Builder Group Core Team member, issued by AWS Community.</p>
+                    <dl class="cert-facts">
+                      <div><dt>Issued by</dt><dd>AWS Community</dd></div>
+                      <div><dt>Awarded to</dt><dd>Bui Hai Duc</dd></div>
+                    </dl>
+                    <h3 class="cert-skills-heading">Skills recognized</h3>
+                    <ul class="cert-skill-list" aria-label="Skills recognized by this credential">
+                      <li>Community Building</li><li>Organization and Leadership</li><li>Student Engagement</li>
+                    </ul>
+                    <a class="cert-link" href="https://www.credly.com/badges/73787dad-002a-4cce-b49d-011b40587df9" target="_blank" rel="noopener noreferrer">View credential on Credly →</a>
+                    </div>
+                  </article>
+                </div></div></div></section>
+<script>import { initCertificates } from '../scripts/certificates'; initCertificates();</script>
+</SiteLayout>

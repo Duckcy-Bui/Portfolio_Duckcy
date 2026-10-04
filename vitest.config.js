@@ -6,6 +6,7 @@ export default defineConfig({
     include: [
       'tests/cloud-rescue/**/*.test.js',
       'tests/flappy-cloud-game/**/*.test.js',
+      'tests/site/**/*.test.ts',
     ],
     setupFiles: ['tests/cloud-rescue/setup.js'],
     clearMocks: true,

@@ -1,0 +1,25 @@
+/* The appearance lives in the original stylesheet; adapt only native dialog behavior. */
+#chatbot-window { top: auto; left: auto; margin: 0; padding: 0; max-width: none; max-height: calc(100dvh - 112px); color: var(--text); }
+#chatbot-window:not([open]) { display: none; }
+#chatbot-window[open] { display: flex; }
+#chatbot-window::backdrop { background: transparent; }
+.chatbot-fab-tooltip[hidden], .chatbot-suggestions[hidden] { display: none; }
+#chatbot-window .chatbot-messages { min-height: 0; overscroll-behavior: contain; }
+#chatbot-window .chatbot-bubble { overflow-wrap: anywhere; }
+#chatbot-window .chatbot-copy-btn:focus-visible { opacity: 1; pointer-events: auto; }
+#chatbot-window .chatbot-copy-tooltip { left: 0; bottom: 28px; }
+#chatbot-window .chatbot-msg.error .chatbot-bubble { color: var(--muted); border: 1px solid var(--stroke); border-radius: 16px; }
+#chatbot-window .chatbot-input-row { margin: 0; }
+#chatbot-window .chatbot-input-row :disabled { cursor: wait; }
+#chatbot-window :focus-visible { outline: 2px solid var(--accent-2); outline-offset: 2px; }
+.chatbot-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+@media (max-width: 767px) {
+  #chatbot-window { height: 100dvh; max-height: 100dvh; }
+  #chatbot-input { font-size: 16px; }
+  #chatbot-window .chatbot-input-row { padding-bottom: max(12px, env(safe-area-inset-bottom)); }
+  #chatbot-window.chatbot-window--minimized { inset: auto 12px 12px; width: calc(100vw - 24px); border: 1px solid var(--stroke); border-radius: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #chatbot-fab.chatbot-fab--pulse, .chatbot-typing span { animation: none; }
+  #chatbot-window, #chatbot-fab, .chatbot-messages { transition: none; scroll-behavior: auto; }
+}

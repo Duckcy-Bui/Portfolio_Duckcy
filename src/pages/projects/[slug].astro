@@ -1,0 +1,28 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import Icon from '../../components/Icon.astro';
+import { projects, type Project } from '../../data/portfolio';
+import SbltContent from '../../content/projects/sblt-cup.md';
+import ClassesContent from '../../content/projects/classes369.md';
+import InvestorContent from '../../content/projects/investor-ai.md';
+export function getStaticPaths() { return projects.map((project) => ({ params: { slug: project.slug }, props: { project } })); }
+interface Props { project: Project; }
+const { project } = Astro.props;
+const articles = { 'sblt-cup': SbltContent, 'classes369': ClassesContent, 'investor-ai': InvestorContent };
+const Content = articles[project.slug as keyof typeof articles];
+const next = projects[(projects.findIndex((p) => p.slug === project.slug) + 1) % projects.length];
+---
+<SiteLayout title={`${project.name} — Project`} description={project.summary}>
+  <section class="section projects project-detail in-view"><div class="container">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/projects/">Projects</a><span aria-hidden="true">/</span><span aria-current="page">{project.name}</span></nav>
+    <article class="project-showcase"><div class="project-showcase-body">
+      <p class="project-showcase-sub">{project.role} · {project.period}</p>
+      <h1 class="project-showcase-title">{project.name}</h1>
+      <p class="project-showcase-desc">{project.summary}</p>
+      <div class="project-showcase-tags" aria-label="Technology stack">{project.stack.map((tech) => <span>{tech}</span>)}</div>
+      <div class="prose"><Content /></div>
+      <div class="project-actions"><a class="project-github-btn" href={project.github} target="_blank" rel="noopener noreferrer">View on GitHub <Icon name="arrow" size={16} /></a><a class="project-github-btn" href="/contact/">Ask about this project <Icon name="right" size={16} /></a></div>
+    </div></article>
+    <nav class="project-next" aria-label="More projects"><a href="/projects/">← All projects</a><a href={`/projects/${next.slug}/`}>Next project: {next.name} →</a></nav>
+  </div></section>
+</SiteLayout>

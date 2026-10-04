@@ -1,5 +1,5 @@
 import { readFileSync, readdirSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { dirname, resolve, sep } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 import { ACHIEVEMENTS } from '../../game/fc-engine.js';
 
@@ -135,10 +135,40 @@ describe('Flappy Cloud final integration smoke contracts', () => {
     expect(engine).not.toMatch(/not implemented|throw new Error\(['"]TODO|\bplaceholder\b/i);
   });
 
-  it('adds no runtime package dependency and ships executable evidence/performance harness contracts', () => {
+  it('keeps the game import graph dependency-free while separating Astro site and historical evidence builds', () => {
     const packageJson = JSON.parse(read('package.json'));
-    expect(packageJson.dependencies).toBeUndefined();
-    expect(Object.keys(packageJson.devDependencies).sort()).toEqual(['fast-check', 'jsdom', 'vitest']);
+    expect(packageJson.scripts.build).toContain('astro build');
+    expect(packageJson.scripts.build).not.toContain('fc-build.mjs');
+    expect(packageJson.scripts['build:production']).toContain('scripts/fc-build.mjs');
+    expect(packageJson.scripts['build:production']).toContain('evidence/production-build.json');
+    for (const tool of ['fast-check', 'jsdom', 'vitest']) expect(packageJson.devDependencies[tool]).toBeTruthy();
+
+    // Site/build tooling may use packages. The engine and compatibility entry
+    // must still ship a self-contained browser graph without package or CDN imports.
+    const gameRoot = resolve(process.cwd(), 'game');
+    const pending = [resolve(gameRoot, 'fc-engine.js'), resolve(gameRoot, 'cr-engine.js')];
+    const visited = new Set();
+    while (pending.length) {
+      const file = pending.pop();
+      if (visited.has(file)) continue;
+      visited.add(file);
+      expect(file.startsWith(`${gameRoot}${sep}`)).toBe(true);
+      const source = readFileSync(file, 'utf8');
+      const staticImports = [
+        ...source.matchAll(/^\s*import\s+(?:[\s\S]*?\bfrom\s+)?['"]([^'"]+)['"]/gm),
+        ...source.matchAll(/^\s*export\s+(?:\*|\{[^}]*\})(?:\s+as\s+\w+)?\s+from\s+['"]([^'"]+)['"]/gm),
+      ];
+      const dynamicImports = [...source.matchAll(/\bimport\s*\(\s*['"]([^'"]+)['"]\s*\)/g)];
+      expect((source.match(/\bimport\s*\(/g) || []).length).toBe(dynamicImports.length);
+      for (const [, specifier] of [...staticImports, ...dynamicImports]) {
+        expect(specifier).toMatch(/^\.\.?\//);
+        pending.push(resolve(dirname(file), specifier));
+      }
+      expect(source).not.toMatch(/\b(?:fetch|XMLHttpRequest|WebSocket|EventSource)\s*\(/);
+    }
+    expect(visited).toContain(resolve(gameRoot, 'fc-engine.js'));
+    expect(visited).toContain(resolve(gameRoot, 'cr-engine.js'));
+
     const performance = read('scripts/fc-performance.mjs');
     const lighthouse = read('scripts/fc-lighthouse.mjs');
     const payload = read('scripts/fc-payload.mjs');

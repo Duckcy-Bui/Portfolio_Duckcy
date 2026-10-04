@@ -1,0 +1,14 @@
+/* Keep the desktop hero and surface its primary actions first on small screens. */
+.hero-copy { display: flex; flex-direction: column; }
+.hero-intro h1 { margin-bottom: 0; }
+.hero-copy > .code-card { order: 1; }
+.hero-copy > .cta-group { order: 2; }
+@media (max-width: 980px) {
+  .hero-grid { gap: 24px; }
+  .hero-copy { display: contents; }
+  .hero-intro { order: 0; min-width: 0; }
+  .hero-copy > .cta-group { order: 1; margin-top: 0; }
+  .hero-visual { order: 2; }
+  .hero-copy > .code-card { order: 3; margin-top: 0; }
+  .hero .cr-cta { font-size: 14px; }
+}

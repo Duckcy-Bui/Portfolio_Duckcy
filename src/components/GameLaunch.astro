@@ -1,0 +1,11 @@
+---
+import '../styles/game-launch.css';
+---
+<button type="button" class="btn ghost cr-cta" aria-haspopup="dialog" aria-controls="cloud-rescue-root">
+  Play Game
+</button>
+<noscript><span class="cr-unavailable-message">Enable JavaScript to play Cloud Rescue.</span></noscript>
+<script>
+  import { initGameLoader } from '../scripts/game-loader';
+  initGameLoader();
+</script>

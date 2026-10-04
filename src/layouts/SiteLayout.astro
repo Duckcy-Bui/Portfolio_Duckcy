@@ -1,0 +1,80 @@
+---
+import '../styles/global.css';
+import Chatbot from '../components/Chatbot.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+interface Props { title: string; description: string; noindex?: boolean; }
+const { title, description, noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} | Bui Hai Duc · Duckcy</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="dark light" />
+    {noindex ? <meta name="robots" content="noindex, follow" /> : <link rel="canonical" href={canonical} />}
+    <link rel="icon" href="/assets/docker_icon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/assets/docker_icon.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Duckcy — Bui Hai Duc" />
+    <meta property="og:title" content={`${title} | Bui Hai Duc`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL('/assets/hai_duc_img.jpg', Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script is:inline>
+      (() => {
+        try {
+          const saved = localStorage.getItem('portfolio-theme');
+          if (['dark', 'light', 'forest', 'ocean', 'sunset'].includes(saved)) document.documentElement.dataset.theme = saved;
+        } catch (_) {}
+        let motion = 'running';
+        try { if (localStorage.getItem('portfolio-motion') === 'paused') motion = 'paused'; } catch (_) {}
+        const reducedMotion = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+        document.documentElement.dataset.motionPreference = motion;
+        document.documentElement.dataset.motionState = reducedMotion ? 'reduced' : motion;
+        if (reducedMotion || motion === 'paused') document.documentElement.setAttribute('data-effects-paused', '');
+        if (location.pathname === '/' && location.hash) {
+          const destinations = { '#about': '/about/', '#skills': '/skills/', '#projects': '/projects/', '#experience': '/experience/', '#contact': '/contact/', '#certificates': '/certificate/', '#certificate': '/certificate/' };
+          const destination = destinations[location.hash];
+          if (destination) location.replace(destination);
+          else if (location.hash === '#home') history.replaceState(null, '', '/' + location.search);
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <script is:inline>
+      (() => {
+        const classes = { light: 'light-mode', forest: 'theme-forest', ocean: 'theme-ocean', sunset: 'theme-sunset' };
+        const themeClass = classes[document.documentElement.dataset.theme];
+        if (themeClass) document.body.classList.add(themeClass);
+      })();
+    </script>
+    <noscript><style>
+      #theme-brand,#theme-toggle,.nav-toggle,button[data-copy-email],.copy-hint,.scroll-progress-vertical,#back-to-top{display:none!important}
+      .tab-content,.skills-panel{display:block!important;opacity:1!important;transform:none!important}
+      .about-page-tabs,.skills-tabs{display:none!important}
+      .nav-dropdown{display:flex!important;position:static;opacity:1;transform:none;pointer-events:auto}
+      .nav-dropdown-btn{display:none!important}
+      @media(max-width:980px){.nav-bar{height:auto;flex-wrap:wrap;padding:14px 16px}.nav-links{position:static;transform:none;flex-basis:100%;flex-direction:row;flex-wrap:wrap;padding:0;margin:0;order:3;gap:4px 12px;background:transparent;border:0;backdrop-filter:none}.nav-links a{font-size:13px;padding:4px 6px}.nav-dropdown{flex-direction:row;flex-wrap:wrap;box-shadow:none;border:0;padding:0;background:transparent}}
+    </style></noscript>
+    <a href="#main-content" class="skip-link">Skip to content</a>
+    <div class="scroll-progress-vertical" aria-hidden="true"></div>
+    <button class="back-to-top" id="back-to-top" type="button" aria-label="Back to top" title="Back to top">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 15V5M10 5L5 10M10 5L15 10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    </button>
+    <div class="orb orb-1" aria-hidden="true"></div>
+    <div class="orb orb-2" aria-hidden="true"></div>
+    <div class="orb orb-3" aria-hidden="true"></div>
+    <canvas id="starfield" aria-hidden="true"></canvas>
+    <SiteHeader />
+    <main id="main-content" tabindex="-1"><slot /></main>
+    <footer class="site-footer"><div class="container"><p>(c) <span data-year>{new Date().getFullYear()}</span> Bui Hai Duc. All rights reserved.</p></div></footer>
+    <Chatbot />
+    <div id="cloud-rescue-root" hidden></div>
+    <script>import { initSite } from '../scripts/site'; initSite();</script>
+  </body>
+</html>

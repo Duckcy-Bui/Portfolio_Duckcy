@@ -1,0 +1,80 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import AboutNavigation from '../components/AboutNavigation.astro';
+---
+<SiteLayout title="About" description="Meet Bui Hai Duc: Software Engineering Intern, Information Technology student and SFIT mentor with a DevOps orientation.">
+      <section id="about" class="section about">
+        <div class="container">
+          <div class="section-title">
+            <p class="eyebrow">About</p>
+            <h1>Career Objective</h1>
+          </div>
+
+          <div class="about-tabs">
+            <AboutNavigation page="about" />
+
+            <div class="about-content">
+              <div class="tab-content active" data-tab-panel="overview" id="about-panel-overview">
+                <p class="lead-text">
+                  Currently pursuing Software Engineering with a DevOps orientation, applying backend development, Docker, CI/CD, and Linux operations in real project environments. Aiming to build reliable software systems while improving deployment quality and operational efficiency.
+                </p>
+                <div class="about-grid">
+                  <div class="about-card">
+                    <h3>Personal Information</h3>
+                    <ul>
+                      <li><strong>Full Name:</strong> Bui Hai Duc</li>
+                      <li><strong>Position:</strong> Software Engineering Intern</li>
+                      <li><strong>Orientation:</strong> DevOps</li>
+                      <li><strong>Current Internship:</strong> Software Engineer Intern at NestScale, Đê La Thành, Hà Nội</li>
+                      <li><strong>Date of Birth:</strong> 13/05/2005</li>
+                      <li><strong>Address:</strong> No. 3, Cau Giay, Hanoi</li>
+                    </ul>
+                  </div>
+                  <div class="about-card">
+                    <h3>Key Strengths</h3>
+                    <ul>
+                      <li>Systems thinking and rapid problem-solving</li>
+                      <li>Passion for pipeline and infrastructure research</li>
+                      <li>Focus on deployment process optimization</li>
+                      <li>Collaborative team player & self-motivated learner</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tab-content" data-tab-panel="education" id="education">
+                <div class="education-list">
+                  <div class="education-item">
+                    <div class="education-header">
+                      <h3>University of Transport and Communication (UTC)</h3>
+                      <span class="time">2023 - Present</span>
+                    </div>
+                    <p class="education-major">IT Major - Year 3 Student</p>
+                    <p class="education-gpa">GPA: 3.4/4.0</p>
+                    <p class="education-desc">Specialized in backend development, system design, and cloud deployment technologies.</p>
+                  </div>
+
+                  <div class="education-item">
+                    <div class="education-header">
+                      <h3>SFIT Club - Technical & Cloud Committee</h3>
+                      <span class="time">2023 - Present</span>
+                    </div>
+                    <p class="education-role">Technical Lead & Mentor</p>
+                    <p class="education-desc">Planning and coordinating technical workshops, mentoring programming courses, promoting project-based learning and research.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tab-content" data-tab-panel="testimonials" id="testimonials">
+                <div class="coming-soon-state">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                  <p class="coming-soon-title">Testimonials coming soon</p>
+                  <p class="coming-soon-desc">This section will be updated with real feedback from collaborators and mentors.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+<script>import { initAbout } from '../scripts/about'; initAbout();</script>
+</SiteLayout>
