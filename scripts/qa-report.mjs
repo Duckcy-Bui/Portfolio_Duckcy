@@ -62,7 +62,7 @@ const report = {
       stats: browser.value?.stats,
       target: 'http://127.0.0.1:4321',
       liveProduction: false,
-      externalServices: 'The AI proxy and optional Credly embed are mocked for deterministic interface/failure tests. Live provider responses and third-party iframe accessibility are separate acceptance checks.',
+      externalServices: 'The AI proxy is mocked for deterministic interface/failure tests. The certificate uses locally hosted official badge artwork; tests block Credly requests to verify independence. Live AI provider responses are a separate acceptance check.',
     },
     astroCheck: process.env.QA_CHECK_STATUS || 'not recorded; consult command output',
     unitTests: {
@@ -104,7 +104,7 @@ const report = {
     },
   },
   liveProductionAcceptance: 'Not run. Deploy and verify HTTP status, clean paths, custom 404, HTTPS, and www redirect separately.',
-  thirdPartyAccessibility: 'The owned pages are tested with the optional Credly script mocked. A live vendor iframe was observed with insufficient contrast in its small attribution footer; this cross-origin content is outside the portfolio stylesheet.',
+  thirdPartyAccessibility: 'The certificate uses locally hosted official badge artwork and an external verification link, with no vendor iframe or script. Earlier Credly iframe contrast observations describe the previous embedding, not this build.',
   historicalEvidence: 'Legacy evidence/ files describe the previous one-page/game build and are not acceptance evidence for this artifact.',
 };
 await mkdir('artifacts', { recursive: true });

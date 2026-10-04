@@ -2,12 +2,14 @@
 import { Image } from 'astro:assets';
 import portrait from '../../assets/hai_duc_img-removebg-preview.png';
 import GameLaunch from './GameLaunch.astro';
+import '../styles/hero.css';
 ---
 <section id="home" class="hero">
         <div class="container hero-grid">
 
           <!-- LEFT: eyebrow, heading, lead, code block, CTA -->
           <div class="hero-copy">
+            <div class="hero-intro">
             <p class="eyebrow">
               <span class="eyebrow-bar" aria-hidden="true"></span>
               Welcome to my portfolio
@@ -16,9 +18,20 @@ import GameLaunch from './GameLaunch.astro';
               Bui Hai Duc
               <span>Software Engineering Intern</span>
             </h1>
+            </div>
             <!-- <p class="lead">
               3rd year IT student at University of Transport. Passionate about Software Engineering with a DevOps orientation, focused on backend systems, Docker, CI/CD, Linux, and robust deployments.
             </p> -->
+
+            <div class="cta-group">
+              <a class="btn primary" href="/assets/CV_bui_hai_duc.pdf" target="_blank" rel="noopener noreferrer">
+                <span class="btn-icon">⬇</span> Download CV <span class="btn-arrow">→</span>
+              </a>
+              <a class="btn ghost hero-contact-action" href="/contact/">
+                <span class="btn-icon">◯</span> Let's Connect <span class="btn-arrow">→</span>
+              </a>
+              <GameLaunch />
+            </div>
 
             <div class="code-card">
               <div class="code-header">
@@ -50,15 +63,6 @@ core_focus:
 </code></pre>
             </div>
 
-            <div class="cta-group">
-              <a class="btn primary" href="/assets/CV_bui_hai_duc.pdf" target="_blank" rel="noopener noreferrer">
-                <span class="btn-icon">⬇</span> Download CV <span class="btn-arrow">→</span>
-              </a>
-              <GameLaunch />
-              <a class="btn ghost" href="/contact/">
-                <span class="btn-icon">◯</span> Let's Connect <span class="btn-arrow">→</span>
-              </a>
-            </div>
           </div>
 
           <!-- RIGHT: avatar circle, name/title, action buttons, stats -->

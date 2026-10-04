@@ -7,7 +7,7 @@ Classes369 is an IT center student management system. My work focused on its bac
 
 ## Backend development
 
-- Delivered a modular **Flask API** with more than 11 Blueprint modules and database transaction handling.
+- Delivered a modular, production-oriented **Flask API** with more than 11 Blueprint modules, RESTful endpoints and database transaction handling.
 - Implemented authentication with bcrypt and role-based access for administrators, teachers and students.
 - Built transactional enrollment, cascading deletion and payment-handling logic.
 

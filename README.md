@@ -8,6 +8,10 @@ The page structure follows the original `index.html` and `styles.css`: Home cont
 
 Visual effects are decorative and progressively enhanced. Reduced-motion preferences stop continuous animation and retain readable content. Theme preferences and contact/chat history use guarded storage; denied storage does not block navigation. Mobile menus and dropdowns provide keyboard access, Escape handling and focus restoration. Each standalone page has its own heading and canonical URL.
 
+The mobile Home layout places CV and contact actions immediately below the name and role, followed by the avatar and YAML profile. Desktop retains the original two-column layout. Project list cards show a short summary, the actual role, a factual highlight and four technology tags; the remaining technologies and complete descriptions are available on the detail page. Search still indexes the full description and all technologies.
+
+The pause button beside the theme control stops the animated backdrop and continuous decorative effects. Its preference persists across routes and refresh through guarded local storage (`portfolio-motion`). Animation remains enabled by default; the operating system's reduced-motion preference always takes precedence. Pausing decorations does not pause Cloud Rescue gameplay.
+
 ## Develop and verify
 
 Use Node **24** (`nvm use` reads `.nvmrc`) and npm. Dependencies are pinned in `package-lock.json`.
@@ -73,9 +77,9 @@ To add a project:
 3. Import that Markdown file in `src/pages/projects/[slug].astro` and add the same slug to its `articles` map. Both metadata and this mapping are required: metadata alone generates a route with no article and fails the build.
 4. Update route inventories in `scripts/verify-site.mjs`, `tests/e2e/site.spec.ts` and this README for the new page, then run the checks above. Open the generated detail page, confirm its GitHub link, and test its search/filter results before deployment.
 
-Public assets live under `public/assets/`. The existing CV URL remains `/assets/CV_bui_hai_duc.pdf`. Add actual credential URLs and assets when adding certificates; do not create unsupported achievements or testimonials. Optional Credly embedding leaves the original credential link available when the third-party script fails.
+Public assets live under `public/assets/`. The existing CV URL remains `/assets/CV_bui_hai_duc.pdf`. Add actual credential URLs and assets when adding certificates; do not create unsupported achievements or testimonials. Certificates uses authentic locally hosted badge artwork and an official Credly verification link. The original image source and retrieval date are recorded beside the PNG in `public/assets/certificates/`. Desktop places the larger badge beside its details; mobile stacks them vertically. No third-party iframe or script is requested by this page. If the local image fails, the page retains readable credential details and its verification link.
 
-Automated owned-page accessibility checks mock that optional embed. A live Credly iframe was observed with insufficient contrast in its small attribution footer; its cross-origin styles are not controlled by this site. The visible original credential link remains available independently. Live third-party content is a separate review item, not a passing result implied by the automated site report.
+Browser checks block Credly requests to verify that the certificate stays useful without that service, and also check local-image failure and JavaScript-disabled rendering. The earlier observation of low contrast inside a Credly iframe describes the previous embed, which is no longer part of this page. The compatibility loader remains available for future optional embeds but is not activated by the current certificate markup.
 
 Project search and technology filters are reflected in the URL (`q` and comma-separated `tech`) so the same result set can be shared. Search combines with any selected technology. The shared theme preference uses local storage; navigation still works when storage is unavailable.
 

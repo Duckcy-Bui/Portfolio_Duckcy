@@ -1,0 +1,9 @@
+---
+import '../styles/motion.css';
+---
+<button type="button" class="motion-toggle" data-motion-toggle aria-label="Pause background animation" aria-pressed="false" aria-describedby="motion-status" title="Pause background animation">
+  <span data-motion-pause><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 5v14M16 5v14" /></svg></span>
+  <span data-motion-play hidden><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="m8 5 11 7-11 7V5Z" /></svg></span>
+</button>
+<span class="sr-only" id="motion-status" data-motion-status role="status" aria-live="polite">Background animation is enabled.</span>
+<noscript><style>.motion-toggle,[data-motion-status]{display:none!important}</style></noscript>

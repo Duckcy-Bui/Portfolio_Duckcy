@@ -284,6 +284,63 @@ export function initVisualEffects(documentRef: Document = document): Cleanup {
   };
   const motionMedia = typeof windowRef.matchMedia === 'function' ? windowRef.matchMedia('(prefers-reduced-motion: reduce)') : null;
   const reducedMotion = () => motionMedia?.matches ?? false;
+  let userPaused = documentRef.documentElement.dataset.motionPreference === 'paused';
+  try {
+    const saved = windowRef.localStorage.getItem('portfolio-motion');
+    if (saved !== null) userPaused = saved === 'paused';
+  } catch { /* The control still works when preference storage is blocked. */ }
+  const motionDisabled = () => userPaused || reducedMotion();
+  let pageHidden = false;
+  const temporarilyPaused = () => pageHidden || documentRef.hidden || documentRef.body.classList.contains('cr-game-open') || Boolean(documentRef.querySelector('dialog[open]'));
+  const motionButton = documentRef.querySelector<HTMLButtonElement>('[data-motion-toggle]');
+  const motionStatus = documentRef.querySelector<HTMLElement>('[data-motion-status]');
+  let syncCanvas = () => {};
+  let refreshScroll = () => {};
+  const syncMotion = () => {
+    const systemReduced = reducedMotion();
+    const state = systemReduced ? 'reduced' : userPaused || temporarilyPaused() ? 'paused' : 'running';
+    documentRef.documentElement.dataset.motionPreference = userPaused ? 'paused' : 'running';
+    documentRef.documentElement.dataset.motionState = state;
+    documentRef.documentElement.toggleAttribute('data-effects-paused', state !== 'running');
+    if (motionButton) {
+      const action = userPaused ? 'Resume background animation' : 'Pause background animation';
+      motionButton.setAttribute('aria-pressed', String(userPaused));
+      motionButton.setAttribute('aria-label', action);
+      motionButton.title = systemReduced ? `${action}. Your system's reduced motion setting still applies.` : action;
+      motionButton.querySelector<HTMLElement>('[data-motion-play]')?.toggleAttribute('hidden', !userPaused);
+      motionButton.querySelector<HTMLElement>('[data-motion-pause]')?.toggleAttribute('hidden', userPaused);
+    }
+    if (motionStatus) {
+      const status = systemReduced
+        ? userPaused ? 'Background motion is paused. Your system also requests reduced motion.' : "Background motion follows your system's reduced motion setting."
+        : userPaused ? 'Background motion is paused. Resume it using this button.'
+          : temporarilyPaused() ? 'Background motion pauses while this page is hidden or an overlay is open.' : 'Background animation is enabled.';
+      if (motionStatus.textContent !== status) motionStatus.textContent = status;
+    }
+    refreshScroll();
+    syncCanvas();
+  };
+  if (motionButton) listen(motionButton, 'click', () => {
+    userPaused = !userPaused;
+    try { windowRef.localStorage.setItem('portfolio-motion', userPaused ? 'paused' : 'running'); } catch { /* Persisting the choice is optional. */ }
+    syncMotion();
+  });
+  listen(windowRef, 'storage', ((event: StorageEvent) => {
+    if (event.key === 'portfolio-motion' || event.key === null) { userPaused = event.newValue === 'paused'; syncMotion(); }
+  }) as EventListener);
+  if (motionMedia?.addEventListener) {
+    motionMedia.addEventListener('change', syncMotion);
+    cleanups.push(() => motionMedia.removeEventListener('change', syncMotion));
+  }
+  listen(documentRef, 'portfolio:themechange', syncMotion);
+  listen(documentRef, 'visibilitychange', syncMotion);
+  listen(windowRef, 'pagehide', () => { pageHidden = true; syncMotion(); });
+  listen(windowRef, 'pageshow', () => { pageHidden = false; syncMotion(); });
+  // Game lifecycle and native dialogs change independently of canvas availability.
+  const modalObserver = new windowRef.MutationObserver(syncMotion);
+  modalObserver.observe(documentRef.body, { attributes: true, attributeFilter: ['class'] });
+  documentRef.querySelectorAll('dialog').forEach((dialog) => modalObserver.observe(dialog, { attributes: true, attributeFilter: ['open'] }));
+  cleanups.push(() => modalObserver.disconnect());
   let disposed = false;
 
   // The YAML code panel uses the same token classes and line timing as the original.
@@ -306,7 +363,7 @@ export function initVisualEffects(documentRef: Document = document): Cleanup {
 
   const revealTargets = [...documentRef.querySelectorAll<HTMLElement>('.section, .stat-card')];
   // CSS's default remains visible without JavaScript or IntersectionObserver.
-  if (!reducedMotion() && typeof windowRef.IntersectionObserver === 'function') {
+  if (!motionDisabled() && typeof windowRef.IntersectionObserver === 'function') {
     const observer = new windowRef.IntersectionObserver((entries) => {
       for (const entry of entries) if (entry.isIntersecting) {
         entry.target.classList.add('in-view'); observer.unobserve(entry.target);
@@ -325,7 +382,7 @@ export function initVisualEffects(documentRef: Document = document): Cleanup {
   const timers = new Set<number>();
   documentRef.querySelectorAll<HTMLElement>('.btn, .icon-button').forEach((button) => {
     listen(button, 'mousemove', ((event: MouseEvent) => {
-      if (reducedMotion()) return;
+      if (motionDisabled()) return;
       const bounds = button.getBoundingClientRect();
       if (bounds.width && bounds.height) {
         button.style.setProperty('--mouse-x', `${((event.clientX - bounds.left) / bounds.width) * 100}%`);
@@ -333,7 +390,7 @@ export function initVisualEffects(documentRef: Document = document): Cleanup {
       }
     }) as EventListener);
     listen(button, 'click', ((event: MouseEvent) => {
-      if (reducedMotion() || button.classList.contains('nav-toggle')) return;
+      if (motionDisabled() || button.classList.contains('nav-toggle')) return;
       const bounds = button.getBoundingClientRect();
       const size = Math.max(bounds.width, bounds.height);
       const ripple = documentRef.createElement('span');
@@ -360,11 +417,12 @@ export function initVisualEffects(documentRef: Document = document): Cleanup {
     const range = documentRef.documentElement.scrollHeight - windowRef.innerHeight;
     if (progress) progress.style.height = `${range > 0 ? Math.min(100, Math.max(0, scrollTop / range * 100)) : 0}%`;
     if (backToTop) { backToTop.classList.toggle('visible', scrollTop > 400); backToTop.setAttribute('aria-hidden', String(scrollTop <= 400)); backToTop.tabIndex = scrollTop > 400 ? 0 : -1; }
-    if (hero) orbs.forEach((orb) => { orb.style.transform = reducedMotion() ? '' : `translateY(${scrollTop * 0.5}px)`; });
+    if (hero && !motionDisabled() && !temporarilyPaused()) orbs.forEach((orb) => { orb.style.transform = `translateY(${scrollTop * 0.5}px)`; });
   };
+  refreshScroll = scrollUpdate;
   listen(windowRef, 'scroll', () => { if (!scrollFrame) scrollFrame = windowRef.requestAnimationFrame(scrollUpdate); }, { passive: true });
   listen(windowRef, 'resize', () => { if (!scrollFrame) scrollFrame = windowRef.requestAnimationFrame(scrollUpdate); });
-  if (backToTop) listen(backToTop, 'click', () => windowRef.scrollTo({ top: 0, behavior: reducedMotion() ? 'instant' : 'smooth' }));
+  if (backToTop) listen(backToTop, 'click', () => windowRef.scrollTo({ top: 0, behavior: motionDisabled() ? 'instant' : 'smooth' }));
   scrollUpdate();
   cleanups.push(() => windowRef.cancelAnimationFrame(scrollFrame));
 
@@ -372,12 +430,11 @@ export function initVisualEffects(documentRef: Document = document): Cleanup {
   let ctx: CanvasRenderingContext2D | null = null;
   try { ctx = canvas?.getContext('2d') ?? null; } catch { /* Content stays functional without canvas support. */ }
   if (canvas && ctx) {
-    const scenes = createScenes(canvas, ctx, reducedMotion);
+    const scenes = createScenes(canvas, ctx, motionDisabled);
     let currentKey = '';
     let activeScene: Scene = scenes.dark;
     let raf = 0;
     let lastFrame = 0;
-    const paused = () => documentRef.hidden || documentRef.body.classList.contains('cr-game-open') || Boolean(documentRef.querySelector('dialog[open]'));
     const selectScene = (force = false) => {
       const key = documentRef.documentElement.dataset.theme || 'dark';
       if (force || key !== currentKey) { currentKey = key; activeScene = scenes[key] ?? scenes.dark; activeScene.build(); canvas.dataset.scene = key; }
@@ -385,33 +442,32 @@ export function initVisualEffects(documentRef: Document = document): Cleanup {
     const render = (timestamp: number) => { ctx!.clearRect(0, 0, canvas.width, canvas.height); activeScene.draw(timestamp); };
     const draw = (timestamp: number) => {
       raf = 0;
-      if (disposed || paused() || reducedMotion()) return;
+      if (disposed) return;
+      // A browser can update matches before delivering/coalescing its change
+      // event. Reconcile the controls and CSS before this loop stops itself.
+      if (temporarilyPaused() || motionDisabled()) { syncMotion(); return; }
       // The legacy scene physics advance once per frame at a maximum of 60fps.
       if (timestamp - lastFrame >= 1000 / 60 - 1) { render(timestamp); lastFrame = timestamp; }
       raf = windowRef.requestAnimationFrame(draw);
     };
     const sync = () => {
       windowRef.cancelAnimationFrame(raf); raf = 0; selectScene();
-      if (reducedMotion()) { canvas.dataset.animationState = 'reduced'; render(windowRef.performance.now()); }
-      else if (paused()) canvas.dataset.animationState = 'paused';
+      if (motionDisabled()) { canvas.dataset.animationState = reducedMotion() ? 'reduced' : 'paused'; render(windowRef.performance.now()); }
+      else if (temporarilyPaused()) canvas.dataset.animationState = 'paused';
       else { canvas.dataset.animationState = 'running'; lastFrame = 0; raf = windowRef.requestAnimationFrame(draw); }
     };
-    const resize = () => { canvas.width = windowRef.innerWidth; canvas.height = windowRef.innerHeight; selectScene(true); sync(); };
+    syncCanvas = sync;
+    const resize = () => { canvas.width = windowRef.innerWidth; canvas.height = windowRef.innerHeight; selectScene(true); syncMotion(); };
     listen(windowRef, 'resize', resize);
-    listen(documentRef, 'portfolio:themechange', sync);
-    listen(documentRef, 'visibilitychange', sync);
-    listen(windowRef, 'pagehide', () => { windowRef.cancelAnimationFrame(raf); raf = 0; canvas.dataset.animationState = 'paused'; });
-    listen(windowRef, 'pageshow', sync);
-    // Game lifecycle and native dialogs change independently of the background.
-    const modalObserver = new windowRef.MutationObserver(sync);
-    modalObserver.observe(documentRef.body, { attributes: true, attributeFilter: ['class'] });
-    documentRef.querySelectorAll('dialog').forEach((dialog) => modalObserver.observe(dialog, { attributes: true, attributeFilter: ['open'] }));
-    if (motionMedia?.addEventListener) {
-      motionMedia.addEventListener('change', sync);
-      cleanups.push(() => motionMedia.removeEventListener('change', sync));
-    }
     resize();
-    cleanups.push(() => { modalObserver.disconnect(); windowRef.cancelAnimationFrame(raf); canvas.dataset.animationState = 'paused'; });
+    cleanups.push(() => { windowRef.cancelAnimationFrame(raf); canvas.dataset.animationState = 'paused'; });
   }
-  return () => { if (disposed) return; disposed = true; cleanups.reverse().forEach((cleanup) => cleanup()); };
+  syncMotion();
+  return () => {
+    if (disposed) return;
+    disposed = true;
+    cleanups.reverse().forEach((cleanup) => cleanup());
+    documentRef.documentElement.setAttribute('data-effects-paused', '');
+    documentRef.documentElement.dataset.motionState = 'paused';
+  };
 }

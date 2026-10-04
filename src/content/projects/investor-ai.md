@@ -9,7 +9,7 @@ Investor AI is an AI-powered stock analysis and prediction platform. My role foc
 
 - Designed containerized deployment for **12 services**, supporting daily financial-data processing through **13 Airflow DAGs**.
 - Created and maintained Docker images and Compose configurations for consistent environments.
-- Prepared GPU- and Spark-enabled containers for reproducible LSTM training and inference, including CUDA configuration.
+- Prepared GPU- and Spark-enabled containers for reproducible LSTM training and inference, including CUDA configuration and tuning.
 
 ## Delivery and operations
 

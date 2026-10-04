@@ -30,6 +30,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
           const saved = localStorage.getItem('portfolio-theme');
           if (['dark', 'light', 'forest', 'ocean', 'sunset'].includes(saved)) document.documentElement.dataset.theme = saved;
         } catch (_) {}
+        let motion = 'running';
+        try { if (localStorage.getItem('portfolio-motion') === 'paused') motion = 'paused'; } catch (_) {}
+        const reducedMotion = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+        document.documentElement.dataset.motionPreference = motion;
+        document.documentElement.dataset.motionState = reducedMotion ? 'reduced' : motion;
+        if (reducedMotion || motion === 'paused') document.documentElement.setAttribute('data-effects-paused', '');
         if (location.pathname === '/' && location.hash) {
           const destinations = { '#about': '/about/', '#skills': '/skills/', '#projects': '/projects/', '#experience': '/experience/', '#contact': '/contact/', '#certificates': '/certificate/', '#certificate': '/certificate/' };
           const destination = destinations[location.hash];
