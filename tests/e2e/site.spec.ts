@@ -186,6 +186,12 @@ test('core pages, assets and native links remain useful without JavaScript', asy
   await page.locator('[data-nav]').getByRole('menuitem', { name: 'Certificates', exact: true }).click();
   await expect(page).toHaveURL(/\/certificate\/$/);
   await expect(page.getByRole('link', { name: /credly|credential|badge/i }).first()).toBeVisible();
+  const aboutSections = page.getByRole('navigation', { name: 'About sections' });
+  await expect(aboutSections.getByRole('link')).toHaveText(['Overview', 'Education', 'Certificates', 'Testimonials']);
+  await expect(aboutSections.getByRole('link', { name: 'Certificates', exact: true })).toHaveAttribute('aria-current', 'page');
+  await aboutSections.getByRole('link', { name: 'Education', exact: true }).click();
+  await expect(page).toHaveURL(/\/about\/#education$/);
+  await expect(page.locator('#education')).toBeVisible();
   await page.goto('http://127.0.0.1:4321/contact/');
   await expect(page.locator('a[href="mailto:duckcy.work@gmail.com"]').first()).toBeVisible();
   await screenshot(page, 'contact-no-javascript', testInfo.project.name);
@@ -211,6 +217,44 @@ test('About dropdown opens dedicated tabs and certificate route', async ({ page,
     await expect(page.locator(`[data-tab-panel="${panel}"]`)).toBeVisible();
     await page.reload();
     await expect(page.locator(`[data-tab-panel="${panel}"]`)).toBeVisible();
+  }
+});
+
+test('About section navigation stays visible on Certificates and returns to the right tabs', async ({ page }) => {
+  await page.goto('/about/');
+  const sections = page.getByRole('navigation', { name: 'About sections' });
+  await sections.getByRole('link', { name: 'Certificates', exact: true }).click();
+  await expect(page).toHaveURL(/\/certificate\/$/);
+  const certificate = sections.getByRole('link', { name: 'Certificates', exact: true });
+  const assertCertificateNavigation = async () => {
+    await expect(sections).toBeVisible();
+    await expect(sections.getByRole('link')).toHaveText(['Overview', 'Education', 'Certificates', 'Testimonials']);
+    for (const link of await sections.getByRole('link').all()) await expect(link).toBeVisible();
+    await expect(certificate).toHaveClass(/active/);
+    await expect(certificate).toHaveAttribute('aria-current', 'page');
+    await expect(sections.getByRole('tablist')).toHaveCount(0);
+  };
+  await assertCertificateNavigation();
+  await page.reload();
+  await assertCertificateNavigation();
+  await sections.getByRole('link', { name: 'Education', exact: true }).focus();
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/\/about\/#education$/);
+  await expect(page.locator('#education')).toBeVisible();
+  await expect(sections.getByRole('tab', { name: 'Education', exact: true })).toHaveAttribute('aria-selected', 'true');
+  await page.goBack();
+  await expect(page).toHaveURL(/\/certificate\/$/);
+  await assertCertificateNavigation();
+  await page.goForward();
+  await expect(page).toHaveURL(/\/about\/#education$/);
+  await expect(page.locator('#education')).toBeVisible();
+  for (const [label, url, panel] of [['Testimonials', /\/about\/#testimonials$/, 'testimonials'], ['Overview', /\/about\/$/, 'overview']] as const) {
+    await sections.getByRole('link', { name: 'Certificates', exact: true }).click();
+    await assertCertificateNavigation();
+    await sections.getByRole('link', { name: label, exact: true }).click();
+    await expect(page).toHaveURL(url);
+    await expect(page.locator(`[data-tab-panel="${panel}"]`)).toBeVisible();
+    await expect(sections.getByRole('tab', { name: label, exact: true })).toHaveAttribute('aria-selected', 'true');
   }
 });
 

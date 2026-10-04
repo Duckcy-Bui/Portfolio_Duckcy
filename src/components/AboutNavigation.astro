@@ -1,0 +1,22 @@
+---
+interface Props { page: 'about' | 'certificate'; }
+const { page } = Astro.props;
+const sections = [
+  { key: 'overview', label: 'Overview', href: '/about/', panel: 'about-panel-overview' },
+  { key: 'education', label: 'Education', href: '/about/#education', panel: 'education' },
+  { key: 'certificates', label: 'Certificates', href: '/certificate/' },
+  { key: 'testimonials', label: 'Testimonials', href: '/about/#testimonials', panel: 'testimonials' },
+];
+---
+<nav class="about-tabs-nav" aria-label="About sections" data-about-navigation data-about-page={page}>
+  {page === 'about' ? <>
+    <div class="about-page-tabs" role="tablist" aria-label="About Duc">
+      {sections.filter((section) => section.key !== 'certificates').map((section) => (
+        <button type="button" class:list={{ 'tab-btn': true, active: section.key === 'overview' }} data-tab={section.key} id={`about-tab-${section.key}`} role="tab" aria-controls={section.panel} aria-selected={section.key === 'overview' ? 'true' : 'false'} tabindex={section.key === 'overview' ? 0 : -1}>{section.label}</button>
+      ))}
+    </div>
+    <a class="tab-btn" href="/certificate/">Certificates</a>
+  </> : sections.map((section) => (
+    <a class:list={{ 'tab-btn': true, active: section.key === 'certificates' }} href={section.href} aria-current={section.key === 'certificates' ? 'page' : undefined}>{section.label}</a>
+  ))}
+</nav>

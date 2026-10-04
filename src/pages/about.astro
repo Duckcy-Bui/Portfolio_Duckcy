@@ -1,5 +1,6 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
+import AboutNavigation from '../components/AboutNavigation.astro';
 ---
 <SiteLayout title="About" description="Meet Bui Hai Duc: Software Engineering Intern, Information Technology student and SFIT mentor with a DevOps orientation.">
       <section id="about" class="section about">
@@ -10,14 +11,7 @@ import SiteLayout from '../layouts/SiteLayout.astro';
           </div>
 
           <div class="about-tabs">
-            <div class="about-tabs-nav">
-              <div class="about-page-tabs">
-              <button class="tab-btn active" data-tab="overview" id="about-tab-overview" role="tab" aria-controls="about-panel-overview">Overview</button>
-              <button class="tab-btn" data-tab="education" id="about-tab-education" role="tab" aria-controls="education">Education</button>
-              <button class="tab-btn" data-tab="testimonials" id="about-tab-testimonials" role="tab" aria-controls="testimonials">Testimonials</button>
-              </div>
-              <a class="tab-btn" href="/certificate/">Certificates</a>
-            </div>
+            <AboutNavigation page="about" />
 
             <div class="about-content">
               <div class="tab-content active" data-tab-panel="overview" id="about-panel-overview">

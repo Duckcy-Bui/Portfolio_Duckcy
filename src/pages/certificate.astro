@@ -1,8 +1,11 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
+import AboutNavigation from '../components/AboutNavigation.astro';
 ---
 <SiteLayout title="Certificates" description="Verify Bui Hai Duc’s AWS Student Builder Group Core Team Member Badge, issued by AWS Community in July 2026.">
-<section id="certificate" class="section about"><div class="container"><div class="section-title"><p class="eyebrow">Certificates</p><h1>Certificates &amp; Recognition</h1></div><div class="certificates-list">
+<section id="certificate" class="section about"><div class="container"><div class="section-title"><p class="eyebrow">Certificates</p><h1>Certificates &amp; Recognition</h1></div><div class="about-tabs">
+                <AboutNavigation page="certificate" />
+                <div class="certificates-list">
                   <div class="cert-item">
                     <div class="cert-header">
                       <h3>AWS SBG Core Team Member Badge</h3>
@@ -14,6 +17,6 @@ import SiteLayout from '../layouts/SiteLayout.astro';
                     </div>
                     <a class="cert-link" href="https://www.credly.com/badges/73787dad-002a-4cce-b49d-011b40587df9" target="_blank" rel="noopener noreferrer">View credential on Credly →</a>
                   </div>
-                </div></div></section>
+                </div></div></div></section>
 <script>import { initCertificates } from '../scripts/certificates'; initCertificates();</script>
 </SiteLayout>

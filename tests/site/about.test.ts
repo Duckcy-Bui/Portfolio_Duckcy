@@ -3,7 +3,7 @@ import { initAbout } from '../../src/scripts/about';
 
 let cleanup: (() => void) | undefined;
 beforeEach(() => {
-  document.body.innerHTML = `<nav class="about-tabs-nav"><button data-tab="overview">Overview</button><button data-tab="education">Education</button><a href="/certificate/">Certificates</a><button data-tab="testimonials">Testimonials</button></nav>
+  document.body.innerHTML = `<nav class="about-tabs-nav" aria-label="About sections"><div class="about-page-tabs"><button data-tab="overview">Overview</button><button data-tab="education">Education</button><button data-tab="testimonials">Testimonials</button></div><a href="/certificate/">Certificates</a></nav>
     <div class="about-content"><section data-tab-panel="overview">Intro</section><section data-tab-panel="education">Education content</section><section data-tab-panel="testimonials">Feedback</section></div>`;
   history.replaceState(null, '', '/about/');
 });
@@ -16,7 +16,8 @@ describe('restored About tabs and independent certificate route', () => {
     cleanup = initAbout();
     expect(activePanel()?.dataset.tabPanel).toBe('education');
     expect(activePanel()?.getAttribute('role')).toBe('tabpanel');
-    expect(document.querySelector('.about-tabs-nav')?.getAttribute('role')).toBe('tablist');
+    expect(document.querySelector('.about-page-tabs')?.getAttribute('role')).toBe('tablist');
+    expect(document.querySelector('a')?.closest('[role="tablist"]')).toBeNull();
     history.replaceState(null, '', '/about/#testimonials');
     window.dispatchEvent(new HashChangeEvent('hashchange'));
     expect(activePanel()?.dataset.tabPanel).toBe('testimonials');

@@ -21,7 +21,8 @@ button, a, input, select, textarea, summary { touch-action: manipulation; }
 .nav-dropdown-btn.active { color: var(--accent); }
 .about-page-tabs { display: contents; }
 .about-tabs-nav [data-tab=testimonials] { order: 3; }
-.about-tabs-nav > a { order: 2; text-decoration: none; }
+.about-tabs-nav > a { text-decoration: none; }
+.about-tabs-nav[data-about-page=about] > a { order: 2; }
 .actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
 .project-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
 .project-showcase-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
