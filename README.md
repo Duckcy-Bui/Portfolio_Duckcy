@@ -1,6 +1,12 @@
 # Duckcy portfolio
 
-A static, multi-page portfolio for Bui Hai Duc at **https://duckcy.me**. Astro builds each route as real HTML; navigation uses ordinary links, so pages can be shared, refreshed and opened directly without a client-side router.
+A multi-page portfolio for Bui Hai Duc at **https://duckcy.me**, retaining the original animated interface. Astro builds each route as real HTML; navigation uses ordinary links, so pages can be shared, refreshed and opened directly without a client-side router. Static output describes hosting, while the interface keeps its starfield, floating orbs, avatar ring, YAML profile, glass cards, interaction effects and original five themes.
+
+## Original interface restoration
+
+The page structure follows the original `index.html` and `styles.css`: Home contains the original hero and profile card; About retains its Overview, Education and Testimonials tabs; Skills retains independent Core and Also tab groups; Projects retains its code-style showcase cards and stack categories; Experience and Contact retain their original cards and timeline. About → Certificates opens the dedicated `/certificate/` route. The theme pill and cycle button retain Outer Space, Daylight, Forest Terminal, Deep Ocean and Sunset Ember. Navigation changes routes instead of scrolling through every section on one long page.
+
+Visual effects are decorative and progressively enhanced. Reduced-motion preferences stop continuous animation and retain readable content. Theme preferences and contact/chat history use guarded storage; denied storage does not block navigation. Mobile menus and dropdowns provide keyboard access, Escape handling and focus restoration. Each standalone page has its own heading and canonical URL.
 
 ## Develop and verify
 
@@ -32,7 +38,7 @@ PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/google-chrome npm run test:e2e
 
 Playwright adds `--ignore-lock` to the preview command so Astro 7 stays in the foreground even when it detects a coding agent. Manual preview can run in the background in that environment; use `npx astro preview status` and `npx astro preview stop` to inspect or stop that worktree's preview.
 
-`npm run preview` also previews the completed build manually. Desktop and mobile browser tests check routes, refresh/Back/Forward, navigation, five themes, project filtering, tabs, contact drafts, chatbot fallbacks and lazy game loading. Axe checks serious and critical WCAG issues. Full-page screenshots, traces and reports are written to ignored `artifacts/`. These checks describe the local build; they do not prove the state of Production or the external AI provider.
+`npm run preview` also previews the completed build manually. Desktop and mobile browser tests check routes, refresh/Back/Forward, navigation, five themes, project filtering, tabs, contact drafts, chatbot fallbacks and lazy game loading. Axe checks serious and critical WCAG issues on every route in the default Outer Space theme and on Contact across all five themes. This coverage does not imply a complete accessibility audit of every page in every theme. Full-page screenshots, traces and reports are written to ignored `artifacts/`. These checks describe the local build; they do not prove the state of Production or the external AI provider.
 
 `npm run test:performance` starts its own preview on port 4323 and runs three independent cold mobile Lighthouse audits each for Home and Projects, using default simulated throttling. Acceptance requires median performance of at least 90 and accessibility of at least 95 on every run. Scores and FCP/LCP/CLS/TBT are recorded in `artifacts/lighthouse-summary.json`; full JSON/HTML reports are in `artifacts/lighthouse/`. The digest must match the build both before and after auditing. Run this after other browser tests finish to avoid contention. For an existing local Chrome binary, use `CHROME_PATH=/usr/bin/google-chrome npm run test:performance`.
 
@@ -42,10 +48,10 @@ Playwright adds `--ignore-lock` to the preview command so Astro 7 stays in the f
 
 | Route | Content |
 | --- | --- |
-| `/` | Introduction, selected work and clear next steps |
-| `/about/` | Profile and education |
-| `/skills/` | Skill groups with accessible tabs |
-| `/projects/` | Project list, search and technology filters |
+| `/` | Original hero, YAML profile, animated avatar, CV/contact/game actions |
+| `/about/` | Original Overview, Education and Testimonials tab layout |
+| `/skills/` | Original Core and Also skill groups with independent accessible tabs |
+| `/projects/` | Original project showcase cards, search and stack category filters |
 | `/projects/sblt-cup/` | SBLT CUP details |
 | `/projects/classes369/` | Classes369 details |
 | `/projects/investor-ai/` | Investor AI details |
@@ -58,12 +64,12 @@ The canonical form includes a trailing slash, for example `https://duckcy.me/cer
 
 Astro's local preview strictly enforces `trailingSlash: 'always'` and returns 404 for `/certificate` without its slash. The local tests use canonical paths and validate the real directory files; GitHub Pages' slash normalization is a separate live hosting check.
 
-Authoritative portfolio facts, project technology lists, social links and certificate details live in `src/data/portfolio.ts`. The chatbot also reads these facts instead of maintaining an independent biography. Page files under `src/pages/` use the shared layout and components. Global design tokens and responsive styles are in `src/styles/`; page behavior is in `src/scripts/`.
+Authoritative portfolio facts, project technology lists, social links and certificate details live in `src/data/portfolio.ts`. The chatbot also reads these facts instead of maintaining an independent biography. Page files under `src/pages/` use the shared layout and components. The original design tokens and responsive styles are in `src/styles/`; page behavior and visual effects are in `src/scripts/`. The restored page templates also retain the original skill, education and experience presentation, so keep visible facts consistent with the shared data when editing them.
 
 To add a project:
 
-1. Add its metadata to `projects` in `src/data/portfolio.ts`, with a unique lowercase URL slug, the actual repository link, stack and an existing illustration type.
-2. Create `src/content/projects/<slug>.md` with the project's factual description. Mark `featured: true` in the metadata only when it should appear on Home.
+1. Add its metadata to `projects` in `src/data/portfolio.ts`, with a unique lowercase URL slug, the actual repository link and factual stack.
+2. Create `src/content/projects/<slug>.md` with the project's factual description. Home intentionally retains only the original hero so the dedicated project list stays on `/projects/`.
 3. Import that Markdown file in `src/pages/projects/[slug].astro` and add the same slug to its `articles` map. Both metadata and this mapping are required: metadata alone generates a route with no article and fails the build.
 4. Update route inventories in `scripts/verify-site.mjs`, `tests/e2e/site.spec.ts` and this README for the new page, then run the checks above. Open the generated detail page, confirm its GitHub link, and test its search/filter results before deployment.
 

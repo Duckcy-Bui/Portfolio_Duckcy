@@ -133,7 +133,7 @@ export async function verifySite({ directory = 'dist', output = 'artifacts/site-
     for (const route of REQUIRED_ROUTES) {
       const page = pages.get(route)?.document;
       if (!page) continue;
-      const active = page.querySelectorAll('nav a[aria-current="page"]');
+      const active = page.querySelectorAll('[data-nav] [aria-current="page"]');
       if (active.length !== 1) fail(route, 'Navigation needs exactly one active page');
     }
     const sitemapEntries = artifact.files.filter((file) => /^sitemap.*\.xml$/.test(file.path));

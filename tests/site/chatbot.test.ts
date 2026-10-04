@@ -31,7 +31,7 @@ describe('portfolio chatbot rendering and source of truth', () => {
 describe('chat widget behavior', () => {
   function fixture() {
     document.body.innerHTML = `<button id="chatbot-fab">Open</button><div id="chatbot-fab-tooltip" hidden><button id="chatbot-tooltip-close">Dismiss</button></div>
-      <dialog id="chatbot-window"><button id="chatbot-close">Close</button><div class="chatbot-messages"></div><div class="chatbot-suggestions"></div>
+      <dialog id="chatbot-window"><button id="chatbot-close">Close</button><button id="chatbot-minimize"><svg class="icon-minimize"></svg><svg class="icon-maximize"></svg></button><div class="chatbot-messages"></div><div class="chatbot-suggestions"></div>
       <form id="chatbot-form"><textarea id="chatbot-input"></textarea><button id="chatbot-send">Send</button></form><button id="chatbot-reset">Clear</button></dialog>`;
     const dialog = document.getElementById('chatbot-window') as HTMLDialogElement;
     dialog.showModal = () => { dialog.setAttribute('open', ''); };
@@ -71,6 +71,31 @@ describe('chat widget behavior', () => {
     await vi.advanceTimersByTimeAsync(4000);
     expect(document.getElementById('chatbot-fab-tooltip')?.hidden).toBe(true);
     second?.dispose();
+  });
+
+  it('restores the old window controls without focusing a hidden input while minimized', async () => {
+    vi.useFakeTimers();
+    vi.stubGlobal('fetch', vi.fn(() => new Promise<Response>(() => {})));
+    const setup = fixture();
+    const instance = initChatbot();
+    const minimize = document.getElementById('chatbot-minimize')!;
+    setup.launcher.click();
+    expect(setup.dialog.classList.contains('chatbot-window--open')).toBe(true);
+    expect(setup.launcher.getAttribute('aria-expanded')).toBe('true');
+    setup.input.value = 'Skills';
+    document.getElementById('chatbot-form')!.dispatchEvent(new Event('submit', { cancelable: true }));
+    minimize.click();
+    expect(setup.dialog.classList.contains('chatbot-window--minimized')).toBe(true);
+    expect(minimize.getAttribute('aria-label')).toBe('Expand chat');
+    await vi.advanceTimersByTimeAsync(15000);
+    expect(document.activeElement).toBe(minimize);
+    minimize.click();
+    expect(setup.dialog.classList.contains('chatbot-window--minimized')).toBe(false);
+    expect(document.activeElement).toBe(setup.input);
+    document.getElementById('chatbot-close')!.click();
+    expect(setup.launcher.getAttribute('aria-expanded')).toBe('false');
+    expect(setup.launcher.classList.contains('chatbot-fab--hidden')).toBe(false);
+    instance?.dispose();
   });
 });
 

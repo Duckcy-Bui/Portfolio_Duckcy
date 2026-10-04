@@ -61,11 +61,30 @@ export function initContact(documentRef: Document = document, options: ContactOp
   const announce = (message: string) => {
     if (!disposed && status) status.textContent = message;
   };
+  const copyFeedback = new Map<HTMLElement, number>();
+  cleanups.push(() => {
+    copyFeedback.forEach((timer, control) => {
+      windowRef.clearTimeout(timer);
+      control.classList.remove('copied');
+    });
+    copyFeedback.clear();
+  });
   documentRef.querySelectorAll<HTMLElement>('[data-copy-email]').forEach((control) => {
     listen(control, 'click', async (event) => {
       event.preventDefault();
       const email = control.dataset.copyEmail || EMAIL;
-      try { await copy(email); announce('Email address copied.'); }
+      try {
+        await copy(email);
+        if (disposed) return;
+        const previous = copyFeedback.get(control);
+        if (previous !== undefined) windowRef.clearTimeout(previous);
+        control.classList.add('copied');
+        copyFeedback.set(control, windowRef.setTimeout(() => {
+          control.classList.remove('copied');
+          copyFeedback.delete(control);
+        }, 2500));
+        announce('Email address copied.');
+      }
       catch { announce(`Email: ${email}. Select the address above to copy it manually.`); }
     });
   });

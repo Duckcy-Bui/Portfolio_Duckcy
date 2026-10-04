@@ -1,12 +1,19 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
-import PageHeading from '../components/PageHeading.astro';
-import Icon from '../components/Icon.astro';
-import { certificates } from '../data/portfolio';
 ---
-<SiteLayout title="Certificates" description="Verify Bui Hai Duc’s AWS Student Builder Group Core Team Member Badge, issued by AWS Community in July 2026."><div class="container page">
-  <PageHeading eyebrow="Credentials & recognition" title="Learning, backed by evidence" description="Credentials with a direct link to their issuing source." />
-  {certificates.map((certificate) => <article class="panel certificate-card"><div><p class="overline">{certificate.issuer} · Issued {certificate.issued}</p><h2>{certificate.title}</h2><p>{certificate.description}</p><div class="tags">{certificate.skills.map((skill) => <span>{skill}</span>)}</div><a class="btn btn-primary" href={certificate.url} target="_blank" rel="noopener noreferrer">Verify on Credly <Icon name="arrow" size={17} /></a></div><div class="badge-preview" data-credly-badge><div data-iframe-width="150" data-iframe-height="270" data-share-badge-id={certificate.badgeId} data-share-badge-host="https://www.credly.com"><noscript>View the original badge using the verification link.</noscript></div></div></article>)}
-  <p class="certificate-note">Every credential listed here links to its original source. More will be added as they are earned.</p>
-  <script>import { initCertificates } from '../scripts/certificates'; initCertificates();</script>
-</div></SiteLayout>
+<SiteLayout title="Certificates" description="Verify Bui Hai Duc’s AWS Student Builder Group Core Team Member Badge, issued by AWS Community in July 2026.">
+<section id="certificate" class="section about"><div class="container"><div class="section-title"><p class="eyebrow">Certificates</p><h1>Certificates &amp; Recognition</h1></div><div class="certificates-list">
+                  <div class="cert-item">
+                    <div class="cert-header">
+                      <h3>AWS SBG Core Team Member Badge</h3>
+                      <span class="cert-status">Issued Jul 2026</span>
+                    </div>
+                    <p class="cert-desc">Official recognition as an AWS Student Builder Group Core Team member, issued by AWS Community. Skills: Community Building, Organization and Leadership, Student Engagement.</p>
+                    <div class="cert-badge-embed" data-credly-badge>
+                      <div data-iframe-width="150" data-iframe-height="270" data-share-badge-id="73787dad-002a-4cce-b49d-011b40587df9" data-share-badge-host="https://www.credly.com"></div>
+                    </div>
+                    <a class="cert-link" href="https://www.credly.com/badges/73787dad-002a-4cce-b49d-011b40587df9" target="_blank" rel="noopener noreferrer">View credential on Credly →</a>
+                  </div>
+                </div></div></section>
+<script>import { initCertificates } from '../scripts/certificates'; initCertificates();</script>
+</SiteLayout>

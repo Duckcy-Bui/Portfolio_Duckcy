@@ -7,7 +7,17 @@ const routes = [
   '/projects/classes369/', '/projects/investor-ai/', '/experience/',
   '/certificate/', '/contact/',
 ];
-const navLabels = ['Home', 'About', 'Skills', 'Projects', 'Experience', 'Certificates', 'Contact'];
+const navLabels = ['Home', 'Skills', 'Projects', 'Experience', 'Contact'];
+const themeLabels: Record<string, string> = { dark: 'Outer Space', light: 'Daylight', forest: 'Forest Terminal', ocean: 'Deep Ocean', sunset: 'Sunset Ember' };
+async function chooseTheme(page: Page, theme: string) {
+  await page.locator('#theme-pill-btn').click();
+  await page.locator(`[data-theme-key="${theme}"]`).click();
+}
+async function certificateNavigation(page: Page, isMobile: boolean) {
+  if (isMobile) await page.locator('[data-nav-toggle]').click();
+  await page.locator('[data-nav-dropdown]').click();
+  await page.locator('[data-nav]').getByRole('menuitem', { name: 'Certificates', exact: true }).click();
+}
 const themeValues = ['dark', 'light', 'forest', 'ocean', 'sunset'];
 const routeName = (route: string) => route === '/' ? 'home' : route.replaceAll('/', '-').replace(/^-|-$/g, '');
 
@@ -36,7 +46,9 @@ for (const route of routes) {
     await expect(page.locator('h1')).toBeVisible();
     await expect(page.locator('main')).toBeVisible();
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', `https://duckcy.me${route}`);
-    await expect(page.locator('[data-nav] a[aria-current="page"]')).toHaveCount(1);
+    await expect(page.locator('[data-nav] [aria-current="page"]')).toHaveCount(1);
+    await expect(page.locator('[data-nav-dropdown]')).toHaveText(/About/);
+    for (const label of ['Overview', 'Education', 'Certificates', 'Testimonials']) await expect(page.locator('[data-nav]').getByRole('menuitem', { name: label, exact: true, includeHidden: true })).toHaveCount(1);
     for (const label of navLabels) await expect(page.locator('[data-nav]').getByRole('link', { name: label, exact: true, includeHidden: true })).toHaveCount(1);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1)).toBe(true);
     const unloadedImages = await page.locator('img').evaluateAll((images) => images.filter((node) => {
@@ -70,30 +82,25 @@ test('canonical clean paths work and unknown paths stay 404', async ({ page }) =
 
 test('navigation changes pages and native Back/Forward restore them', async ({ page, isMobile }) => {
   await page.goto('/');
-  if (isMobile) await page.locator('[data-nav-toggle]').click();
-  await page.locator('[data-nav]').getByRole('link', { name: 'Certificates', exact: true }).click();
+  await certificateNavigation(page, isMobile);
   await expect(page).toHaveURL(/\/certificate\/$/);
-  await expect(page.locator('[data-nav] a[aria-current="page"]')).toHaveText('Certificates');
+  await expect(page.locator('[data-nav] [aria-current="page"]')).toHaveText(/Certificates|About/);
   await page.goBack();
   await expect(page).toHaveURL(/4321\/$/);
   await page.goForward();
   await expect(page).toHaveURL(/\/certificate\/$/);
 });
 
-test('home primary links remain reachable beside the floating assistant', async ({ page, isMobile }) => {
+test('original hero, YAML profile and primary actions are restored', async ({ page }) => {
   await page.goto('/');
-  if (isMobile) {
-    const link = await page.getByRole('link', { name: 'All projects', exact: true }).boundingBox();
-    const widget = await page.locator('#chatbot-fab').boundingBox();
-    expect(link).not.toBeNull();
-    expect(widget).not.toBeNull();
-    const separated = link!.x + link!.width <= widget!.x || link!.x >= widget!.x + widget!.width
-      || link!.y + link!.height <= widget!.y || link!.y >= widget!.y + widget!.height;
-    expect(separated, 'The full All projects link must be visible beside the assistant').toBe(true);
-  }
-  await page.getByRole('link', { name: 'All projects', exact: true }).click({ timeout: 3_000 });
-  await expect(page).toHaveURL(/\/projects\/$/);
-  await page.goto('/');
+  await expect(page.locator('.hero-grid')).toBeVisible();
+  await expect(page.locator('.code-card')).toContainText('software_engineering_profile.yaml');
+  await expect(page.locator('.code-card')).toContainText('Backend Engineering');
+  await expect(page.locator('.profile-card .avatar-ring img')).toBeVisible();
+  await expect(page.locator('#starfield')).toBeVisible();
+  await expect(page.locator('.orb')).toHaveCount(3);
+  await expect(page.locator('.cr-cta')).toBeVisible();
+  await expect(page.locator('main > section')).toHaveCount(1);
   await page.getByRole('link', { name: /let.s connect/i }).click({ timeout: 3_000 });
   await expect(page).toHaveURL(/\/contact\/$/);
 });
@@ -134,11 +141,12 @@ test('mobile navigation keyboard, Escape, resize and focus restoration', async (
 test('all themes persist across pages and pass serious accessibility checks', async ({ page }, testInfo) => {
   await page.goto('/');
   for (const theme of themeValues) {
-    await page.locator('#theme-select').selectOption(theme);
+    await chooseTheme(page, theme);
     await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
     await page.goto('/contact/');
     await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
-    await expect(page.locator('#theme-select')).toHaveValue(theme);
+    await expect(page.locator('#theme-pill-label')).toHaveText(themeLabels[theme]);
+    await expect(page.locator(`[data-theme-key="${theme}"]`)).toHaveAttribute('aria-checked', 'true');
     const axe = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
     expect(axe.violations.filter((violation) => ['serious', 'critical'].includes(violation.impact || '')), JSON.stringify(axe.violations, null, 2)).toEqual([]);
     await page.goto('/');
@@ -154,7 +162,7 @@ test('reduced motion and denied storage preserve usable navigation', async ({ pa
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
   await page.goto('/');
-  await page.locator('#theme-select').selectOption('ocean');
+  await chooseTheme(page, 'ocean');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'ocean');
   if (isMobile) await page.locator('[data-nav-toggle]').click();
   await page.locator('[data-nav]').getByRole('link', { name: 'Projects', exact: true }).click();
@@ -175,7 +183,7 @@ test('core pages, assets and native links remain useful without JavaScript', asy
   const cvResponse = await page.request.get('/assets/CV_bui_hai_duc.pdf');
   expect(cvResponse.status()).toBe(200);
   expect(cvResponse.headers()['content-type']).toContain('application/pdf');
-  await page.locator('[data-nav]').getByRole('link', { name: 'Certificates', exact: true }).click();
+  await page.locator('[data-nav]').getByRole('menuitem', { name: 'Certificates', exact: true }).click();
   await expect(page).toHaveURL(/\/certificate\/$/);
   await expect(page.getByRole('link', { name: /credly|credential|badge/i }).first()).toBeVisible();
   await page.goto('http://127.0.0.1:4321/contact/');
@@ -191,4 +199,77 @@ test('200 percent text scale stays within viewport', async ({ page }) => {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1), route).toBe(true);
     await expect(page.locator('h1')).toBeVisible();
   }
+});
+
+test('About dropdown opens dedicated tabs and certificate route', async ({ page, isMobile }) => {
+  for (const [label, route, panel] of [['Overview', '/about/', 'overview'], ['Education', '/about/#education', 'education'], ['Testimonials', '/about/#testimonials', 'testimonials']]) {
+    await page.goto('/');
+    if (isMobile) await page.locator('[data-nav-toggle]').click();
+    await page.locator('[data-nav-dropdown]').click();
+    await page.locator('[data-nav]').getByRole('menuitem', { name: label, exact: true }).click();
+    await expect(page).toHaveURL(`http://127.0.0.1:4321${route}`);
+    await expect(page.locator(`[data-tab-panel="${panel}"]`)).toBeVisible();
+    await page.reload();
+    await expect(page.locator(`[data-tab-panel="${panel}"]`)).toBeVisible();
+  }
+});
+
+test('theme picker and About menu are usable with keyboard and Escape', async ({ page, isMobile }) => {
+  await page.goto('/');
+  const theme = page.locator('#theme-pill-btn');
+  await theme.focus();
+  await page.keyboard.press('ArrowDown');
+  await expect(page.locator('[data-theme-key="dark"]')).toBeFocused();
+  await page.keyboard.press('End');
+  await expect(page.locator('[data-theme-key="sunset"]')).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'sunset');
+  await expect(theme).toBeFocused();
+  await theme.click();
+  await page.keyboard.press('Escape');
+  await expect(theme).toHaveAttribute('aria-expanded', 'false');
+  if (isMobile) await page.locator('[data-nav-toggle]').click();
+  const about = page.locator('[data-nav-dropdown]');
+  await about.focus();
+  await page.keyboard.press('ArrowDown');
+  await expect(page.getByRole('menuitem', { name: 'Overview', exact: true })).toBeFocused();
+  await page.keyboard.press('End');
+  await expect(page.getByRole('menuitem', { name: 'Testimonials', exact: true })).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(about).toBeFocused();
+  await expect(about).toHaveAttribute('aria-expanded', 'false');
+});
+
+test('original theme scenes animate, pause for dialogs and honor reduced motion', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/');
+  const canvas = page.locator('#starfield');
+  for (const theme of themeValues) {
+    await chooseTheme(page, theme);
+    await expect(canvas).toHaveAttribute('data-scene', theme);
+    await expect(canvas).toHaveAttribute('data-animation-state', 'running');
+    const before = await canvas.evaluate((node) => (node as HTMLCanvasElement).toDataURL());
+    await expect.poll(() => canvas.evaluate((node) => (node as HTMLCanvasElement).toDataURL()), { timeout: 3_000 }).not.toBe(before);
+  }
+  await page.getByRole('link', { name: /let.s connect/i }).click();
+  await expect(page).toHaveURL(/\/contact\/$/);
+  await page.goBack();
+  await expect(page).toHaveURL(/4321\/$/);
+  await expect(canvas).toHaveAttribute('data-animation-state', 'running');
+  const restored = await canvas.evaluate((node) => (node as HTMLCanvasElement).toDataURL());
+  await expect.poll(() => canvas.evaluate((node) => (node as HTMLCanvasElement).toDataURL()), { timeout: 3_000 }).not.toBe(restored);
+  await page.locator('#chatbot-fab').click();
+  await expect(canvas).toHaveAttribute('data-animation-state', 'paused');
+  const paused = await canvas.evaluate((node) => (node as HTMLCanvasElement).toDataURL());
+  await page.waitForTimeout(150);
+  expect(await canvas.evaluate((node) => (node as HTMLCanvasElement).toDataURL())).toBe(paused);
+  await page.keyboard.press('Escape');
+  await expect(canvas).toHaveAttribute('data-animation-state', 'running');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(canvas).toHaveAttribute('data-animation-state', 'reduced');
+  const reduced = await canvas.evaluate((node) => (node as HTMLCanvasElement).toDataURL());
+  await page.waitForTimeout(150);
+  expect(await canvas.evaluate((node) => (node as HTMLCanvasElement).toDataURL())).toBe(reduced);
+  await expect(page.locator('.code-card')).toContainText('Linux Operations');
+  await expect(page.locator('.avatar-ring')).toBeVisible();
 });

@@ -1,12 +1,59 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
-import PageHeading from '../components/PageHeading.astro';
-import Icon from '../components/Icon.astro';
-import { profile } from '../data/portfolio';
 ---
-<SiteLayout title="Contact" description="Contact Bui Hai Duc about software engineering opportunities and collaboration. Find email, LinkedIn, phone and CV here."><div class="container page">
-  <PageHeading eyebrow="Start a conversation" title="Let’s build something useful" description="Have an opportunity, a project or a question about my work? I’d be glad to hear from you." />
-  <div class="contact-grid"><section class="contact-intro"><h2>Say hello</h2><p>Email is a good place to start. You can also find me on LinkedIn or take a look at my CV.</p><div class="contact-link"><Icon name="mail" /><div><p class="overline">Email</p><a href={`mailto:${profile.email}`}>{profile.email}</a><button type="button" class="copy-action" data-copy-email={profile.email}>Copy email address</button></div></div><div class="contact-link"><Icon name="right" /><div><p class="overline">Phone</p><a href={`tel:${profile.telephone}`}>{profile.phone}</a></div></div><div class="contact-link"><Icon name="pin" /><div><p class="overline">Location</p><span>{profile.location}</span></div></div><div class="actions"><a class="btn btn-primary" href={profile.cv} target="_blank" rel="noopener noreferrer"><Icon name="download" size={16} />Download CV</a><a class="btn" href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn <Icon name="arrow" size={16} /></a><a class="btn" href={profile.facebook} target="_blank" rel="noopener noreferrer">Facebook <Icon name="arrow" size={16} /></a></div></section>
-  <section class="panel"><h2>Prepare your message</h2><p class="form-note">This form prepares a draft in your email app. You’ll review and send it there.</p><noscript><style>#contact-form{display:none}</style><p class="form-note">To send a message, use the email link on this page. The draft form requires JavaScript.</p></noscript><form id="contact-form" novalidate><div class="form-group"><label for="cf-name">Your name</label><input id="cf-name" name="name" type="text" autocomplete="name" placeholder="Your name" data-validate="name" required minlength="2" maxlength="100" /><span class="field-error" aria-live="polite"></span></div><div class="form-group"><label for="cf-email">Your email</label><input id="cf-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" data-validate="email" required maxlength="254" /><span class="field-error" aria-live="polite"></span></div><div class="form-group"><label for="cf-message">Message</label><textarea id="cf-message" name="message" rows="5" placeholder="Tell me about the opportunity…" data-validate="message" required minlength="10" maxlength="5000"></textarea><span class="field-error" aria-live="polite"></span></div><div class="form-tools"><button class="btn btn-primary" type="submit">Open email app <Icon name="arrow" size={16} /></button><button class="link-button" type="button" data-contact-copy>Copy draft</button><button class="link-button" type="button" data-contact-clear>Clear</button></div><p class="form-status" data-contact-status role="status" aria-live="polite"></p></form></section>
-  </div><script>import { initContact } from '../scripts/contact'; initContact();</script>
-</div></SiteLayout>
+<SiteLayout title="Contact" description="Contact Bui Hai Duc about software engineering opportunities and collaboration. Find email, LinkedIn, phone and CV here.">
+      <section id="contact" class="section contact">
+        <div class="container contact-card">
+          <div>
+            <p class="eyebrow">Contact</p>
+            <h1>Ready to Collaborate</h1>
+            <div class="contact-details">
+              <a href="mailto:duckcy.work@gmail.com" class="copy-email" data-copy-email="duckcy.work@gmail.com" title="Click to copy email">
+                <span class="contact-icon">✉</span>
+                <span class="contact-text">duckcy.work@gmail.com</span>
+                <span class="copy-hint">Click to copy</span>
+              </a>
+              <a href="tel:+84976795113">
+                <span class="contact-icon">☎</span>
+                <span class="contact-text">+84 97 679 5113</span>
+              </a>
+              <div class="contact-location">
+                <span class="contact-icon">📍</span>
+                <span class="contact-text">No. 3, Cau Giay, Hanoi</span>
+              </div>
+              <div class="contact-actions">
+                <a class="btn primary" href="/assets/CV_bui_hai_duc.pdf" target="_blank" rel="noopener noreferrer">📄 Download CV</a>
+                <a class="btn ghost" href="https://www.linkedin.com/in/duckcy/" target="_blank" rel="noopener noreferrer">💼 LinkedIn</a>
+              </div>
+            </div>
+          </div>
+
+          <noscript><style>#contact-form { display: none; }</style><p class="form-note">To send a message, use the email link on this page. The draft form requires JavaScript.</p></noscript>
+          <form class="contact-form" id="contact-form" novalidate>
+            <div class="form-group">
+              <label for="cf-name">Your Name</label>
+              <input type="text" id="cf-name" name="name" placeholder="Nguyen Van A" autocomplete="name" required data-validate="name" minlength="2" maxlength="100" />
+              <span class="field-error" aria-live="polite"></span>
+            </div>
+            <div class="form-group">
+              <label for="cf-email">Your Email</label>
+              <input type="email" id="cf-email" name="email" placeholder="you@example.com" autocomplete="email" required data-validate="email" maxlength="254" />
+              <span class="field-error" aria-live="polite"></span>
+            </div>
+            <div class="form-group">
+              <label for="cf-message">Message</label>
+              <textarea id="cf-message" name="message" placeholder="Tell me about the opportunity..." rows="5" required data-validate="message" minlength="10" maxlength="5000"></textarea>
+              <span class="field-error" aria-live="polite"></span>
+            </div>
+            <button type="submit" class="btn primary form-submit">
+              <span class="submit-text">Open email app</span>
+              <span class="submit-icon">→</span>
+            </button>
+            <div class="form-tools"><button type="button" class="btn ghost" data-contact-copy>Copy draft</button><button type="button" class="btn ghost" data-contact-clear>Clear</button></div>
+            <p class="form-note">Opens a draft in your email app. Review and send it there.</p>
+            <p class="form-status" data-contact-status role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+<script>import { initContact } from '../scripts/contact'; initContact();</script>
+</SiteLayout>

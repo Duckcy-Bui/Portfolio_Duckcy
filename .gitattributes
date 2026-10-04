@@ -1,2 +1,4 @@
 # Preserve the upstream font licenses verbatim, including their whitespace.
 public/fonts/*-LICENSE.txt -whitespace
+# Preserve the original stylesheet snapshot verbatim.
+src/styles/legacy.css -whitespace

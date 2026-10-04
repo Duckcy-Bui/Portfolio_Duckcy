@@ -1,16 +1,37 @@
 ---
 import SiteLayout from '../../layouts/SiteLayout.astro';
-import PageHeading from '../../components/PageHeading.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
-import Icon from '../../components/Icon.astro';
-import { projects } from '../../data/portfolio';
-const technologies = [...new Set(projects.flatMap((project) => project.stack))].sort();
+import { projects, profile } from '../../data/portfolio';
+const groups = [
+  { id: 'frontend', title: 'Frontend', stack: ['Next.js', 'React', 'Tailwind', 'JavaFX'] },
+  { id: 'backend', title: 'Backend', stack: ['TypeScript', 'Flask', 'Spring Boot', 'Python', 'Java', 'bcrypt'] },
+  { id: 'data', title: 'Data', stack: ['PostgreSQL', 'SQL Server', 'Prisma', 'Spark', 'Redis', 'MinIO'] },
+  { id: 'devops', title: 'DevOps', stack: ['Docker', 'Airflow', 'CI/CD'] },
+  { id: 'ai', title: 'AI / ML', stack: ['GenAI', 'LLM', 'CUDA'] },
+  { id: 'realtime', title: 'Realtime', stack: ['SSE', 'Web Push'] },
+];
 ---
-<SiteLayout title="Projects" description="Explore Bui Hai Duc’s projects in backend engineering, DevOps and data infrastructure: SBLT CUP, Classes369 and Investor AI."><div class="container page">
-  <PageHeading eyebrow="Work & experiments" title="Projects that connect the dots" description="Application logic, infrastructure and delivery — explored through real projects." />
-  <div class="project-filters" data-filter-controls hidden><label class="search-control"><Icon name="search" size={19} /><span class="sr-only">Search projects</span><input type="search" data-project-search placeholder="Search projects or technologies…" aria-label="Search projects" /></label><fieldset class="filter-options"><legend>Filter by technology</legend><div class="filter-chips">{technologies.map((tech) => <label class="filter-chip"><input type="checkbox" data-tech value={tech} />{tech}</label>)}</div></fieldset></div>
-  <div class="projects-result-row"><p data-project-count aria-live="polite" style="margin:0">Showing {projects.length} of {projects.length} projects</p><button type="button" class="link-button" data-project-clear hidden>Clear filters</button></div>
-  <div class="project-grid" data-project-list>{projects.map((project) => <ProjectCard project={project} filterable />)}</div>
-  <div class="empty-state" data-project-empty hidden><h2>No projects match yet</h2><p>Try a different keyword or clear the technology filters.</p></div>
-  <script>import { initProjects } from '../../scripts/projects'; document.querySelector('[data-filter-controls]')?.removeAttribute('hidden'); document.querySelector('[data-project-clear]')?.removeAttribute('hidden'); initProjects();</script>
-</div></SiteLayout>
+<SiteLayout title="Projects" description="Explore Bui Hai Duc’s projects in backend engineering, DevOps and data infrastructure: SBLT CUP, Classes369 and Investor AI.">
+  <section id="projects" class="section projects">
+    <div class="container">
+      <div class="section-title"><p class="eyebrow">Projects</p><h1>Personal Projects</h1></div>
+      <div data-filter-controls hidden>
+        <div class="stack-filter-bar" id="stack-filter-bar">
+          {groups.map((group) => <details class="stack-category" data-category={group.id}>
+            <summary class="stack-cat-btn">{group.title}<svg class="stack-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg></summary>
+            <div class="stack-dropdown">{group.stack.map((tech) => <label class="stack-tag"><input type="checkbox" data-tech value={tech} /><span>{tech}</span></label>)}</div>
+          </details>)}
+        </div>
+        <div class="project-toolbar">
+          <input type="search" placeholder="Search projects or technologies..." aria-label="Search projects" data-project-search />
+          <p class="project-count" data-project-count aria-live="polite">Showing {projects.length} of {projects.length} projects</p>
+          <button type="button" class="btn ghost" data-project-clear>Clear filters</button>
+        </div>
+      </div>
+      <div class="project-list" data-project-list>{projects.map((project) => <ProjectCard project={project} filterable />)}</div>
+      <div class="coming-soon-state" data-project-empty hidden><p class="coming-soon-title">No projects match yet</p><p class="coming-soon-desc">Try a different keyword or clear the technology filters.</p></div>
+      <div class="projects-cta"><a class="btn ghost" href={profile.github} target="_blank" rel="noopener noreferrer"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>View All Source Code on GitHub <span class="btn-arrow" aria-hidden="true">→</span></a></div>
+    </div>
+  </section>
+  <script>import { initProjects } from '../../scripts/projects'; document.querySelector('[data-filter-controls]')?.removeAttribute('hidden'); initProjects();</script>
+</SiteLayout>

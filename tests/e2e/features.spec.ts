@@ -33,11 +33,28 @@ test('project technology OR and search AND combinations work from a direct URL',
   const typescript = page.locator('input[data-tech][value="TypeScript"]');
   await expect(docker).toBeChecked();
   await expect(page.locator('[data-project]:visible')).toHaveCount(2);
+  const category = typescript.locator('xpath=ancestor::details');
+  const summary = category.locator('summary');
+  await summary.click();
+  await expect(category).toHaveAttribute('open', '');
+  await page.keyboard.press('Escape');
+  await expect(category).not.toHaveAttribute('open');
+  await expect(summary).toBeFocused();
+  await summary.click();
+  await page.locator('h1').click();
+  await expect(category).not.toHaveAttribute('open');
+  await summary.click();
   await typescript.check();
+  await expect(category).not.toHaveAttribute('open');
   await expect(page.locator('[data-project]:visible')).toHaveCount(3);
+  await page.keyboard.press('Escape');
+  await expect(typescript.locator('xpath=ancestor::details')).not.toHaveAttribute('open');
   await page.locator('[data-project-search]').fill('sblt');
   await expect(page.locator('[data-project]:visible')).toHaveCount(1);
+  await typescript.locator('xpath=ancestor::details').locator('summary').click();
   await typescript.uncheck();
+  await page.keyboard.press('Escape');
+  await expect(typescript.locator('xpath=ancestor::details')).not.toHaveAttribute('open');
   await expect(page.locator('[data-project]:visible')).toHaveCount(0);
   await page.locator('[data-project-clear]').click();
   await expect(docker).not.toBeChecked();
@@ -45,28 +62,32 @@ test('project technology OR and search AND combinations work from a direct URL',
   await expect(page.locator('[data-project]:visible')).toHaveCount(3);
 });
 
-test('skills tabs support click, Arrow keys, Home and End', async ({ page }) => {
+test('two original skills groups keep independent keyboard tabs', async ({ page }) => {
   await page.goto('/skills/');
-  const tabs = page.locator('[data-skill-tab]');
-  const count = await tabs.count();
-  expect(count).toBeGreaterThan(1);
-  await expect(tabs.first()).toHaveAttribute('aria-selected', 'true');
-  await tabs.first().focus();
-  await page.keyboard.press('ArrowRight');
-  await expect(tabs.nth(1)).toBeFocused();
-  await expect(tabs.nth(1)).toHaveAttribute('aria-selected', 'true');
-  await expect(tabs.first()).toHaveAttribute('tabindex', '-1');
-  await page.keyboard.press('End');
-  await expect(tabs.last()).toBeFocused();
-  await expect(tabs.last()).toHaveAttribute('aria-selected', 'true');
-  await page.keyboard.press('Home');
-  await expect(tabs.first()).toBeFocused();
-  await page.keyboard.press('ArrowLeft');
-  await expect(tabs.last()).toBeFocused();
-  await tabs.nth(1).click();
-  const target = await tabs.nth(1).getAttribute('data-skill-tab');
-  await expect(page.locator(`[data-skill-panel="${target}"]`)).toBeVisible();
-  await expect(page.locator('[data-skill-panel]:visible')).toHaveCount(1);
+  const groups = page.locator('[data-skill-group]');
+  await expect(groups).toHaveCount(2);
+  for (const group of await groups.all()) {
+    const tabs = group.locator('[data-skill-tab]');
+    expect(await tabs.count()).toBeGreaterThan(1);
+    await expect(tabs.first()).toHaveAttribute('aria-selected', 'true');
+    await tabs.first().focus();
+    await page.keyboard.press('ArrowRight');
+    await expect(tabs.nth(1)).toBeFocused();
+    await expect(tabs.nth(1)).toHaveAttribute('aria-selected', 'true');
+    await expect(tabs.first()).toHaveAttribute('tabindex', '-1');
+    await page.keyboard.press('End');
+    await expect(tabs.last()).toBeFocused();
+    await expect(tabs.last()).toHaveAttribute('aria-selected', 'true');
+    await page.keyboard.press('Home');
+    await expect(tabs.first()).toBeFocused();
+    await page.keyboard.press('ArrowLeft');
+    await expect(tabs.last()).toBeFocused();
+    await tabs.nth(1).click();
+    const target = await tabs.nth(1).getAttribute('data-skill-tab');
+    await expect(group.locator(`[data-skill-panel="${target}"]`)).toBeVisible();
+    await expect(group.locator('[data-skill-panel]:visible')).toHaveCount(1);
+  }
+  await expect(page.locator('[data-skill-panel]:visible')).toHaveCount(2);
 });
 
 test('contact invalid fields get focus and clear keeps submission honest', async ({ page }) => {
@@ -93,21 +114,26 @@ test('contact invalid fields get focus and clear keeps submission honest', async
   await expect(page.locator('#cf-message')).toHaveValue('');
 });
 
-test('contact retains email, phone, CV and all original social channels', async ({ page }) => {
+test('original contact actions and Home profile preserve all social channels', async ({ page }) => {
   await page.goto('/contact/');
+  const linkedin = page.locator('main a[href="https://www.linkedin.com/in/duckcy/"]');
+  await expect(linkedin).toBeVisible();
+  await expect(linkedin).toContainText('LinkedIn');
+  await expect(linkedin).toHaveAttribute('rel', 'noopener noreferrer');
+  await expect(page.locator('a[href="mailto:duckcy.work@gmail.com"]').first()).toBeVisible();
+  await expect(page.locator('a[href="tel:+84976795113"]')).toBeVisible();
+  await expect(page.getByRole('link', { name: /Download CV/ })).toHaveAttribute('href', '/assets/CV_bui_hai_duc.pdf');
+  await page.goto('/');
   for (const [label, href] of [
     ['LinkedIn', 'https://www.linkedin.com/in/duckcy/'],
     ['Facebook', 'https://www.facebook.com/HaiDuc12528/'],
     ['GitHub', 'https://github.com/Duckcy-Bui'],
   ]) {
-    const link = page.getByRole('link', { name: new RegExp(`^${label}`) }).first();
+    const link = page.locator('.profile-actions').getByRole('link', { name: label, exact: true });
     await expect(link).toBeVisible();
     await expect(link).toHaveAttribute('href', href);
     await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
   }
-  await expect(page.locator('a[href="mailto:duckcy.work@gmail.com"]').first()).toBeVisible();
-  await expect(page.locator('a[href="tel:+84976795113"]')).toBeVisible();
-  await expect(page.getByRole('link', { name: /Download CV/ })).toHaveAttribute('href', '/assets/CV_bui_hai_duc.pdf');
 });
 
 test('contact copies a draft and opens encoded mailto without claiming delivery', async ({ page, context }) => {

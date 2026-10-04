@@ -1,13 +1,10 @@
 ---
 import '../styles/global.css';
-import { navigation, profile, themes } from '../data/portfolio';
 import Chatbot from '../components/Chatbot.astro';
-import Icon from '../components/Icon.astro';
+import SiteHeader from '../components/SiteHeader.astro';
 interface Props { title: string; description: string; noindex?: boolean; }
 const { title, description, noindex = false } = Astro.props;
-const pathname = Astro.url.pathname;
-const canonical = new URL(pathname, Astro.site);
-const active = (href: string) => href === '/' ? pathname === '/' : pathname.startsWith(href);
+const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 <!doctype html>
 <html lang="en" data-theme="dark">
@@ -18,7 +15,8 @@ const active = (href: string) => href === '/' ? pathname === '/' : pathname.star
     <meta name="description" content={description} />
     <meta name="color-scheme" content="dark light" />
     {noindex ? <meta name="robots" content="noindex, follow" /> : <link rel="canonical" href={canonical} />}
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/assets/docker_icon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/assets/docker_icon.png" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Duckcy — Bui Hai Duc" />
     <meta property="og:title" content={`${title} | Bui Hai Duc`} />
@@ -42,36 +40,35 @@ const active = (href: string) => href === '/' ? pathname === '/' : pathname.star
     </script>
   </head>
   <body>
+    <script is:inline>
+      (() => {
+        const classes = { light: 'light-mode', forest: 'theme-forest', ocean: 'theme-ocean', sunset: 'theme-sunset' };
+        const themeClass = classes[document.documentElement.dataset.theme];
+        if (themeClass) document.body.classList.add(themeClass);
+      })();
+    </script>
     <noscript><style>
-      .theme-control,.nav-toggle,[data-copy-email]{display:none!important}
-      @media(max-width:1023px){.header-inner{height:auto;flex-wrap:wrap;padding-block:14px}.nav-links{display:flex!important;position:static;flex-basis:100%;flex-direction:row;flex-wrap:wrap;gap:0 18px;padding:0;margin:0;order:3;overflow:visible}.nav-links>a{font-size:13px;padding:6px 0;border:0}.nav-links>a.active:after{display:none}}
+      #theme-brand,#theme-toggle,.nav-toggle,button[data-copy-email],.copy-hint,.scroll-progress-vertical,#back-to-top{display:none!important}
+      .tab-content,.skills-panel{display:block!important;opacity:1!important;transform:none!important}
+      .about-tabs-nav,.skills-tabs{display:none!important}
+      .nav-dropdown{display:flex!important;position:static;opacity:1;transform:none;pointer-events:auto}
+      .nav-dropdown-btn{display:none!important}
+      @media(max-width:980px){.nav-bar{height:auto;flex-wrap:wrap;padding:14px 16px}.nav-links{position:static;transform:none;flex-basis:100%;flex-direction:row;flex-wrap:wrap;padding:0;margin:0;order:3;gap:4px 12px;background:transparent;border:0;backdrop-filter:none}.nav-links a{font-size:13px;padding:4px 6px}.nav-dropdown{flex-direction:row;flex-wrap:wrap;box-shadow:none;border:0;padding:0;background:transparent}}
     </style></noscript>
     <a href="#main-content" class="skip-link">Skip to content</a>
-    <header class="site-header">
-      <div class="container header-inner">
-        <a class="brand" href="/" aria-label="Duckcy home"><span class="brand-mark">d<span class="accent">.</span></span><span class="brand-name">duckcy<span class="accent">.</span></span></a>
-        <nav class="nav-links" id="site-nav" data-nav aria-label="Main navigation">
-          {navigation.map((item) => <a href={item.href} class:list={{ active: active(item.href) }} aria-current={active(item.href) ? 'page' : undefined}>{item.label}</a>)}
-        </nav>
-        <div class="header-actions">
-          <label class="theme-control" for="theme-select"><Icon name="sun" size={17} /><span class="sr-only">Color theme</span><select id="theme-select" aria-label="Color theme">{themes.map((theme) => <option value={theme.value}>{theme.label}</option>)}</select></label>
-          <button class="nav-toggle" type="button" data-nav-toggle aria-label="Toggle navigation" aria-controls="site-nav" aria-expanded="false"><span></span><span></span></button>
-        </div>
-      </div>
-    </header>
+    <div class="scroll-progress-vertical" aria-hidden="true"></div>
+    <button class="back-to-top" id="back-to-top" type="button" aria-label="Back to top" title="Back to top">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 15V5M10 5L5 10M10 5L15 10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+    </button>
+    <div class="orb orb-1" aria-hidden="true"></div>
+    <div class="orb orb-2" aria-hidden="true"></div>
+    <div class="orb orb-3" aria-hidden="true"></div>
+    <canvas id="starfield" aria-hidden="true"></canvas>
+    <SiteHeader />
     <main id="main-content" tabindex="-1"><slot /></main>
-    <footer class="site-footer">
-      <div class="container footer-inner">
-        <div><a href="/" class="footer-brand">duckcy<span class="accent">.</span></a><p>Software engineering. A DevOps mindset.</p></div>
-        <div class="footer-links"><a href={profile.github} target="_blank" rel="noopener noreferrer">GitHub <Icon name="arrow" size={14} /></a><a href={profile.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn <Icon name="arrow" size={14} /></a><a href={`mailto:${profile.email}`}>Email <Icon name="arrow" size={14} /></a></div>
-      </div>
-      <div class="container footer-bottom"><span>© <span data-year>{new Date().getFullYear()}</span> Bui Hai Duc</span><span>Hanoi, Vietnam <span class="status-dot"></span></span></div>
-    </footer>
+    <footer class="site-footer"><div class="container"><p>(c) <span data-year>{new Date().getFullYear()}</span> Bui Hai Duc. All rights reserved.</p></div></footer>
     <Chatbot />
     <div id="cloud-rescue-root" hidden></div>
-    <script>
-      import { initSite } from '../scripts/site';
-      initSite();
-    </script>
+    <script>import { initSite } from '../scripts/site'; initSite();</script>
   </body>
 </html>

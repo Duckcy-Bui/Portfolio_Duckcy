@@ -171,14 +171,35 @@ export function initChatbot(): { dispose: () => void } | undefined {
   try { dismissed = Boolean(store?.getItem(TOOLTIP_DISMISSED_KEY)); } catch { /* Storage optional. */ }
   const dismissTip = () => {
     dismissed = true;
-    if (tooltip) tooltip.hidden = true;
+    if (tooltip) { tooltip.hidden = true; tooltip.classList.remove('visible'); }
     try { store?.setItem(TOOLTIP_DISMISSED_KEY, '1'); } catch { /* Storage optional. */ }
   };
-  const tipTimer = window.setTimeout(() => { if (!dismissed && !dialog.open && tooltip) tooltip.hidden = false; }, 4000);
+  const tipTimer = window.setTimeout(() => { if (!dismissed && !dialog.open && tooltip) { tooltip.hidden = false; tooltip.classList.add('visible'); } }, 4000);
+  launcher.classList.add('chatbot-fab--pulse');
+  const minimizeButton = document.getElementById('chatbot-minimize') as HTMLButtonElement | null;
+  const syncMinimized = (minimized: boolean) => {
+    dialog.classList.toggle('chatbot-window--minimized', minimized);
+    const iconMin = minimizeButton?.querySelector<SVGElement>('.icon-minimize');
+    const iconMax = minimizeButton?.querySelector<SVGElement>('.icon-maximize');
+    if (iconMin) iconMin.style.display = minimized ? 'none' : '';
+    if (iconMax) iconMax.style.display = minimized ? '' : 'none';
+    minimizeButton?.setAttribute('aria-label', minimized ? 'Expand chat' : 'Minimize chat');
+    minimizeButton?.setAttribute('title', minimized ? 'Expand' : 'Minimize');
+    minimizeButton?.setAttribute('aria-expanded', String(!minimized));
+    if (minimized) minimizeButton?.focus();
+    else if (dialog.open && !loading) input.focus();
+  };
+  const resizeInput = () => { input.style.height = 'auto'; input.style.height = `${Math.min(120, Math.max(44, input.scrollHeight))}px`; };
+  input.addEventListener('input', resizeInput, { signal });
 
   const bubble = (role: 'user' | 'assistant' | 'error', text: string): HTMLElement => {
     const item = document.createElement('div');
     item.className = `chatbot-msg ${role === 'assistant' ? 'ai' : role}`;
+    if (role === 'assistant') {
+      const avatar = document.createElement('img');
+      avatar.className = 'chatbot-msg-avatar'; avatar.src = '/assets/hai_duc_img-removebg-preview.png'; avatar.alt = ''; avatar.width = 26; avatar.height = 26;
+      item.append(avatar);
+    }
     const content = document.createElement('div');
     content.className = 'chatbot-bubble';
     if (role === 'assistant') content.innerHTML = renderMarkdown(text);
@@ -186,10 +207,11 @@ export function initChatbot(): { dispose: () => void } | undefined {
     item.append(content);
     if (navigator.clipboard?.writeText && role !== 'error') {
       const copy = document.createElement('button');
-      copy.type = 'button'; copy.className = 'chatbot-copy-btn'; copy.textContent = 'Copy'; copy.setAttribute('aria-label', 'Copy message');
+      copy.type = 'button'; copy.className = 'chatbot-copy-btn'; copy.title = 'Copy message'; copy.setAttribute('aria-label', 'Copy message');
+      copy.innerHTML = '<svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
       copy.addEventListener('click', async () => {
-        try { await navigator.clipboard.writeText(text); copy.textContent = 'Copied'; }
-        catch { copy.textContent = 'Copy unavailable'; }
+        try { await navigator.clipboard.writeText(text); copy.title = 'Copied'; copy.setAttribute('aria-label', 'Message copied'); }
+        catch { copy.title = 'Copy unavailable'; copy.setAttribute('aria-label', 'Copy unavailable'); }
       }, { signal });
       item.append(copy);
     }
@@ -207,11 +229,24 @@ export function initChatbot(): { dispose: () => void } | undefined {
   launcher.addEventListener('click', () => {
     dismissTip();
     if (!dialog.open) dialog.showModal();
+    dialog.classList.add('chatbot-window--open');
+    launcher.classList.remove('chatbot-fab--pulse');
+    launcher.classList.add('chatbot-fab--hidden');
+    launcher.setAttribute('aria-expanded', 'true');
+    syncMinimized(false);
+    resizeInput();
     input.focus();
   }, { signal });
   document.getElementById('chatbot-tooltip-close')?.addEventListener('click', dismissTip, { signal });
   document.getElementById('chatbot-close')?.addEventListener('click', () => dialog.close(), { signal });
-  dialog.addEventListener('close', () => launcher.focus({ preventScroll: true }), { signal });
+  dialog.addEventListener('close', () => {
+    dialog.classList.remove('chatbot-window--open');
+    launcher.classList.add('chatbot-fab--pulse');
+    launcher.classList.remove('chatbot-fab--hidden');
+    launcher.setAttribute('aria-expanded', 'false');
+    launcher.focus({ preventScroll: true });
+  }, { signal });
+  minimizeButton?.addEventListener('click', () => syncMinimized(!dialog.classList.contains('chatbot-window--minimized')), { signal });
   dialog.addEventListener('click', (event) => { if (event.target === dialog) { const bounds = dialog.getBoundingClientRect(); if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) dialog.close(); } }, { signal });
   document.getElementById('chatbot-reset')?.addEventListener('click', () => {
     if (loading) return;
@@ -225,16 +260,19 @@ export function initChatbot(): { dispose: () => void } | undefined {
     const reset = document.getElementById('chatbot-reset') as HTMLButtonElement | null;
     if (reset) reset.disabled = true;
     input.value = ''; bubble('user', text);
+    resizeInput();
     if (suggestions) suggestions.hidden = true;
     const pending = bubble('assistant', 'Thinking…');
     pending.setAttribute('aria-label', 'Assistant is preparing a reply');
+    const pendingBubble = pending.querySelector('.chatbot-bubble');
+    if (pendingBubble) pendingBubble.innerHTML = '<span class="chatbot-sr-only">Thinking…</span><span class="chatbot-typing" aria-hidden="true"><span></span><span></span><span></span></span>';
     messages.setAttribute('aria-busy', 'true');
     try { const reply = await session.send(text); if (!disposed) { pending.remove(); bubble('assistant', reply); } }
     catch (error) { if (!disposed) { pending.remove(); bubble('error', error instanceof Error ? error.message : 'Please try again.'); } }
     finally {
       loading = false; input.disabled = false; sendButton.disabled = false; if (reset) reset.disabled = false;
       messages.removeAttribute('aria-busy');
-      if (dialog.open && !disposed) input.focus();
+      if (dialog.open && !disposed && !dialog.classList.contains('chatbot-window--minimized')) input.focus();
     }
   };
   form.addEventListener('submit', (event) => { event.preventDefault(); void send(); }, { signal });

@@ -25,7 +25,7 @@ test('chatbot modal, safe links, response and session history survive native nav
   await page.locator('#chatbot-send').click();
   await expect(page.locator('.chatbot-msg.ai').last()).toContainText('Visit Contact');
   expect(requests).toBe(1);
-  await expect(dialog.locator('img')).toHaveCount(0);
+  await expect(dialog.locator('.chatbot-bubble img')).toHaveCount(0);
   await expect(dialog.locator('a[href^="javascript:"]')).toHaveCount(0);
   await expect(dialog.getByRole('link', { name: 'GitHub', exact: true })).toHaveAttribute('rel', 'noopener noreferrer');
   await dialog.getByRole('link', { name: 'Contact', exact: true }).click();
@@ -39,6 +39,14 @@ test('chatbot modal, safe links, response and session history survive native nav
   await page.locator('#chatbot-fab').click();
   await page.locator('#chatbot-reset').click();
   await expect(page.locator('.chatbot-messages')).not.toContainText('Visit Contact');
+  await expect(page.locator('#chatbot-input')).toBeFocused();
+  await page.locator('#chatbot-minimize').click();
+  await expect(dialog).toBeVisible();
+  await expect(page.locator('#chatbot-minimize')).toHaveAttribute('aria-expanded', 'false');
+  await expect(page.locator('#chatbot-input')).toBeHidden();
+  await page.locator('#chatbot-minimize').click();
+  await expect(page.locator('#chatbot-minimize')).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.locator('#chatbot-input')).toBeVisible();
   await expect(page.locator('#chatbot-input')).toBeFocused();
 });
 
@@ -90,7 +98,8 @@ test('game resources are lazy and modal close restores page, theme and focus', a
     if (/fc-(?:engine|overlay)[^/]*\.(?:js|css)(?:\?|$)/.test(request.url())) gameRequests.push(request.url());
   });
   await page.goto('/');
-  await page.locator('#theme-select').selectOption('forest');
+  await page.locator('#theme-pill-btn').click();
+  await page.locator('[data-theme-key="forest"]').click();
   expect(gameRequests).toEqual([]);
   await expect(page.locator('link[data-fc-game-resource]')).toHaveCount(0);
   const trigger = page.locator('.cr-cta');

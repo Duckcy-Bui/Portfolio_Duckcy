@@ -38,8 +38,9 @@ afterEach(() => {
 const siteFixture = () => {
   document.body.innerHTML = `<button data-nav-toggle aria-controls="site-nav">Menu</button>
     <nav id="site-nav" data-nav><a href="/">Home</a><a href="/certificate/">Certificates</a></nav>
-    <select id="theme-select"><option value="dark">Dark</option><option value="light">Light</option>
-      <option value="forest">Forest</option><option value="ocean">Ocean</option><option value="sunset">Sunset</option></select>
+    <div id="theme-brand"><button id="theme-pill-btn" aria-controls="theme-picker">Theme <span id="theme-pill-label"></span></button>
+      <div id="theme-picker" role="menu">${['dark', 'light', 'forest', 'ocean', 'sunset'].map((theme) => `<button class="theme-picker-item" data-theme-key="${theme}">${theme}</button>`).join('')}</div></div>
+    <button id="theme-toggle">Next theme</button>
     <span data-year></span><main><button id="outside">Outside</button></main>`;
 };
 
@@ -49,10 +50,13 @@ describe('Shared site navigation and theme persistence', () => {
     localStorage.setItem('portfolio-theme', 'forest');
     start(initSite());
     expect(document.documentElement.dataset.theme).toBe('forest');
-    const select = document.querySelector<HTMLSelectElement>('#theme-select')!;
-    expect(select.value).toBe('forest');
-    select.value = 'ocean';
-    select.dispatchEvent(new Event('change'));
+    expect(document.querySelector('#theme-pill-label')?.textContent).toBe('Forest Terminal');
+    expect(document.body.classList.contains('theme-forest')).toBe(true);
+    click('#theme-pill-btn');
+    click('[data-theme-key="ocean"]');
+    expect(document.querySelector('[data-theme-key="ocean"]')?.getAttribute('aria-checked')).toBe('true');
+    expect(document.querySelector<HTMLElement>('#theme-picker')?.hidden).toBe(true);
+    expect(document.body.classList.contains('theme-ocean')).toBe(true);
     expect(document.documentElement.dataset.theme).toBe('ocean');
     expect(localStorage.getItem('portfolio-theme')).toBe('ocean');
     expect(document.querySelector('[data-year]')?.textContent).toBe(String(new Date().getFullYear()));
@@ -63,9 +67,7 @@ describe('Shared site navigation and theme persistence', () => {
     vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => { throw new Error('blocked'); });
     vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new Error('blocked'); });
     expect(() => start(initSite())).not.toThrow();
-    const select = document.querySelector<HTMLSelectElement>('#theme-select')!;
-    select.value = 'light';
-    select.dispatchEvent(new Event('change'));
+    click('#theme-toggle');
     expect(document.documentElement.dataset.theme).toBe('light');
     click('[data-nav-toggle]');
     expect(document.body.classList.contains('nav-open')).toBe(true);
@@ -119,6 +121,21 @@ describe('Shared site navigation and theme persistence', () => {
     window.dispatchEvent(new Event('resize'));
     expect(document.querySelector('[data-nav]')!.hasAttribute('aria-hidden')).toBe(false);
     expect(document.body.classList.contains('nav-open')).toBe(false);
+  });
+
+  it('supports the original theme picker keyboard navigation and closes it on Escape', () => {
+    siteFixture();
+    start(initSite());
+    const pill = document.querySelector<HTMLButtonElement>('#theme-pill-btn')!;
+    pill.focus();
+    pill.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true }));
+    expect(document.activeElement).toBe(document.querySelector('[data-theme-key="dark"]'));
+    document.activeElement!.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', bubbles: true, cancelable: true }));
+    expect(document.activeElement).toBe(document.querySelector('[data-theme-key="sunset"]'));
+    document.activeElement!.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+    expect(document.activeElement).toBe(pill);
+    expect(pill.getAttribute('aria-expanded')).toBe('false');
+    expect(document.querySelector<HTMLElement>('#theme-picker')!.hidden).toBe(true);
   });
 
   it('has no required page-specific nodes and accepts cross-tab theme changes', () => {
@@ -191,6 +208,42 @@ describe('Project search, filters and shareable query state', () => {
     expect(replace).not.toHaveBeenCalled();
   });
 
+  it('closes native category overlays after a selection, on Escape and outside clicks', () => {
+    projectFixture();
+    const first = document.createElement('details');
+    first.className = 'stack-category';
+    first.innerHTML = '<summary>Backend</summary>';
+    first.appendChild(document.querySelector('[value="Java"]')!);
+    const second = document.createElement('details');
+    second.className = 'stack-category';
+    second.innerHTML = '<summary>AI</summary>';
+    second.appendChild(document.querySelector('[value="Python"]')!);
+    document.body.prepend(first, second);
+    start(initProjects());
+    first.open = true;
+    first.dispatchEvent(new Event('toggle'));
+    second.open = true;
+    second.dispatchEvent(new Event('toggle'));
+    expect(first.open).toBe(false);
+    click('[value="Python"]');
+    expect(visibleProjects()).toEqual(['Investor']);
+    expect(second.open).toBe(false);
+    expect(document.activeElement).toBe(second.querySelector('summary'));
+    expect(new URL(location.href).searchParams.get('tech')).toBe('Python');
+    first.open = true;
+    first.querySelector('summary')!.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+    expect(first.open).toBe(false);
+    expect(document.activeElement).toBe(first.querySelector('summary'));
+    second.open = true;
+    click('[data-project-search]');
+    expect(second.open).toBe(false);
+    second.open = true;
+    click('[data-project-clear]');
+    expect(second.open).toBe(false);
+    expect(visibleProjects()).toHaveLength(3);
+    expect(location.search).toBe('');
+  });
+
   it('matches technology names exactly instead of misleading text substrings', () => {
     projectFixture();
     const first = document.querySelector<HTMLElement>('[data-project]')!;
@@ -239,6 +292,27 @@ describe('Accessible skill tabs', () => {
     languages.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', bubbles: true }));
     expect(document.activeElement).toBe(devops);
   });
+  it('keeps the original primary and secondary stacks independently selected', () => {
+    document.body.innerHTML = `<div data-skill-group="primary"><div role="tablist">
+      <button data-skill-tab="devops" aria-selected="true">DevOps</button>
+      <button data-skill-tab="databases">Databases</button></div>
+      <section data-skill-panel="devops">Docker</section><section data-skill-panel="databases">PostgreSQL</section></div>
+      <div data-skill-group="secondary"><div role="tablist">
+      <button data-skill-tab="languages" aria-selected="true">Languages</button>
+      <button data-skill-tab="frameworks">Frameworks</button></div>
+      <section data-skill-panel="languages">Python</section><section data-skill-panel="frameworks">Flask</section></div>`;
+    start(initSkills());
+    click('[data-skill-tab="frameworks"]');
+    expect(document.querySelector('[data-skill-tab="devops"]')!.getAttribute('aria-selected')).toBe('true');
+    expect(document.querySelector<HTMLElement>('[data-skill-panel="devops"]')!.hidden).toBe(false);
+    expect(document.querySelector<HTMLElement>('[data-skill-panel="languages"]')!.hidden).toBe(true);
+    const frameworks = document.querySelector<HTMLElement>('[data-skill-tab="frameworks"]')!;
+    frameworks.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+    expect(document.activeElement).toBe(document.querySelector('[data-skill-tab="languages"]'));
+    click('[data-skill-tab="databases"]');
+    expect(document.querySelector<HTMLElement>('[data-skill-panel="languages"]')!.hidden).toBe(false);
+    expect(document.querySelector<HTMLElement>('[data-skill-panel="databases"]')!.hidden).toBe(false);
+  });
 });
 
 const contactFixture = () => {
@@ -258,6 +332,23 @@ const fillContact = () => {
 const submitContact = () => document.querySelector('form')!.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
 
 describe('Contact drafts and truthful mailto behavior', () => {
+  it('copies the original email anchor without destroying its markup or opening mailto', async () => {
+    document.body.innerHTML = `<a class="copy-email" href="mailto:duckcy.work@gmail.com" data-copy-email="duckcy.work@gmail.com"><span class="contact-icon">✉</span><span class="contact-text">duckcy.work@gmail.com</span><span class="copy-hint">Click to copy</span></a><p data-contact-status></p>`;
+    const copyText = vi.fn().mockResolvedValue(undefined);
+    const cleanup = start(initContact(document, { copyText }));
+    const anchor = document.querySelector<HTMLAnchorElement>('.copy-email')!;
+    const before = anchor.innerHTML;
+    const event = new MouseEvent('click', { bubbles: true, cancelable: true });
+    anchor.dispatchEvent(event);
+    await Promise.resolve();
+    expect(event.defaultPrevented).toBe(true);
+    expect(copyText).toHaveBeenCalledWith('duckcy.work@gmail.com');
+    expect(anchor.innerHTML).toBe(before);
+    expect(anchor.classList.contains('copied')).toBe(true);
+    cleanup();
+    expect(anchor.classList.contains('copied')).toBe(false);
+  });
+
   it('blocks blank submission, marks every missing input, and focuses the first', () => {
     contactFixture();
     const openMailto = vi.fn();

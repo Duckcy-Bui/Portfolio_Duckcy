@@ -13,13 +13,32 @@ export function initProjects(documentRef: Document = document): Cleanup {
   const count = documentRef.querySelector<HTMLElement>('[data-project-count]');
   const clear = documentRef.querySelector<HTMLButtonElement>('[data-project-clear]');
   const empty = documentRef.querySelector<HTMLElement>('[data-project-empty]');
+  const categories = [...documentRef.querySelectorAll<HTMLDetailsElement>('details.stack-category')];
   if (!cards.length && !search && !filters.length) return () => {};
   const normalize = (value: string) => value.trim().toLocaleLowerCase();
   const cleanups: Cleanup[] = [];
+  let disposed = false;
   const listen = (target: EventTarget, name: string, listener: EventListener) => {
     target.addEventListener(name, listener);
     cleanups.push(() => target.removeEventListener(name, listener));
   };
+  const closeDropdowns = (restoreFocus = false, except?: HTMLDetailsElement) => {
+    const open = categories.filter((category) => category.open && category !== except);
+    open.forEach((category) => { category.open = false; });
+    if (restoreFocus) open.at(-1)?.querySelector<HTMLElement>('summary')?.focus();
+  };
+  categories.forEach((category) => listen(category, 'toggle', () => {
+    if (!disposed && category.open) closeDropdowns(false, category);
+  }));
+  listen(documentRef, 'click', (event) => {
+    if (!(event.target instanceof windowRef.Node)) return;
+    if (!categories.some((category) => category.contains(event.target as Node))) closeDropdowns();
+  });
+  listen(documentRef, 'keydown', (event) => {
+    if ((event as KeyboardEvent).key !== 'Escape' || !categories.some((category) => category.open)) return;
+    event.preventDefault();
+    closeDropdowns(true);
+  });
 
   const apply = (updateUrl = true) => {
     const query = normalize(search?.value || '');
@@ -54,9 +73,15 @@ export function initProjects(documentRef: Document = document): Cleanup {
     filters.forEach((input) => { input.checked = selected.has(normalize(input.value)); });
     apply(false);
   };
-  if (search) listen(search, 'input', () => apply());
-  filters.forEach((input) => listen(input, 'change', () => apply()));
+  if (search) listen(search, 'input', () => { closeDropdowns(); apply(); });
+  filters.forEach((input) => listen(input, 'change', () => {
+    apply();
+    // Like the original tag dropdown, a selection closes the overlay. Return
+    // focus to its summary so keyboard focus never stays in hidden content.
+    closeDropdowns(true);
+  }));
   if (clear) listen(clear, 'click', () => {
+    closeDropdowns();
     if (search) search.value = '';
     filters.forEach((input) => { input.checked = false; });
     apply();
@@ -65,7 +90,6 @@ export function initProjects(documentRef: Document = document): Cleanup {
   listen(windowRef, 'popstate', restore);
   restore();
 
-  let disposed = false;
   const cleanup = () => {
     if (disposed) return;
     disposed = true;
